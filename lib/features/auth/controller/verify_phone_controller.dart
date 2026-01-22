@@ -1,3 +1,4 @@
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -106,7 +107,7 @@ class VerifyPhoneController extends GetxController {
     try {
       await Future.delayed(const Duration(seconds: 2));
       Get.snackbar('Success', 'Phone verified successfully!');
-      // Get.offAllNamed('/reset-password');
+      Get.toNamed(AppNamed.menuPage);
     } catch (e) {
       Get.snackbar('Error', 'Invalid OTP. Please try again.');
     } finally {

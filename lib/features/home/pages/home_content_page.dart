@@ -1,37 +1,35 @@
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top Blue Header Section with Background Image
-            _buildHeaderSection(context),
-            SizedBox(height: 24.h),
-            // Send Again Section
-            _buildSendAgainSection(),
-            SizedBox(height: 24.h),
-            // Payment List Section
-            _buildPaymentListSection(),
-            SizedBox(height: 24.h),
-            // Trading History Section
-            _buildTradingHistorySection(),
-            SizedBox(height: 100.h), // Space for bottom nav
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top Blue Header Section with Background Image
+          _buildHeaderSection(context),
+          SizedBox(height: 24.h),
+          // Send Again Section
+          _buildSendAgainSection(),
+          SizedBox(height: 24.h),
+          // Payment List Section
+          _buildPaymentListSection(),
+          SizedBox(height: 24.h),
+          // Trading History Section
+          _buildTradingHistorySection(),
+          SizedBox(height: 24.h),
+        ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -64,34 +62,38 @@ class MenuPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(8.r),
-                      child: Stack(
-                        children: [
-                          AppImageViewer(
-                            imagePath: AppImages.notificationIcon,
-                            height: 24.h,
-                            width: 24.w,
-                            color: Colors.white,
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              width: 8.w,
-                              height: 8.h,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppNamed.notificationPage);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.r),
+                        child: Stack(
+                          children: [
+                            AppImageViewer(
+                              imagePath: AppImages.notificationIcon,
+                              height: 24.h,
+                              width: 24.w,
+                              color: Colors.white,
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                width: 8.w,
+                                height: 8.h,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.primarySup,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-                // SizedBox(height: 16.h),
                 // Balance Section
                 Text(
                   'Balance',
@@ -117,27 +119,46 @@ class MenuPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.r),
                     color: AppColors.backLanding,
                   ),
-
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildActionButton(
-                          icon: AppImages.topupIcon,
-                          label: 'Top up',
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppNamed.topUpPage);
+                          },
+                          child: _buildActionButton(
+                            icon: AppImages.topupIcon,
+                            label: 'Top up',
+                          ),
                         ),
-                        _buildActionButton(
-                          icon: AppImages.walletIcon,
-                          label: 'Wallet',
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppNamed.walletsDashboard);
+                          },
+                          child: _buildActionButton(
+                            icon: AppImages.walletIcon,
+                            label: 'Wallet',
+                          ),
                         ),
-                        _buildActionButton(
-                          icon: AppImages.scanIcon,
-                          label: 'QR Scan',
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppNamed.scannerPage);
+                          },
+                          child: _buildActionButton(
+                            icon: AppImages.scanIcon,
+                            label: 'QR Scan',
+                          ),
                         ),
-                        _buildActionButton(
-                          icon: AppImages.myQrcodeIcon,
-                          label: 'My QR',
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppNamed.myQrPage);
+                          },
+                          child: _buildActionButton(
+                            icon: AppImages.myQrcodeIcon,
+                            label: 'My QR',
+                          ),
                         ),
                       ],
                     ),
@@ -164,7 +185,7 @@ class MenuPage extends StatelessWidget {
   Widget _buildSendAgainSection() {
     final contacts = [
       {'name': 'John', 'color': const Color(0xFFFFB74D)},
-      {'name': 'Lovi William', 'color': const Color(0xFF4FC3F7)},
+      {'name': 'Lovi ', 'color': const Color(0xFF4FC3F7)},
       {'name': 'Hametrius', 'color': const Color(0xFFE57373)},
       {'name': 'Leshaad', 'color': const Color(0xFF81C784)},
       {'name': 'Lane R.', 'color': const Color(0xFFBA68C8)},
@@ -183,6 +204,7 @@ class MenuPage extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           SizedBox(
+            height: 90.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: contacts.length,
@@ -203,29 +225,45 @@ class MenuPage extends StatelessWidget {
 
   Widget _buildContactAvatar({required String name, required Color color}) {
     return Column(
+      mainAxisSize: MainAxisSize.min, // ✅ FIX
       children: [
         Container(
-          width: 56.w,
-          height: 56.h,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          width: 60.w,
+          height: 60.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.primary, width: 2),
+          ),
           child: Center(
-            child: Text(
-              name.substring(0, 1).toUpperCase(),
-              style: AppTextStyles.titleMedium.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            child: Container(
+              width: 48.w,
+              height: 48.w,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              child: Center(
+                child: Text(
+                  name.substring(0, 1).toUpperCase(),
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
         ),
-        Text(
-          name,
-          style: AppTextStyles.labelLarge.copyWith(
-            color: AppColors.secondaryText,
+        SizedBox(height: 6.h), // slightly reduced
+        SizedBox(
+          width: 64.w,
+          child: Text(
+            name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.labelLarge.copyWith(
+              color: AppColors.secondaryText,
+              height: 1.2, // ✅ tighter line height
+            ),
           ),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -236,42 +274,42 @@ class MenuPage extends StatelessWidget {
       {
         'icon': AppImages.electricityBadge,
         'label': 'Electricity',
-        'color': const Color(0xFF4CAF50),
+        // 'color': const Color(0xFF4CAF50),
       },
       {
         'icon': AppImages.internetBadge,
         'label': 'Internet',
-        'color': const Color(0xFF9C27B0),
+        // 'color': const Color(0xFF9C27B0),
       },
       {
         'icon': AppImages.insuranceBadge,
         'label': 'Insurance',
-        'color': const Color(0xFF2196F3),
+        // 'color': const Color(0xFF2196F3),
       },
       {
         'icon': AppImages.medicalBadge,
         'label': 'Medical',
-        'color': const Color(0xFFF44336),
+        // 'color': const Color(0xFFF44336),
       },
       {
         'icon': AppImages.marketBadge,
         'label': 'Market',
-        'color': const Color(0xFF4CAF50),
+        // 'color': const Color(0xFF4CAF50),
       },
       {
         'icon': AppImages.electricBillBadge,
         'label': 'Electric bill',
-        'color': const Color(0xFFFF9800),
+        // 'color': const Color(0xFFFF9800),
       },
       {
         'icon': AppImages.televisionBadge,
         'label': 'Television',
-        'color': const Color(0xFF2196F3),
+        // 'color': const Color(0xFF2196F3),
       },
       {
         'icon': AppImages.waterbillBadge,
         'label': 'Waterbill',
-        'color': const Color(0xFF03A9F4),
+        // 'color': const Color(0xFF03A9F4),
       },
     ];
 
@@ -291,8 +329,8 @@ class MenuPage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
-              // crossAxisSpacing: .w,
-              mainAxisSpacing: 10.h,
+              mainAxisSpacing: 11.h,
+              // crossAxisSpacing: 1.w,
               childAspectRatio: 0.85,
             ),
             itemCount: paymentItems.length,
@@ -301,7 +339,6 @@ class MenuPage extends StatelessWidget {
               return _buildPaymentItem(
                 icon: item['icon'] as String,
                 label: item['label'] as String,
-                backgroundColor: item['color'] as Color,
               );
             },
           ),
@@ -310,11 +347,7 @@ class MenuPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentItem({
-    required String icon,
-    required String label,
-    required Color backgroundColor,
-  }) {
+  Widget _buildPaymentItem({required String icon, required String label}) {
     return Column(
       children: [
         AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
@@ -347,11 +380,20 @@ class MenuPage extends StatelessWidget {
           SizedBox(height: 16.h),
           _buildTransactionItem(
             icon: AppImages.electricBillBadge,
-            title: 'Electric bill',
+            title: 'Electric Bill',
             subtitle: 'Sent',
             amount: '-\$420',
             isNegative: true,
-            backgroundColor: const Color(0xFF4CAF50),
+            date: "Today - 3.14",
+          ),
+          SizedBox(height: 20.h),
+          _buildTransactionItem(
+            icon: AppImages.televisionBadge,
+            title: 'Television Bill',
+            subtitle: 'Sent',
+            amount: '\$420',
+            isNegative: true,
+            date: "22 jan- 3.14",
           ),
         ],
       ),
@@ -364,92 +406,61 @@ class MenuPage extends StatelessWidget {
     required String subtitle,
     required String amount,
     required bool isNegative,
-    required Color backgroundColor,
+    required String date,
   }) {
-    return Container(
-      padding: EdgeInsets.all(12.r),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10.r),
-            decoration: BoxDecoration(
-              color: backgroundColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: AppImageViewer(imagePath: icon, height: 24.h, width: 24.w),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
+    return Row(
+      children: [
+        AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.success,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            amount,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: isNegative ? AppColors.primaryText : AppColors.success,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+                  Text(
+                    amount,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: isNegative
+                          ? AppColors.success
+                          : AppColors.primaryText,
 
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.success,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    date,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(icon: Icons.home_filled, isSelected: true),
-            _buildNavItem(icon: Icons.add_chart_outlined, isSelected: false),
-            _buildNavItem(icon: Icons.settings, isSelected: false),
-            _buildNavItem(icon: Icons.person_outline, isSelected: false),
-          ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({required IconData icon, required bool isSelected}) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Icon(
-        icon,
-        color: isSelected ? AppColors.primary : AppColors.secondaryText,
-        size: 24.sp,
-      ),
+      ],
     );
   }
 }

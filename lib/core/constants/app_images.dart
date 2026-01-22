@@ -19,6 +19,7 @@ class AppImages {
 
   // App Logo
   static const String appLogo = '$_logoPath/app_logo.svg';
+  static const String appLogoSquare = '$_logoPath/app_logo_squre.svg';
 
   // Onboarding Images
   static const String onboardingImage1 =
@@ -35,9 +36,27 @@ class AppImages {
   // Menu Page Icons
   static const String topupIcon = '$_iconPath/topup_icon.svg';
   static const String walletIcon = '$_iconPath/Wallet_icon.svg';
+  static const String walletinactive = '$_iconPath/Wallet_inactive.svg';
   static const String scanIcon = '$_iconPath/scan_icon.svg';
   static const String myQrcodeIcon = '$_iconPath/my_qrcode_icon.svg';
   static const String notificationIcon = '$_iconPath/Notification.svg';
+
+  // bottom navigation icons
+  // Home
+  static const String homeActive = '$_iconPath/home_active.svg';
+  static const String homeInactive = '$_iconPath/home_inactive.svg';
+
+  // Chart
+  static const String chartActive = '$_iconPath/chart_active.svg';
+  static const String chartInactive = '$_iconPath/chart_inactive.svg';
+
+  // Discount
+  static const String discountActive = '$_iconPath/discount_active.svg';
+  static const String discountInactive = '$_iconPath/discount_inactive.svg';
+
+  // Profile
+  static const String profileActive = '$_iconPath/profile_active.svg';
+  static const String profileInactive = '$_iconPath/profile_inactive.svg';
 
   // Payment Badge Images
   static const String electricityBadge =
@@ -51,4 +70,26 @@ class AppImages {
   static const String televisionBadge = '$_imagePath/televisio_badge_image.svg';
   static const String waterbillBadge = '$_imagePath/waterbill_badge_image.svg';
   static const String menuPageBackground = '$_imagePath/menu_page_bgimage.svg';
+  static const String downloadIcon = "$_iconPath/download_icon.svg";
+
+  // Voucher Images
+  static const String voucherImage1 = '$_imagePath/voucher_image1.jpeg';
+  static const String voucherImage2 = '$_imagePath/voucher_image2.jpeg';
+  static const String voucherImage3 = '$_imagePath/voucher_image3.jpeg';
+
+  // wallet images
+  static const String greenBgCreditCard = '$_imagePath/green_bg_creditcard.svg';
+  static const String blueBgCreditCard = '$_imagePath/blue_bg_creditcard.svg';
+  static const String yellowBgCreditCard =
+      '$_imagePath/yellow_bg_creditcard.svg';
+  static const String debitCardGoldenImage =
+      '$_imagePath/debitcard_golden_image.svg';
+
+  //
+  static const String bankIcon = "$_iconPath/bank_icon.dart";
+
+  // greeting cards
+  static const String greetingCard1 = "$_iconPath/greeting_card1.svg";
+  static const String greetingCard2 = "$_iconPath/greeting_card2.svg";
+  static const String greetingCard3 = "$_iconPath/greeting_card3.svg";
 }

@@ -6,7 +6,29 @@ import 'package:expense/features/auth/pages/login_page.dart';
 import 'package:expense/features/auth/pages/onboarding_page.dart';
 import 'package:expense/features/auth/pages/register_page.dart';
 import 'package:expense/features/auth/pages/signup_sucessfull_page.dart';
-import 'package:expense/features/home/pages/menu_page.dart';
+import 'package:expense/features/home/pages/main_navigation_page.dart';
+import 'package:expense/features/qr/bindings/qr_binding.dart';
+import 'package:expense/features/qr/pages/my_qr_page.dart';
+import 'package:expense/features/qr/pages/qr_scanner_page.dart';
+import 'package:expense/features/topup/bindings/top_up_binding.dart';
+import 'package:expense/features/topup/pages/top_up_page.dart';
+import 'package:expense/features/withdraw/binding/withdraw_binding.dart';
+import 'package:expense/features/withdraw/pages/withdraw_page.dart';
+import 'package:expense/features/wallet/bindings/wallet_binding.dart';
+import 'package:expense/features/wallet/pages/add_new_card_page.dart';
+import 'package:expense/features/wallet/pages/wallets_dashboard_page.dart';
+import 'package:expense/features/transfer/bindings/transfer_binding.dart';
+import 'package:expense/features/transfer/bindings/transfer_by_bank_binding.dart';
+import 'package:expense/features/transfer/bindings/transfer_by_wallet_binding.dart';
+import 'package:expense/features/transfer/pages/transfer_by_bank_page.dart';
+import 'package:expense/features/transfer/pages/transfer_by_wallet_page.dart';
+import 'package:expense/features/profile/bingings/edit_profile_binding.dart';
+import 'package:expense/features/profile/pages/edit_profile_page.dart';
+import 'package:expense/features/profile/pages/payment_security_page.dart';
+import 'package:expense/features/profile/pages/setting_page.dart';
+import 'package:expense/features/analytics/pages/share_analysis_page.dart';
+import 'package:expense/features/notification/pages/notification_page.dart';
+import 'package:expense/features/transfer/pages/transfer_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
@@ -34,6 +56,74 @@ class AppRoutes {
       page: () => const VerifyPhonePage(),
       binding: VerifyPhoneBinding(),
     ),
-    GetPage(name: AppNamed.menuPage, page: () => const MenuPage()),
+    GetPage(name: AppNamed.menuPage, page: () => MainNavigationPage()),
+    GetPage(
+      name: AppNamed.walletsDashboard,
+      page: () => const WalletsDashboardPage(),
+      binding: WalletBinding(),
+    ),
+    GetPage(
+      name: AppNamed.addNewCard,
+      page: () => const AddNewCardPage(),
+      binding:
+          WalletBinding(), // Reusing binding to share controller instance if needed or we can separate
+    ),
+    GetPage(
+      name: AppNamed.topUpPage,
+      page: () => const TopUpPage(),
+      binding: TopUpBinding(),
+    ),
+    GetPage(
+      name: AppNamed.withdrawPage,
+      page: () => const WithdrawPage(),
+      binding: WithdrawBinding(),
+    ),
+    GetPage(
+      name: AppNamed.scannerPage,
+      page: () => const QrScannerPage(),
+      binding: QrScannerBinding(),
+    ),
+    GetPage(
+      name: AppNamed.myQrPage,
+      page: () => const MyQrPage(),
+      binding: QrScannerBinding(),
+    ),
+    GetPage(
+      name: AppNamed.transferPage,
+      page: () => const TransferPage(),
+      binding: TransferBinding(),
+    ),
+    GetPage(
+      name: AppNamed.transferByWalletPage,
+      page: () => const TransferByWalletPage(),
+      binding: TransferByWalletBinding(),
+    ),
+    GetPage(
+      name: AppNamed.transferByBankPage,
+      page: () => const TransferByBankPage(),
+      binding: TransferByBankBinding(),
+    ),
+    GetPage(
+      name: AppNamed.editProfile,
+      page: () => const EditProfilePage(),
+      binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: AppNamed.paymentSecurity,
+      page: () => const PaymentSecurityPage(),
+    ),
+    GetPage(name: AppNamed.setting, page: () => const SettingPage()),
+    GetPage(
+      name: AppNamed.notificationPage,
+      page: () => const NotificationPage(),
+    ),
+    GetPage(
+      name: AppNamed.notificationPage,
+      page: () => const NotificationPage(),
+    ),
+    GetPage(
+      name: AppNamed.shareAnalysis,
+      page: () => const ShareAnalysisPage(),
+    ),
   ];
 }

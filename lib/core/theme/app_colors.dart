@@ -16,6 +16,7 @@ class AppColors {
     0xFF665AF0,
   ); // #665AF0 RGB(102, 90, 240)
   static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
   // Secondary & Interactive
   static const Color secondary = Color(
     0xFF6E6E82,
@@ -45,7 +46,11 @@ class AppColors {
   static const Color bgSeparator = Color(
     0xFFDDDDDD,
   ); // #DDDDD RGB(102, 90, 240)
+  static const Color inputBackground = Color(
+    0xFFF0F1F5,
+  ); // Light grey for inputs
   static const Color backLanding = Color(0xFFF8F8FC);
+  static const Color dividerColor = Color(0xFFE8E7E7);
 
   // Text Colors (derived from design)
   static const Color primaryText = Color(0xFF232440); // Same as onSurface

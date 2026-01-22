@@ -7,4 +7,21 @@ class AppNamed {
   static const String signupSuccess = '/signup-success';
   static const String verifyPhone = '/verify-phone';
   static const String menuPage = "/menu-page";
+  static const String analyticsPage = "/analytics-page";
+  static const String voucherPage = "/voucher-page";
+  static const String profilePage = "/profile-page";
+  static const String walletsDashboard = '/wallets-dashboard';
+  static const String addNewCard = '/add-new-card';
+  static const String topUpPage = '/top-up-page';
+  static const String scannerPage = '/scanner-page';
+  static const String myQrPage = '/my-qr-page';
+  static const String transferPage = '/transfer';
+  static const String transferByWalletPage = '/transfer-wallet';
+  static const String transferByBankPage = '/transfer-bank';
+  static const String editProfile = '/edit-profile';
+  static const String paymentSecurity = '/payment-security';
+  static const String notificationPage = '/notification';
+  static const String withdrawPage = '/withdraw-page';
+  static const String shareAnalysis = '/share-analysis';
+  static const String setting = '/setting';
 }

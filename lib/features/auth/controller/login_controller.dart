@@ -80,6 +80,7 @@ class LoginController extends GetxController {
     try {
       FocusManager.instance.primaryFocus?.unfocus();
       await Future.delayed(const Duration(seconds: 2));
+      Get.toNamed(AppNamed.menuPage);
     } catch (e) {
       Get.snackbar('Error', 'Login failed. Please try again.');
     } finally {

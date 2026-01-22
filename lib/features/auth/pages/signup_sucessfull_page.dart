@@ -1,6 +1,7 @@
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_button.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class SignupSuccessfulPage extends StatelessWidget {
                 text: 'Done',
                 onPressed: () {
                   // Navigate to login or home
-                  Get.offAllNamed('/login');
+                  Get.toNamed(AppNamed.menuPage);
                 },
               ),
 

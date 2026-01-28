@@ -1,5 +1,7 @@
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/wallet/models/card_model.dart';
+import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,12 +41,15 @@ class TopUpController extends GetxController {
     }
 
     // Simulate top-up success
-    Get.snackbar(
-      'Success',
-      'Top up of \$$amount completed successfully!',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
+    // Navigate to Success Page
+    Get.toNamed(
+      AppNamed.transactionSuccess,
+      arguments: TransactionSuccessArgs(
+        type: TransactionType.topUp,
+        amount: amount.toString(), // Formatting can be done in page or here
+        recipientName: "AVI Bank", // Dummy or from card
+        recipientInfo: "123456789", // Dummy
+      ),
     );
 
     // Reset the custom amount

@@ -2,10 +2,11 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
-import 'package:expense/features/qr/pages/qr_scanner_page.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:expense/features/qr/controller/my_qr_controller.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -14,27 +15,33 @@ class MyQrPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(MyQrController());
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9), // Light grey background
+      backgroundColor: AppColors.background, // Light grey background
       body: SafeArea(
         child: Column(
           children: [
             _buildTopBar(),
-            SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 10.h),
-                    _buildTicketCard(),
-                    SizedBox(height: 24.h),
-                    // herer
-                    SizedBox(height: 40.h), // Spacing for bottom tabs
+                    Container(
+                      color: AppColors.white,
+                      child: Padding(
+                        padding: EdgeInsets.all(16.h.w),
+                        child: _buildTicketCard(),
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    _buildCouponSection(controller),
+                    SizedBox(height: 8.h),
+                    _buildPointsSection(), // Spacing for bottom tabs
                   ],
                 ),
               ),
             ),
-            _buildBottomTabs(),
           ],
         ),
       ),
@@ -60,7 +67,7 @@ class MyQrPage extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  // Share functionality
+                  Get.toNamed(AppNamed.shareQr);
                 },
                 child: Icon(
                   Icons.ios_share,
@@ -179,58 +186,108 @@ class MyQrPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomTabs() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 40.h),
+  Widget _buildCouponSection(MyQrController controller) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              Get.off(
-                () => const QrScannerPage(),
-                transition: Transition.fadeIn,
-              );
-            },
-            child: _buildTabItem(
-              label: "QR Scan",
-              icon: AppImages.scanIcon,
-              isActive: false,
+          AppImageViewer(
+            imagePath: AppImages.couponIcon,
+            height: 24.h,
+            width: 24.w,
+            color: AppColors.primaryText,
+          ),
+          SizedBox(width: 12.w),
+          Text(
+            'Coupon',
+            style: AppTextStyles.bodyMedium.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.primaryText,
             ),
           ),
-          SizedBox(width: 60.w),
-          _buildTabItem(
-            label: "My QR",
-            icon: AppImages.myQrcodeIcon,
-            isActive: true,
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Container(
+              height: 40.h,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: TextField(
+                controller: controller.couponController,
+                decoration: InputDecoration(
+                  hintText: 'Your coupon',
+                  hintStyle: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.hintText,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(bottom: 8.h),
+                ),
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.primaryText,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          GestureDetector(
+            onTap: controller.applyCoupon,
+            child: Icon(
+              Icons.arrow_forward_ios,
+              size: 16.sp,
+              color: AppColors.secondaryText,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTabItem({
-    required String label,
-    required String icon,
-    required bool isActive,
-  }) {
-    return Column(
-      children: [
-        AppImageViewer(
-          imagePath: icon,
-          height: 24.h,
-          width: 24.w,
-          color: isActive ? AppColors.primarySup : AppColors.secondaryText,
-        ),
-        SizedBox(height: 8.h),
-        Text(
-          label,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: isActive ? AppColors.primarySup : AppColors.secondaryText,
-            fontWeight: FontWeight.w600,
+  Widget _buildPointsSection() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Row(
+        children: [
+          AppImageViewer(
+            imagePath: AppImages.starIcon,
+            height: 24.h,
+            width: 24.w,
+            color: AppColors.primaryText,
           ),
-        ),
-      ],
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              'Use your points',
+              style: AppTextStyles.bodyMedium.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.primaryText,
+              ),
+            ),
+          ),
+          Text(
+            '4000',
+            style: AppTextStyles.bodyLarge.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.success,
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Icon(
+            Icons.arrow_forward_ios,
+            size: 16.sp,
+            color: AppColors.secondaryText,
+          ),
+        ],
+      ),
     );
   }
 }

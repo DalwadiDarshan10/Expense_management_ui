@@ -13,6 +13,9 @@ class LabeledInputTile extends StatelessWidget {
     this.trailingWidget,
     this.onChanged,
     this.readOnly = false,
+    this.errorText,
+    this.maxLength,
+    this.prefix,
   });
 
   /// Left header text (Cash, Transfer Content, Bank)
@@ -28,6 +31,10 @@ class LabeledInputTile extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool readOnly;
   final ValueChanged<String>? onChanged;
+  final String? errorText;
+  final int? maxLength;
+
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +50,8 @@ class LabeledInputTile extends StatelessWidget {
               Text(
                 title,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.onSurface,
                 ),
               ),
@@ -62,6 +69,8 @@ class LabeledInputTile extends StatelessWidget {
             controller: controller,
             keyboardType: keyboardType,
             readOnly: readOnly,
+            maxLength: maxLength,
+
             onChanged: onChanged,
             style: AppTextStyles.bodyMedium,
             decoration: InputDecoration(
@@ -69,6 +78,9 @@ class LabeledInputTile extends StatelessWidget {
               hintStyle: AppTextStyles.bodyLarge.copyWith(
                 color: AppColors.secondaryText,
               ),
+              prefix: prefix,
+              counterText: "",
+              errorText: errorText, // Mapped here
               isDense: true,
               contentPadding: EdgeInsets.zero,
               border: const UnderlineInputBorder(borderSide: BorderSide.none),
@@ -80,7 +92,6 @@ class LabeledInputTile extends StatelessWidget {
               ),
             ),
           ),
-          // SizedBox(height: 20.h),
         ],
       ),
     );

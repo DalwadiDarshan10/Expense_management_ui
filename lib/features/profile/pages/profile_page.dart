@@ -6,6 +6,7 @@ import 'package:expense/features/profile/widgets/profile_header_widget.dart';
 import 'package:expense/features/profile/widgets/profile_menu_item_widget.dart';
 import 'package:expense/features/profile/widgets/profile_stats_widget.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
+import 'package:expense/features/profile/pages/affiliate_service_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -57,8 +58,6 @@ class ProfilePage extends GetView<ProfileController> {
               ),
             ),
             SizedBox(height: 8.h),
-
-            // Stats (Points & Balance)
             Obx(
               () => ProfileStatsWidget(
                 points: controller.points.value,
@@ -81,7 +80,9 @@ class ProfilePage extends GetView<ProfileController> {
                         imagePath: AppImages.walletinactive,
                         height: 22,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppNamed.walletsDashboard);
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -94,7 +95,9 @@ class ProfilePage extends GetView<ProfileController> {
                         imagePath: AppImages.discountInactive,
                         height: 22.h,
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const AffiliateServicePage());
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -104,7 +107,9 @@ class ProfilePage extends GetView<ProfileController> {
                     ProfileMenuItemWidget(
                       title: 'Manage group of friend',
                       icon: Icon(Icons.group_outlined, size: 24.r),
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppNamed.friends);
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),

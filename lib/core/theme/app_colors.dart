@@ -1,13 +1,13 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
 
   // Primary Colors
   static const Color primary = Color(0xFF665AF0); // #665AF0 RGB(102, 90, 240)
-  static const Color primarySup = Color(
-    0xFFFEBC11,
-  ); // #FEBC11 RGB(254, 188, 17)
+  static const Color primarySup = Color(0xFFFEBC11);
+  static const Color transparent = Colors.transparent;
+  // #FEBC11 RGB(254, 188, 17)
 
   // Surface Colors
   static const Color onSurface = Color(0xFF232440); // #232440 RGB(35, 36, 64)

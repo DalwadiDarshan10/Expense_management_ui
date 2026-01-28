@@ -123,6 +123,9 @@ class AnalyticsPage extends GetView<AnalyticsController> {
                 amount: transaction.amount,
                 date: transaction.date,
                 isExpense: transaction.isExpense,
+                onTap: () {
+                  Get.toNamed(AppNamed.shareBill);
+                },
               );
             },
           ),

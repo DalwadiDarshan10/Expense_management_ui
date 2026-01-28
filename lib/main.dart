@@ -22,8 +22,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppNamed.menuPage,
           getPages: AppRoutes.routes,
-          locale: const Locale('en'),
-          fallbackLocale: const Locale('en'),
         );
       },
     );

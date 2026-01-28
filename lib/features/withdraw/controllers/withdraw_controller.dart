@@ -1,3 +1,5 @@
+import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,8 +30,15 @@ class WithdrawController extends GetxController {
       return;
     }
     // Implement actual withdraw logic here
-    Get.snackbar('Success', 'Withdraw of \$$amount initiated');
-    // Navigate back or reset
+    Get.toNamed(
+      AppNamed.transactionSuccess,
+      arguments: TransactionSuccessArgs(
+        type: TransactionType.withdraw,
+        amount: amount,
+        recipientName: "AVI Bank",
+        recipientInfo: "123456 *** 789",
+      ),
+    );
     // Get.back();
   }
 }

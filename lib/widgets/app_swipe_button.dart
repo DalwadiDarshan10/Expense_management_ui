@@ -17,31 +17,31 @@ class AppSwipeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(mainRadius),
-      child: ActionSlider.custom(
-        sliderBehavior: SliderBehavior.move,
-        width: double.infinity,
-        height: 70.h,
-        backgroundColor: AppColors.primary,
-        toggleWidth: 56.w,
-        toggleMargin: EdgeInsets.all(6.r), // balanced
-        foregroundBuilder: (context, state, child) {
-          return Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(30.r),
-            ),
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.arrow_forward_rounded,
-              color: AppColors.primary,
-              size: 26.sp,
-            ),
-          );
-        },
-        backgroundBuilder: (context, state, child) {
-          return Center(
+    return ActionSlider.custom(
+      sliderBehavior: SliderBehavior.move,
+      width: double.infinity,
+      height: 70.h,
+      backgroundColor: AppColors.primary,
+      toggleWidth: 56.w,
+      toggleMargin: EdgeInsets.all(6.r), // balanced
+      foregroundBuilder: (context, state, child) {
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(30.r),
+          ),
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.arrow_forward_rounded,
+            color: AppColors.primary,
+            size: 26.sp,
+          ),
+        );
+      },
+      backgroundBuilder: (context, state, child) {
+        return Padding(
+          padding: EdgeInsets.only(left: 35.w + 6.r),
+          child: Center(
             child: Text(
               text,
               style: AppTextStyles.titleSmall.copyWith(
@@ -51,16 +51,16 @@ class AppSwipeButton extends StatelessWidget {
                 fontSize: 16.sp,
               ),
             ),
-          );
-        },
-        action: (sliderController) async {
-          sliderController.loading();
-          await onAction();
-          sliderController.success();
-          await Future.delayed(const Duration(milliseconds: 600));
-          sliderController.reset();
-        },
-      ),
+          ),
+        );
+      },
+      action: (sliderController) async {
+        sliderController.loading();
+        await onAction();
+        sliderController.success();
+        await Future.delayed(const Duration(milliseconds: 600));
+        sliderController.reset();
+      },
     );
   }
 }

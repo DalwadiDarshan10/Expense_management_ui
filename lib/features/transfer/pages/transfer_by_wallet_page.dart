@@ -38,14 +38,48 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SelectedUserTile(
-                      name: "Irene Perry",
-                      subtitle: "505-287-8051",
-                      isBorder: true,
-                      isArrowRight: false,
-                      onTap: () {},
-                      isBig: true,
-                    ),
+                    Obx(() {
+                      final contact = controller.selectedContact.value;
+                      if (contact == null) return const SizedBox.shrink();
+                      return SelectedUserTile(
+                        name: contact.name, // "Irene Perry"
+                        subtitle: contact.phone, // "505-287-8051"
+                        isBorder: true,
+                        isArrowRight: false,
+                        onTap: () {},
+                        isBig: true,
+                        avatar: Container(
+                          width: 54.w,
+                          height: 54.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
+                          ),
+                          padding: EdgeInsets.all(3.w),
+                          child: CircleAvatar(
+                            backgroundColor: AppColors.bgSeparator,
+                            backgroundImage: contact.avatarUrl != null
+                                ? AssetImage(contact.avatarUrl!)
+                                : null,
+                            child: contact.avatarUrl == null
+                                ? Text(
+                                    contact.name.isNotEmpty
+                                        ? contact.name[0].toUpperCase()
+                                        : '?',
+                                    style: TextStyle(
+                                      color: AppColors.primaryText,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.sp,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                        ),
+                      );
+                    }),
 
                     // Selected User Card
                     SizedBox(height: 8.h),
@@ -54,6 +88,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                       controller: controller.amountController,
                       hintText: "\$ 12,000.00",
                       keyboardType: TextInputType.number,
+                      errorText: controller.amountError.value,
                     ),
                     SizedBox(height: 8.h),
                     // Transfer Content
@@ -83,8 +118,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: controller.greetingCards.length,
-                              separatorBuilder: (_, __) =>
-                                  SizedBox(width: 12.w),
+                              separatorBuilder: (_, _) => SizedBox(width: 12.w),
                               itemBuilder: (context, index) {
                                 return Obx(() {
                                   final isSelected =
@@ -126,7 +160,9 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: AppSwipeButton(
-                        onAction: () async {},
+                        onAction: () async {
+                          controller.onTransfer();
+                        },
                         text: "SWIPE TO TRANSFER",
                       ),
                     ),

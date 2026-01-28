@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
       children: [
         // Blue curved background using SVG image
         SizedBox(
-          height: 230.h,
+          height: 210.h,
           width: double.infinity,
           child: ClipRRect(
             borderRadius: BorderRadius.only(
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
             ),
             child: AppImageViewer(
               imagePath: AppImages.menuPageBackground,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
         ),
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
               children: [
-                SizedBox(height: 16.h),
+                SizedBox(height: 1.h),
                 // Notification row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -122,42 +122,49 @@ class HomePage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppNamed.topUpPage);
-                          },
-                          child: _buildActionButton(
-                            icon: AppImages.topupIcon,
-                            label: 'Top up',
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(AppNamed.topUpPage);
+                            },
+                            child: _buildActionButton(
+                              icon: AppImages.topupIcon,
+                              label: 'Top up',
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppNamed.walletsDashboard);
-                          },
-                          child: _buildActionButton(
-                            icon: AppImages.walletIcon,
-                            label: 'Wallet',
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(AppNamed.walletsDashboard);
+                            },
+                            child: _buildActionButton(
+                              icon: AppImages.walletIcon,
+                              label: 'Wallet',
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppNamed.scannerPage);
-                          },
-                          child: _buildActionButton(
-                            icon: AppImages.scanIcon,
-                            label: 'QR Scan',
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(AppNamed.scannerPage);
+                            },
+                            child: _buildActionButton(
+                              icon: AppImages.scanIcon,
+                              label: 'QR Scan',
+                            ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppNamed.myQrPage);
-                          },
-                          child: _buildActionButton(
-                            icon: AppImages.myQrcodeIcon,
-                            label: 'My QR',
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(AppNamed.myQrPage);
+                            },
+                            child: _buildActionButton(
+                              icon: AppImages.myQrcodeIcon,
+                              label: 'My QR',
+                            ),
                           ),
                         ),
                       ],
@@ -385,6 +392,7 @@ class HomePage extends StatelessWidget {
             amount: '-\$420',
             isNegative: true,
             date: "Today - 3.14",
+            onTap: () => Get.toNamed(AppNamed.shareBill),
           ),
           SizedBox(height: 20.h),
           _buildTransactionItem(
@@ -394,6 +402,7 @@ class HomePage extends StatelessWidget {
             amount: '\$420',
             isNegative: true,
             date: "22 jan- 3.14",
+            onTap: () => Get.toNamed(AppNamed.shareBill),
           ),
         ],
       ),
@@ -407,60 +416,64 @@ class HomePage extends StatelessWidget {
     required String amount,
     required bool isNegative,
     required String date,
+    VoidCallback? onTap,
   }) {
-    return Row(
-      children: [
-        AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
-        SizedBox(width: 12.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w400,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  Text(
-                    amount,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: isNegative
-                          ? AppColors.success
-                          : AppColors.primaryText,
+                    Text(
+                      amount,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: isNegative
+                            ? AppColors.success
+                            : AppColors.primaryText,
 
-                      fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    subtitle,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.success,
-                      fontWeight: FontWeight.w400,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      subtitle,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: AppColors.success,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  Text(
-                    date,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.secondary,
-                      fontWeight: FontWeight.w400,
+                    Text(
+                      date,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

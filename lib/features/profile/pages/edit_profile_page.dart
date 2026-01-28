@@ -35,27 +35,32 @@ class EditProfilePage extends GetView<EditProfileController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 24.h),
             // Avatar
-            Center(
-              child: Container(
-                width: 100.w,
-                height: 100.w,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  // Placeholder for now, can be updated to show actual image
-                  child: Icon(
-                    Icons.person,
-                    size: 50.r,
-                    color: Colors.grey[600],
+            Container(
+              color: AppColors.white,
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 24.h),
+                  child: Container(
+                    width: 100.w,
+                    height: 100.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      // Placeholder for now, can be updated to show actual image
+                      child: Icon(
+                        Icons.person,
+                        size: 50.r,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 32.h),
+            SizedBox(height: 8.h),
 
             // Form Fields
             LabeledInputTile(

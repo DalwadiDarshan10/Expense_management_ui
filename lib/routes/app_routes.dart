@@ -8,8 +8,12 @@ import 'package:expense/features/auth/pages/register_page.dart';
 import 'package:expense/features/auth/pages/signup_sucessfull_page.dart';
 import 'package:expense/features/home/pages/main_navigation_page.dart';
 import 'package:expense/features/qr/bindings/qr_binding.dart';
+import 'package:expense/features/qr/bindings/share_qr_binding.dart';
 import 'package:expense/features/qr/pages/my_qr_page.dart';
 import 'package:expense/features/qr/pages/qr_scanner_page.dart';
+import 'package:expense/features/qr/pages/share_qr_page.dart';
+import 'package:expense/features/bill/bindings/share_bill_binding.dart';
+import 'package:expense/features/bill/pages/share_bill_page.dart';
 import 'package:expense/features/topup/bindings/top_up_binding.dart';
 import 'package:expense/features/topup/pages/top_up_page.dart';
 import 'package:expense/features/withdraw/binding/withdraw_binding.dart';
@@ -29,6 +33,11 @@ import 'package:expense/features/profile/pages/setting_page.dart';
 import 'package:expense/features/analytics/pages/share_analysis_page.dart';
 import 'package:expense/features/notification/pages/notification_page.dart';
 import 'package:expense/features/transfer/pages/transfer_page.dart';
+import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/features/friends/bindings/friends_binding.dart';
+import 'package:expense/features/friends/pages/friends_page.dart';
+import 'package:expense/features/friends/bindings/add_friend_binding.dart';
+import 'package:expense/features/friends/pages/add_friend_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
@@ -124,6 +133,30 @@ class AppRoutes {
     GetPage(
       name: AppNamed.shareAnalysis,
       page: () => const ShareAnalysisPage(),
+    ),
+    GetPage(
+      name: AppNamed.shareQr,
+      page: () => const ShareQrPage(),
+      binding: ShareQrBinding(),
+    ),
+    GetPage(
+      name: AppNamed.shareBill,
+      page: () => const ShareBillPage(),
+      binding: ShareBillBinding(),
+    ),
+    GetPage(
+      name: AppNamed.friends,
+      page: () => const FriendsPage(),
+      binding: FriendsBinding(),
+    ),
+    GetPage(
+      name: AppNamed.addNewFriend,
+      page: () => const AddFriendPage(),
+      binding: AddFriendBinding(),
+    ),
+    GetPage(
+      name: AppNamed.transactionSuccess,
+      page: () => const TransactionSuccessPage(),
     ),
   ];
 }

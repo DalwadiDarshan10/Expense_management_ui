@@ -35,7 +35,7 @@ class AppButton extends StatelessWidget {
     this.suffixIcon,
     this.width,
     this.height,
-    this.borderRadius = 12.0,
+    this.borderRadius = 15.0,
     this.backgroundColor,
     this.textColor,
     this.borderColor,
@@ -150,14 +150,17 @@ class AppButton extends StatelessWidget {
           Icon(prefixIcon, color: contentColor, size: 20.sp),
           SizedBox(width: 4.w),
         ],
-        Text(
-          text,
-          style:
-              textStyle ??
-              AppTextStyles.button.copyWith(
-                color: contentColor,
-                fontSize: 16.sp,
-              ),
+        Flexible(
+          child: Text(
+            maxLines: 1,
+            text,
+            style:
+                textStyle ??
+                AppTextStyles.button.copyWith(
+                  color: contentColor,
+                  fontSize: 16.sp,
+                ),
+          ),
         ),
         if (suffixIcon != null) ...[
           SizedBox(width: 8.w),

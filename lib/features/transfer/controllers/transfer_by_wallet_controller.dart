@@ -1,7 +1,8 @@
+import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/transfer/models/contact_model.dart';
-import 'package:expense/core/theme/app_colors.dart'; // For snackbar colors if needed
 import 'package:expense/core/constants/app_images.dart';
 
 class TransferByWalletController extends GetxController {
@@ -10,6 +11,7 @@ class TransferByWalletController extends GetxController {
 
   final selectedContact = Rxn<ContactModel>();
   final isValid = false.obs;
+  final amountError = RxnString();
 
   // Hardcoded balance for demo
   final double balance = 12769.00;
@@ -35,34 +37,52 @@ class TransferByWalletController extends GetxController {
 
   void _validate() {
     final amountText = amountController.text;
-    final amount = double.tryParse(
-      amountText.replaceAll(',', ''),
-    ); // Simple parsing
+    // Simplified: Check only if text is not empty.
+    // If user inputs "0" or valid text, we consider it valid for "not empty" rule.
+    bool amountValid = amountController.text.isNotEmpty;
 
-    // Validate: Amount > 0 and User selected
-    // Note: If no user selected, we might still allow input but disable button
+    if (!amountValid && amountText.isNotEmpty) {
+      // Just keep existing error logic if useful but don't block invalid logic on pure text empty check
+      amountError.value = null;
+    } else {
+      // if we want to show invalid number error:
+      final amount = double.tryParse(amountText.replaceAll(',', ''));
+      if (amount == null && amountText.isNotEmpty) {
+        amountError.value = "Invalid number";
+      } else {
+        amountError.value = null;
+      }
+    }
 
-    bool amountValid = amount != null && amount > 0 && amount <= balance;
-    // For now, require contact to be selected?
-    // If entered via "Transfer by Wallet" without contact, we might need a way to select one.
-    // For simplicity, we assume contact is either passed or we simulate selection.
-    // Or we strictly require contact.
-
+    // We still need a contact to transfer TO.
     isValid.value = amountValid && selectedContact.value != null;
   }
 
   void onTransfer() {
-    if (!isValid.value) return;
+    bool isAmountEmpty = amountController.text.isEmpty;
 
-    Get.snackbar(
-      'Success',
-      'Transfer of \$${amountController.text} to ${selectedContact.value?.name} successful!',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.success,
-      colorText: AppColors.white,
+    if (isAmountEmpty) {
+      if (isAmountEmpty) {
+        amountError.value = "Amount required";
+      }
+
+      Get.snackbar(
+        "Invalid Input",
+        "Please enter an amount",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    Get.toNamed(
+      AppNamed.transactionSuccess,
+      arguments: TransactionSuccessArgs(
+        type: TransactionType.transfer,
+        amount: amountController.text,
+        recipientName: selectedContact.value?.name ?? "Unknown",
+        recipientInfo: selectedContact.value?.phone ?? "",
+      ),
     );
-    // Navigate back or to receipt
-    // Get.offNamed(AppNamed.transferSuccess); // If we had one
   }
 
   final RxInt selectedGreetingIndex = (-1).obs;

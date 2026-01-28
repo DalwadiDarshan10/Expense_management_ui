@@ -11,6 +11,7 @@ class TradingHistoryItemWidget extends StatelessWidget {
   final double amount;
   final String date;
   final bool isExpense;
+  final VoidCallback? onTap;
 
   const TradingHistoryItemWidget({
     super.key,
@@ -20,60 +21,64 @@ class TradingHistoryItemWidget extends StatelessWidget {
     required this.amount,
     required this.date,
     required this.isExpense,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        children: [
-          // Icon
-          Center(child: _buildIcon()),
-          SizedBox(width: 12.w),
-          // Title and status
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Row(
+          children: [
+            // Icon
+            Center(child: _buildIcon()),
+            SizedBox(width: 12.w),
+            // Title and status
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primaryText,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    status,
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.success,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Amount and date
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  title,
+                  '${isExpense ? '-' : '+'}\$${amount.toStringAsFixed(0)}',
                   style: AppTextStyles.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.primaryText,
+                    fontWeight: FontWeight.w600,
+                    color: isExpense ? AppColors.critical : AppColors.success,
                   ),
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  status,
+                  date,
                   style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.success,
+                    color: AppColors.secondaryText,
                   ),
                 ),
               ],
             ),
-          ),
-          // Amount and date
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${isExpense ? '-' : '+'}\$${amount.toStringAsFixed(0)}',
-                style: AppTextStyles.bodyLarge.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: isExpense ? AppColors.critical : AppColors.success,
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                date,
-                style: AppTextStyles.labelMedium.copyWith(
-                  color: AppColors.secondaryText,
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

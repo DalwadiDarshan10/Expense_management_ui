@@ -3,6 +3,7 @@ import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/analytics/controller/share_analysis_controller.dart';
 import 'package:expense/features/analytics/widgets/shared_contact_item_widget.dart';
 import 'package:expense/widgets/app_button.dart';
+import 'package:expense/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,10 +21,10 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
     final phoneController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.background,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: AppColors.white,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -34,93 +35,129 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
         ),
         title: Text(
           'Share Analys',
-          style: AppTextStyles.titleLarge.copyWith(
+          style: AppTextStyles.headlineSmall.copyWith(
             color: AppColors.primaryText,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 24.h),
-            Text(
-              'Shared With',
-              style: AppTextStyles.titleMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.primaryText,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 8.h),
+        child: Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Shared With',
+                style: AppTextStyles.titleMedium.copyWith(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
+                ),
               ),
-            ),
-            SizedBox(height: 16.h),
-            // Input Field row
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 50.h,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.inputBackground,
-                      borderRadius: BorderRadius.circular(12.r),
+
+              SizedBox(height: 14.h),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: AppTextField(
+                      hint: 'Phone number',
+                      controller: phoneController,
+                      onChanged: controller.updateSearchQuery,
+                      fillColor: AppColors.inputBackground,
+                      borderRadius: 30,
                     ),
-                    child: Center(
-                      child: TextField(
-                        controller: phoneController,
-                        onChanged: controller.updateSearchQuery,
-                        decoration: InputDecoration(
-                          hintText: 'Phone number',
-                          hintStyle: AppTextStyles.bodyMedium.copyWith(
-                            color: AppColors.secondaryText,
+                  ),
+                  SizedBox(width: 10.w),
+                  SizedBox(
+                    width: 83.w,
+                    height: 50.h,
+                    child: AppButton(
+                      text: 'Send',
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      textStyle: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      borderRadius: 25.r,
+                      onPressed: () {
+                        // Close any existing snackbar first
+                        if (Get.isSnackbarOpen) {
+                          Get.closeCurrentSnackbar();
+                        }
+                        if (phoneController.text.isNotEmpty) {
+                          Get.snackbar(
+                            'Sent',
+                            'Share message sent successfully',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                          controller.addContact(phoneController.text);
+                          phoneController.clear();
+                          controller.updateSearchQuery('');
+                        } else {
+                          Get.snackbar(
+                            'Error',
+                            'Please enter a phone number',
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 18.h),
+              Divider(color: AppColors.dividerColor),
+
+              // Contact List
+              Obx(() {
+                if (controller.filteredContacts.isEmpty) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24.h),
+                        child: Center(
+                          child: Text(
+                            'No contacts found',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.secondaryText,
+                            ),
                           ),
-                          border: InputBorder.none,
-                          isDense: true,
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 12.w),
-                SizedBox(
-                  width: 80.w,
-                  height: 50.h,
-                  child: AppButton(
-                    text: 'Send',
-                    onPressed: () {
-                      controller.addContact(phoneController.text);
-                      phoneController.clear();
-                      controller.updateSearchQuery('');
-                    },
-                    backgroundColor: AppColors.primary,
-                    textStyle: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    borderRadius: 12.r,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            // Contact List
-            Expanded(
-              child: Obx(() {
-                if (controller.filteredContacts.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No contacts found',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.secondaryText,
+                      Divider(color: AppColors.dividerColor),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: _buildFooter(),
                       ),
-                    ),
+                    ],
                   );
                 }
-                return ListView.builder(
-                  itemCount: controller.filteredContacts.length,
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.filteredContacts.length + 1,
+                  separatorBuilder: (_, _) =>
+                      Divider(color: AppColors.dividerColor),
                   itemBuilder: (context, index) {
+                    if (index == controller.filteredContacts.length) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        child: _buildFooter(),
+                      );
+                    }
+
                     final contact = controller.filteredContacts[index];
+
                     return SharedContactItemWidget(
                       name: contact.name,
                       phoneNumber: contact.phoneNumber,
@@ -129,52 +166,53 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                   },
                 );
               }),
-            ),
-            SizedBox(height: 16.h),
-            // Footer Section
-            _buildFooter(),
-            SizedBox(height: 32.h),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
+  /// Footer like Figma
   Widget _buildFooter() {
     return Row(
       children: [
-        Icon(Icons.error_outline, color: AppColors.secondaryText, size: 20.r),
+        Icon(Icons.error_outline, color: AppColors.secondaryText, size: 24.r),
+
         SizedBox(width: 8.w),
+
         Expanded(
           child: Text(
             'Learn about sharing',
-            style: AppTextStyles.bodyMedium.copyWith(
+            style: AppTextStyles.bodyLarge.copyWith(
               color: AppColors.secondaryText,
             ),
           ),
         ),
+
         InkWell(
+          borderRadius: BorderRadius.circular(12.r),
           onTap: () {
+            // Close any existing snackbar first
+            if (Get.isSnackbarOpen) {
+              Get.closeCurrentSnackbar();
+            }
             Clipboard.setData(
               const ClipboardData(text: 'https://example.com/share-link'),
             );
-            Get.snackbar(
-              'Copied',
-              'Link copied to clipboard',
-              snackPosition: SnackPosition.BOTTOM,
-            );
+            Get.snackbar('Copied', 'Link copied to clipboard');
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: AppColors.inputBackground,
-              borderRadius: BorderRadius.circular(8.r),
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: AppColors.dividerColor),
             ),
             child: Text(
               'Copy link',
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.primaryText,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

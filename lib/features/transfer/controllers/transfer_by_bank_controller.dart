@@ -1,6 +1,7 @@
+import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:expense/core/theme/app_colors.dart';
 
 class TransferByBankController extends GetxController {
   final amountController = TextEditingController();
@@ -9,6 +10,9 @@ class TransferByBankController extends GetxController {
 
   final selectedBank = RxnString();
   final isValid = false.obs;
+
+  final amountError = RxnString();
+  final accountError = RxnString();
 
   final double balance = 12769.00;
 
@@ -33,10 +37,37 @@ class TransferByBankController extends GetxController {
 
   void _validate() {
     final amountText = amountController.text;
-    final amount = double.tryParse(amountText.replaceAll(',', ''));
+    // Simplified validation: simple isNotEmpty checks
+    bool amountValid = amountText.isNotEmpty;
 
-    bool amountValid = amount != null && amount > 0 && amount <= balance;
+    // Optional: still try to show specific errors for feedback if we want,
+    // but the main gate 'isValid' should be loose.
+    // If strict compliance with "not empty" is requested:
+    // We can just set errors if empty.
+
+    if (!amountValid) {
+      // If amount is not valid (i.e., empty)
+      amountError.value =
+          null; // Clear error for empty, will be handled by onTransfer
+    } else {
+      // This branch assumes we still parse double.
+      // User said "not empty", so let's stick to text check primarily.
+      // But we probably still want basic number check to avoid logic errors downstream.
+      final amount = double.tryParse(amountText.replaceAll(',', ''));
+      if (amount == null) {
+        amountError.value = "Invalid number";
+        amountValid = false; // Mark as invalid if it's not a number
+      } else if (amount <= 0) {
+        amountError.value = "Amount must be positive";
+        amountValid = false; // Mark as invalid if not positive
+      } else {
+        amountError.value = null;
+      }
+    }
+
     bool accountValid = accountController.text.isNotEmpty;
+    if (accountValid) accountError.value = null;
+
     bool bankValid = selectedBank.value != null;
 
     isValid.value = amountValid && accountValid && bankValid;
@@ -48,14 +79,54 @@ class TransferByBankController extends GetxController {
   }
 
   void onTransfer() {
-    if (!isValid.value) return;
+    // Explicit final check before transfer
+    bool isAmountEmpty = amountController.text.isEmpty;
+    bool isAccountEmpty = accountController.text.isEmpty;
 
-    Get.snackbar(
-      'Success',
-      'Transfer of \$${amountController.text} to account ${accountController.text} successful!',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.success,
-      colorText: AppColors.white,
+    if (isAmountEmpty || isAccountEmpty || selectedBank.value == null) {
+      if (isAccountEmpty) {
+        accountError.value = "Account required";
+      }
+      if (isAmountEmpty) {
+        amountError.value = "Amount required";
+      }
+
+      Get.snackbar(
+        "Invalid Input",
+        "Please fill all fields",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    final amountText = amountController.text;
+    final amount = double.tryParse(amountText.replaceAll(',', ''));
+    if (amount == null) {
+      amountError.value = "Invalid number";
+      Get.snackbar(
+        "Invalid Input",
+        "Please enter a valid number for amount",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    if (amount <= 0) {
+      amountError.value = "Amount must be positive";
+      Get.snackbar(
+        "Invalid Input",
+        "Amount must be positive",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    Get.toNamed(
+      AppNamed.transactionSuccess,
+      arguments: TransactionSuccessArgs(
+        type: TransactionType.transfer,
+        amount: amountController.text,
+        recipientName: selectedBank.value ?? "Unknown Bank",
+        recipientInfo: accountController.text,
+      ),
     );
   }
 }

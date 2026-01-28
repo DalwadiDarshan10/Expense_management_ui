@@ -24,4 +24,9 @@ class AppNamed {
   static const String withdrawPage = '/withdraw-page';
   static const String shareAnalysis = '/share-analysis';
   static const String setting = '/setting';
+  static const String shareQr = '/share-qr';
+  static const String shareBill = '/share-bill';
+  static const String friends = '/friends';
+  static const String addNewFriend = '/add-new-friend';
+  static const String transactionSuccess = '/transaction-success';
 }

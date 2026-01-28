@@ -15,7 +15,7 @@ class ChangePasswordPage extends StatelessWidget {
     final controller = Get.put(ChangePasswordController());
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.white,
         leading: IconButton(
@@ -35,111 +35,119 @@ class ChangePasswordPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Old Password
-              Obx(
-                () => AppTextField(
-                  label: 'Old password',
-                  hint: 'Walletavipay123',
-                  controller: controller.oldPasswordController,
-                  isPassword: true,
-                  maxLength: 8,
-                  onChanged: controller.validateOldPassword,
-                  errorText: controller.oldPasswordError.value.isNotEmpty
-                      ? controller.oldPasswordError.value
-                      : null,
-                ),
-              ),
-              SizedBox(height: 24.h),
-
-              // New Password
-              Obx(
-                () => AppTextField(
-                  label: 'New password',
-                  hint: 'At least 8 characters',
-                  controller: controller.newPasswordController,
-                  isPassword: true,
-                  maxLength: 8,
-                  onChanged: controller.validateNewPassword,
-                  errorText: controller.newPasswordError.value.isNotEmpty
-                      ? controller.newPasswordError.value
-                      : null,
-                ),
-              ),
-              SizedBox(height: 24.h),
-
-              // Confirm Password
-              Obx(
-                () => AppTextField(
-                  label: 'Confirm password',
-                  hint: 'At least 8 characters',
-                  controller: controller.confirmPasswordController,
-                  isPassword: true,
-                  maxLength: 8,
-                  onChanged: controller.validateConfirmPassword,
-                  errorText: controller.confirmPasswordError.value.isNotEmpty
-                      ? controller.confirmPasswordError.value
-                      : null,
-                ),
-              ),
-              SizedBox(height: 24.h),
-
-              // Sign Out Checkbox
-              Obx(
-                () => GestureDetector(
-                  onTap: controller.toggleSignOutAllDevices,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 20.w,
-                        height: 20.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.r),
-                          border: Border.all(
-                            color: controller.signOutAllDevices.value
-                                ? AppColors.primary
-                                : AppColors.borderNor,
-                            width: 1.5.w,
-                          ),
-                          color: controller.signOutAllDevices.value
-                              ? AppColors.primary
-                              : Colors.transparent,
-                        ),
-                        child: controller.signOutAllDevices.value
-                            ? Icon(
-                                Icons.check,
-                                size: 14.sp,
-                                color: AppColors.white,
-                              )
-                            : null,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        'Sign Out Of All Devices',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.secondaryText,
-                        ),
-                      ),
-                    ],
+        child: Column(
+          children: [
+            SizedBox(height: 8.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+              color: AppColors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Old Password
+                  Obx(
+                    () => AppTextField(
+                      label: 'Old password',
+                      hint: 'Walletavipay123',
+                      controller: controller.oldPasswordController,
+                      isPassword: true,
+                      maxLength: 8,
+                      onChanged: controller.validateOldPassword,
+                      errorText: controller.oldPasswordError.value.isNotEmpty
+                          ? controller.oldPasswordError.value
+                          : null,
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: 40.h),
+                  SizedBox(height: 24.h),
 
-              // Save Button
-              Obx(
-                () => AppButton(
+                  // New Password
+                  Obx(
+                    () => AppTextField(
+                      label: 'New password',
+                      hint: 'At least 8 characters',
+                      controller: controller.newPasswordController,
+                      isPassword: true,
+                      maxLength: 8,
+                      onChanged: controller.validateNewPassword,
+                      errorText: controller.newPasswordError.value.isNotEmpty
+                          ? controller.newPasswordError.value
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+
+                  // Confirm Password
+                  Obx(
+                    () => AppTextField(
+                      label: 'Confirm password',
+                      hint: 'At least 8 characters',
+                      controller: controller.confirmPasswordController,
+                      isPassword: true,
+                      maxLength: 8,
+                      onChanged: controller.validateConfirmPassword,
+                      errorText:
+                          controller.confirmPasswordError.value.isNotEmpty
+                          ? controller.confirmPasswordError.value
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+
+                  // Sign Out Checkbox
+                  Obx(
+                    () => GestureDetector(
+                      onTap: controller.toggleSignOutAllDevices,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 20.w,
+                            height: 20.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.r),
+                              border: Border.all(
+                                color: AppColors.primary,
+                                width: 1.5.w,
+                              ),
+                              color: controller.signOutAllDevices.value
+                                  ? AppColors.primary
+                                  : Colors.transparent,
+                            ),
+                            child: controller.signOutAllDevices.value
+                                ? Icon(
+                                    Icons.check,
+                                    size: 14.sp,
+                                    color: AppColors.white,
+                                  )
+                                : null,
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Sign Out Of All Devices',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.primaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 40.h),
+
+            // Save Button
+            Obx(
+              () => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: AppButton(
                   text: 'Save Change',
                   onPressed: controller.saveChange,
                   isLoading: controller.isLoading.value,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/withdraw/controllers/withdraw_controller.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
 import 'package:expense/widgets/labeled_input_tile.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,11 @@ class WithdrawPage extends GetView<WithdrawController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20.h),
+            SizedBox(height: 8.h),
             // Withdraw To Section
             _buildWithdrawToSection(),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: 8.h),
 
             // Denominations Section
             Container(
@@ -43,18 +44,21 @@ class WithdrawPage extends GetView<WithdrawController> {
               child: _buildDenominationsSection(),
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: 8.h),
 
             // Cash Section
             _buildCashSection(),
 
-            SizedBox(height: 60.h),
+            SizedBox(height: 40.h),
 
-            AppSwipeButton(
-              text: 'SWIPE TO WITHDRAW',
-              onAction: () async {
-                controller.performWithdraw();
-              },
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: AppSwipeButton(
+                text: 'SWIPE TO WITHDRAW',
+                onAction: () async {
+                  controller.performWithdraw();
+                },
+              ),
             ),
             SizedBox(height: 20.h),
           ],
@@ -83,7 +87,7 @@ class WithdrawPage extends GetView<WithdrawController> {
           ),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () {
-            // Handle bank selection if needed
+            Get.toNamed(AppNamed.walletsDashboard);
           },
         ),
       ),
@@ -93,71 +97,64 @@ class WithdrawPage extends GetView<WithdrawController> {
   Widget _buildDenominationsSection() {
     final List<int> denominations = [50, 100, 200, 500, 1000, 2000];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Denominations',
-          style: AppTextStyles.titleMedium.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 16.sp,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Denominations',
+            style: AppTextStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 16.sp,
+            ),
           ),
-        ),
-        SizedBox(height: 12.h),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12.w,
-            mainAxisSpacing: 12.h,
-            childAspectRatio: 2.5,
-          ),
-          itemCount: denominations.length,
-          itemBuilder: (context, index) {
-            final amount = denominations[index];
-            return Obx(() {
-              final isSelected =
-                  controller.selectedDenomination.value == amount;
+          SizedBox(height: 12.h),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12.w,
+              mainAxisSpacing: 12.h,
+              childAspectRatio: 2.5,
+            ),
+            itemCount: denominations.length,
+            itemBuilder: (context, index) {
+              final amount = denominations[index];
+              return Obx(() {
+                final isSelected =
+                    controller.selectedDenomination.value == amount;
 
-              return GestureDetector(
-                onTap: () => controller.selectDenomination(amount),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppColors.primary
-                          : Colors.transparent,
-                      width: 1.5,
+                return GestureDetector(
+                  onTap: () => controller.selectDenomination(amount),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.primary
+                            : Colors.transparent,
+                        width: 1.5,
+                      ),
                     ),
-                    boxShadow: [
-                      if (!isSelected)
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '\$$amount',
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.primaryText,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18.sp,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '\$$amount',
+                      style: AppTextStyles.titleMedium.copyWith(
+                        color: AppColors.primaryText,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
-                ),
-              );
-            });
-          },
-        ),
-      ],
+                );
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -167,6 +164,8 @@ class WithdrawPage extends GetView<WithdrawController> {
       controller: controller.customAmountController,
       keyboardType: TextInputType.number,
       hintText: 'Enter amount',
+      prefix: Text("\$ "),
+
       onChanged: (val) {
         if (int.tryParse(val) != controller.selectedDenomination.value) {
           controller.selectedDenomination.value = 0;

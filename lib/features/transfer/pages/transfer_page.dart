@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -35,13 +36,13 @@ class TransferPage extends GetView<TransferController> {
 
             ActionTile(
               title: 'Transfer by Avipay wallet',
-              icon: Icons.account_balance_wallet_outlined,
+              icon: AppImages.walletinactive,
               onTap: controller.onTransferByWallet,
             ),
             const SizedBox(height: 8),
             ActionTile(
               title: 'Transfer by Bank',
-              icon: Icons.account_balance_outlined,
+              icon: AppImages.bankIcon,
               onTap: controller.onTransferByBank,
             ),
 

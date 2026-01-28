@@ -71,6 +71,9 @@ class AppImages {
   static const String waterbillBadge = '$_imagePath/waterbill_badge_image.svg';
   static const String menuPageBackground = '$_imagePath/menu_page_bgimage.svg';
   static const String downloadIcon = "$_iconPath/download_icon.svg";
+  static const String qrBadgeIcon = "$_iconPath/qr_badge_icon.svg";
+  static const String qrScannerBadgeIcon =
+      "$_iconPath/qr_scanner_badge_icon.svg";
 
   // Voucher Images
   static const String voucherImage1 = '$_imagePath/voucher_image1.jpeg';
@@ -86,7 +89,11 @@ class AppImages {
       '$_imagePath/debitcard_golden_image.svg';
 
   //
-  static const String bankIcon = "$_iconPath/bank_icon.dart";
+  static const String bankIcon = "$_iconPath/bank_icon.svg";
+  static const String sucessPageBgImage =
+      "$_imagePath/sucess_page_bg_image.svg";
+  static const String couponIcon = "$_iconPath/coupon_icon.svg";
+  static const String starIcon = "$_iconPath/Star_icon.svg";
 
   // greeting cards
   static const String greetingCard1 = "$_iconPath/greeting_card1.svg";

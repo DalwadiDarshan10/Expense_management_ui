@@ -1,10 +1,11 @@
+import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 
 class ActionTile extends StatelessWidget {
   final String title;
-  final IconData icon; // Or use SVG path if designs require SVGs
+  final String icon; // Or use SVG path if designs require SVGs
   final VoidCallback onTap;
 
   const ActionTile({
@@ -29,7 +30,7 @@ class ActionTile extends StatelessWidget {
             color: AppColors.surface, // Light background for icon
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppColors.primary),
+          child: AppImageViewer(imagePath: icon),
         ),
         title: Text(
           title,
@@ -62,7 +63,7 @@ class SectionTitle extends StatelessWidget {
         style: AppTextStyles.headlineSmall.copyWith(
           // Assuming H3 or similar exists
           fontSize: 18,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           color: AppColors.primaryText,
         ),
       ),
@@ -100,11 +101,11 @@ class ContactTile extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             child: CircleAvatar(
               radius: 24,
-              backgroundColor: AppColors.surface,
+              backgroundColor: AppColors.bgSeparator,
               child: Text(
                 name[0].toUpperCase(),
                 style: const TextStyle(
-                  color: AppColors.primary,
+                  color: AppColors.primaryText,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -115,7 +116,7 @@ class ContactTile extends StatelessWidget {
         title: Text(
           name,
           style: AppTextStyles.bodyLarge.copyWith(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
             color: AppColors.primaryText,
           ),
         ),

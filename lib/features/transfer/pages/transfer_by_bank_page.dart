@@ -57,11 +57,14 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     SizedBox(height: 12.h),
 
                     // To The Account
-                    LabeledInputTile(
-                      title: 'To The Account',
-                      controller: controller.accountController,
-                      hintText: '122 456 141 250',
-                      keyboardType: TextInputType.number,
+                    Obx(
+                      () => LabeledInputTile(
+                        title: 'To The Account',
+                        controller: controller.accountController,
+                        hintText: '122 456 141 250',
+                        keyboardType: TextInputType.number,
+                        errorText: controller.accountError.value,
+                      ),
                     ),
 
                     SizedBox(height: 12.h),
@@ -123,20 +126,23 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     SizedBox(height: 12.h),
 
                     // Cash Amount
-                    LabeledInputTile(
-                      title: 'Cash',
-                      controller: controller.amountController,
-                      hintText: '\$ 12.00.00',
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      trailingWidget: Text(
-                        '(balance \$${controller.balance.toStringAsFixed(2)})',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: const Color(
-                            0xFF6B7280,
-                          ), // Cool gray / blurple text
-                          fontSize: 12.sp,
+                    Obx(
+                      () => LabeledInputTile(
+                        title: 'Cash',
+                        controller: controller.amountController,
+                        hintText: '\$ 12.00.00',
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        errorText: controller.amountError.value,
+                        trailingWidget: Text(
+                          '(balance \$${controller.balance.toStringAsFixed(2)})',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: const Color(
+                              0xFF6B7280,
+                            ), // Cool gray / blurple text
+                            fontSize: 12.sp,
+                          ),
                         ),
                       ),
                     ),
@@ -155,7 +161,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: AppSwipeButton(
-                        onAction: () async {},
+                        onAction: () async {
+                          controller.onTransfer();
+                        },
                         text: "SWIPE TO TRANSFER",
                       ),
                     ),

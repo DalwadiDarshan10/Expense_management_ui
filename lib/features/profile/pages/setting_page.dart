@@ -1,5 +1,6 @@
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
+import 'package:expense/features/profile/controllers/setting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:expense/features/profile/pages/change_password_page.dart';
@@ -10,6 +11,8 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SettingController());
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -38,37 +41,53 @@ class SettingPage extends StatelessWidget {
             SizedBox(height: 8.h),
             Container(
               color: AppColors.white,
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: _buildSettingItem(title: 'Change Face ID', onTap: () {}),
+            ),
+            SizedBox(height: 8.h),
+            Container(
+              color: AppColors.white,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
               child: Column(
                 children: [
-                  _buildSettingItem(title: 'Change Face ID', onTap: () {}),
                   SizedBox(height: 8.h),
-                  _buildSettingItem(
-                    title: 'Change Language',
-                    onTap: () {},
-                    trailing: Row(
-                      children: [
-                        Text('🇬🇧', style: TextStyle(fontSize: 20.sp)),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'English',
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: AppColors.secondaryText,
+                  Obx(
+                    () => _buildSettingItem(
+                      title: 'Change Language',
+                      onTap: () {
+                        _showLanguageBottomSheet(context, controller);
+                      },
+                      trailing: Row(
+                        children: [
+                          Text(
+                            controller.selectedFlag.value,
+                            style: TextStyle(fontSize: 20.sp),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 8.w),
+                          Text(
+                            controller.selectedLanguage.value,
+                            style: AppTextStyles.bodyLarge.copyWith(
+                              color: AppColors.secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                      showChevron: true,
+                      isDropdown: true,
                     ),
-                    showChevron: true,
-                    isDropdown: true,
-                  ),
-                  Divider(color: AppColors.dividerColor, height: 24.h),
-                  _buildSettingItem(
-                    title: 'Change Password',
-                    onTap: () {
-                      Get.to(() => const ChangePasswordPage());
-                    },
                   ),
                 ],
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Container(
+              color: AppColors.white,
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: _buildSettingItem(
+                title: 'Change Password',
+                onTap: () {
+                  Get.to(() => const ChangePasswordPage());
+                },
               ),
             ),
             SizedBox(height: 8.h),
@@ -90,7 +109,6 @@ class SettingPage extends StatelessWidget {
                   ),
                   _buildSettingItem(
                     title: 'Application infomation',
-
                     onTap: () {},
                   ),
                 ],
@@ -99,6 +117,107 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLanguageBottomSheet(
+    BuildContext context,
+    SettingController controller,
+  ) {
+    Get.bottomSheet(
+      Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.9,
+        ),
+        margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20.h),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(width: 24.w), // Spacer for centering
+                  Text(
+                    'Change Language',
+                    style: AppTextStyles.titleLarge.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: Icon(
+                      Icons.close,
+                      color: AppColors.primaryText,
+                      size: 24.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Flexible(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: controller.languages.length,
+                separatorBuilder: (context, index) => Divider(
+                  color: AppColors.dividerColor,
+                  height: 1,
+                  thickness: 0.5,
+                ),
+                itemBuilder: (context, index) {
+                  final language = controller.languages[index];
+                  return Obx(() {
+                    final isSelected =
+                        controller.selectedLanguage.value == language['name'];
+                    return Container(
+                      color: isSelected
+                          ? AppColors.primary.withOpacity(0.05)
+                          : Colors.transparent,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 24.w),
+                        leading: Text(
+                          language['flag']!,
+                          style: TextStyle(fontSize: 24.sp),
+                        ),
+                        title: Text(
+                          language['name']!,
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.primaryText,
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? Icon(Icons.check, color: AppColors.primary)
+                            : SizedBox.shrink(),
+                        onTap: () {
+                          controller.changeLanguage(
+                            language['name']!,
+                            language['flag']!,
+                          );
+                        },
+                      ),
+                    );
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -112,7 +231,7 @@ class SettingPage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
+        padding: EdgeInsets.symmetric(vertical: 12.h),
         color: Colors.transparent, // For hit test
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -17,64 +17,72 @@ class SharedContactItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        children: [
-          // Avatar
-          Container(
-            width: 48.w,
-            height: 48.w,
-            decoration: BoxDecoration(
-              color: AppColors.secondaryText.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                name.isNotEmpty ? name[0].toUpperCase() : '?',
-                style: AppTextStyles.titleMedium.copyWith(
-                  color: AppColors.primaryText,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+    return Row(
+      children: [
+        // Avatar
+        Container(
+          width: 44.w,
+          height: 44.w,
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.primary),
+            borderRadius: BorderRadius.circular(100.r),
+            color: AppColors.transparent,
           ),
-          SizedBox(width: 12.w),
-          // Name and Phone
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w500,
+
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.secondaryText.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  name.isNotEmpty ? name[0].toUpperCase() : '?',
+                  style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.primaryText,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  phoneNumber,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.secondaryText,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Delete Button
-          TextButton(
-            onPressed: onDelete,
-            child: Text(
-              'Delete',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.critical,
-                fontWeight: FontWeight.w500,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        SizedBox(width: 12.w),
+        // Name and Phone
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: AppTextStyles.bodyLarge.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.primaryText,
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                phoneNumber,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.secondaryText,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Delete Button
+        TextButton(
+          onPressed: onDelete,
+          child: Text(
+            'Delete',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.critical,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

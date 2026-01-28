@@ -198,29 +198,36 @@ class WalletsDashboardPage extends GetView<WalletController> {
                       horizontal: 8.0,
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildHeaderAction(
-                          icon: AppImages.topupIcon,
-                          label: 'Top up',
-                          onTap: () => Get.toNamed(AppNamed.topUpPage),
+                        Expanded(
+                          child: _buildHeaderAction(
+                            icon: AppImages.topupIcon,
+                            label: 'Top up',
+                            onTap: () => Get.toNamed(AppNamed.topUpPage),
+                          ),
                         ),
-                        _buildHeaderAction(
-                          icon: AppImages.walletIcon,
-                          label: 'Transfer',
-                          color: AppColors.primary,
-                          onTap: () => Get.toNamed(AppNamed.transferPage),
+                        Expanded(
+                          child: _buildHeaderAction(
+                            icon: AppImages.walletIcon,
+                            label: 'Transfer',
+                            color: AppColors.primary,
+                            onTap: () => Get.toNamed(AppNamed.transferPage),
+                          ),
                         ),
-                        _buildHeaderAction(
-                          icon: AppImages.scanIcon,
-                          label: 'Withdraw',
-                          color: AppColors.primary,
-                          onTap: () => Get.toNamed(AppNamed.withdrawPage),
+                        Expanded(
+                          child: _buildHeaderAction(
+                            icon: AppImages.scanIcon,
+                            label: 'Withdraw',
+                            color: AppColors.primary,
+                            onTap: () => Get.toNamed(AppNamed.withdrawPage),
+                          ),
                         ),
-                        _buildHeaderAction(
-                          icon: AppImages.notificationIcon,
-                          label: 'History',
-                          color: AppColors.primary,
+                        Expanded(
+                          child: _buildHeaderAction(
+                            icon: AppImages.notificationIcon,
+                            label: 'History',
+                            color: AppColors.primary,
+                          ),
                         ),
                       ],
                     ),

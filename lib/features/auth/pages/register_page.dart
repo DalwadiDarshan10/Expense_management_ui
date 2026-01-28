@@ -36,8 +36,8 @@ class RegisterPage extends StatelessWidget {
 
                 20.verticalSpace,
 
-                // Phone field
-                _buildPhoneField(controller),
+                // Email field
+                _buildEmailField(controller),
 
                 20.verticalSpace,
 
@@ -134,21 +134,20 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  /// Build phone input field
-  Widget _buildPhoneField(RegisterController controller) {
+  /// Build email input field
+  Widget _buildEmailField(RegisterController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Phone',
-        hint: '505-287-8051',
-        keyboardType: TextInputType.phone,
-        maxLength: 10,
+        label: 'Email',
+        hint: 'example@email.com',
+        keyboardType: TextInputType.emailAddress,
         showValidationIcon: true,
-        isValid: controller.isPhoneValid.value,
-        onChanged: controller.validatePhone,
-        errorText: controller.phoneErrorText.value.isNotEmpty
-            ? controller.phoneErrorText.value
+        isValid: controller.isEmailValid.value,
+        onChanged: controller.validateEmail,
+        errorText: controller.emailErrorText.value.isNotEmpty
+            ? controller.emailErrorText.value
             : null,
-        suffixIcon: controller.isPhoneValid.value
+        suffixIcon: controller.isEmailValid.value
             ? AppImageViewer(
                 imagePath: AppImages.greentick,
                 height: 22.sp,
@@ -164,9 +163,8 @@ class RegisterPage extends StatelessWidget {
     return Obx(
       () => AppTextField(
         label: 'Password',
-        hint: 'At least 8 characters',
+        hint: 'At least 6 characters',
         isPassword: true,
-        maxLength: 8,
         onChanged: controller.validatePassword,
         errorText: controller.passwordErrorText.value.isNotEmpty
             ? controller.passwordErrorText.value
@@ -180,7 +178,7 @@ class RegisterPage extends StatelessWidget {
     return Obx(
       () => AppTextField(
         label: 'Confirm password',
-        hint: 'At least 8 characters',
+        hint: 'At least 6 characters',
         isPassword: true,
         onChanged: controller.validateConfirmPassword,
         errorText: controller.confirmPasswordErrorText.value.isNotEmpty

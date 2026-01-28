@@ -1,7 +1,8 @@
 import 'package:expense/features/auth/bindings/login_binding.dart';
 import 'package:expense/features/auth/bindings/register_binding.dart';
-import 'package:expense/features/auth/bindings/verify_phone_binding.dart';
 import 'package:expense/features/auth/pages/forget_password.dart';
+import 'package:expense/features/auth/pages/verify_email_otp_page.dart';
+import 'package:expense/features/auth/pages/reset_password_page.dart';
 import 'package:expense/features/auth/pages/login_page.dart';
 import 'package:expense/features/auth/pages/onboarding_page.dart';
 import 'package:expense/features/auth/pages/register_page.dart';
@@ -61,9 +62,16 @@ class AppRoutes {
       page: () => const SignupSuccessfulPage(),
     ),
     GetPage(
-      name: AppNamed.verifyPhone,
-      page: () => const VerifyPhonePage(),
-      binding: VerifyPhoneBinding(),
+      name: AppNamed.forgotPassword,
+      page: () => const ForgotPasswordPage(),
+    ),
+    GetPage(
+      name: AppNamed.verifyEmailOtp,
+      page: () => const VerifyEmailOtpPage(),
+    ),
+    GetPage(
+      name: AppNamed.resetPassword,
+      page: () => const ResetPasswordPage(),
     ),
     GetPage(name: AppNamed.menuPage, page: () => MainNavigationPage()),
     GetPage(

@@ -1,12 +1,19 @@
+import 'package:expense/features/auth/services/auth_service.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class LoginController extends GetxController {
-  // Phone field
-  final phoneController = ''.obs;
-  final isPhoneValid = false.obs;
-  final phoneErrorText = ''.obs;
+  final AuthService _authService = AuthService();
+  final GetStorage _storage = GetStorage();
+
+  // Email field
+  final emailController = ''.obs;
+  final isEmailValid = false.obs;
+  final emailErrorText = ''.obs;
 
   // Password field
   final passwordController = ''.obs;
@@ -19,18 +26,18 @@ class LoginController extends GetxController {
   // Loading state
   final isLoading = false.obs;
 
-  /// Validates phone number (10+ digits)
-  void validatePhone(String value) {
-    phoneController.value = value;
+  /// Validates email
+  void validateEmail(String value) {
+    emailController.value = value;
     if (value.isEmpty) {
-      isPhoneValid.value = false;
-      phoneErrorText.value = 'Phone number is required';
-    } else if (value.length < 10) {
-      isPhoneValid.value = false;
-      phoneErrorText.value = 'Phone number must be at least 10 digits';
+      isEmailValid.value = false;
+      emailErrorText.value = 'Email is required';
+    } else if (!GetUtils.isEmail(value)) {
+      isEmailValid.value = false;
+      emailErrorText.value = 'Please enter a valid email';
     } else {
-      isPhoneValid.value = true;
-      phoneErrorText.value = '';
+      isEmailValid.value = true;
+      emailErrorText.value = '';
     }
   }
 
@@ -39,15 +46,15 @@ class LoginController extends GetxController {
     passwordController.value = value;
     if (value.isEmpty) {
       passwordErrorText.value = 'Password is required';
-    } else if (value.length < 8) {
-      passwordErrorText.value = 'Password must be at least 8 characters';
+    } else if (value.length < 6) {
+      passwordErrorText.value = 'Password must be at least 6 characters';
     } else {
       passwordErrorText.value = '';
     }
   }
 
-  /// Validates password (minimum 8 characters)
-  bool get isPasswordValid => passwordController.value.length >= 8;
+  /// Validates password (minimum 6 characters for Firebase)
+  bool get isPasswordValid => passwordController.value.length >= 6;
 
   /// Toggle password visibility
   void togglePasswordVisibility() {
@@ -60,11 +67,11 @@ class LoginController extends GetxController {
   }
 
   /// Check if form is valid
-  bool get isFormValid => isPhoneValid.value && isPasswordValid;
+  bool get isFormValid => isEmailValid.value && isPasswordValid;
 
   /// Validates all fields - call this on button tap
   void validateAllFields() {
-    validatePhone(phoneController.value);
+    validateEmail(emailController.value);
     validatePassword(passwordController.value);
   }
 
@@ -79,10 +86,20 @@ class LoginController extends GetxController {
 
     try {
       FocusManager.instance.primaryFocus?.unfocus();
-      await Future.delayed(const Duration(seconds: 2));
-      Get.toNamed(AppNamed.menuPage);
+
+      await _authService.signInWithEmail(
+        email: emailController.value.trim(),
+        password: passwordController.value,
+      );
+
+      // Save login state using GetStorage
+      _storage.write('isLoggedIn', true);
+      _storage.write('userEmail', emailController.value.trim());
+
+      Get.snackbar('Success', 'Logged in successfully');
+      Get.offAllNamed(AppNamed.menuPage);
     } catch (e) {
-      Get.snackbar('Error', 'Login failed. Please try again.');
+      Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -90,7 +107,7 @@ class LoginController extends GetxController {
 
   /// Navigate to forgot password
   void goToForgotPassword() {
-    Get.toNamed(AppNamed.verifyPhone);
+    Get.toNamed(AppNamed.forgotPassword);
   }
 
   /// Navigate to sign up

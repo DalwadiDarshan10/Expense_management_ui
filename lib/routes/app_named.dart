@@ -5,7 +5,9 @@ class AppNamed {
   static const String login = '/login';
   static const String register = '/register';
   static const String signupSuccess = '/signup-success';
-  static const String verifyPhone = '/verify-phone';
+  static const String verifyEmailOtp = '/verify-email-otp';
+  static const String forgotPassword = '/forgot-password';
+  static const String resetPassword = '/reset-password';
   static const String menuPage = "/menu-page";
   static const String analyticsPage = "/analytics-page";
   static const String voucherPage = "/voucher-page";

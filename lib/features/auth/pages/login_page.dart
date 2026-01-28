@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
                 // Login button
                 _buildLoginButton(controller),
 
-                24.verticalSpace,
+                16.verticalSpace,
 
                 // Sign up link
                 _buildSignUpLink(controller),
@@ -100,17 +100,16 @@ class LoginPage extends StatelessWidget {
   Widget _buildPhoneField(LoginController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Phone',
-        hint: '012345689',
-        keyboardType: TextInputType.phone,
-        maxLength: 10,
+        label: 'Email',
+        hint: 'example@email.com',
+        keyboardType: TextInputType.emailAddress,
         showValidationIcon: true,
-        isValid: controller.isPhoneValid.value,
-        onChanged: controller.validatePhone,
-        errorText: controller.phoneErrorText.value.isNotEmpty
-            ? controller.phoneErrorText.value
+        isValid: controller.isEmailValid.value,
+        onChanged: controller.validateEmail,
+        errorText: controller.emailErrorText.value.isNotEmpty
+            ? controller.emailErrorText.value
             : null,
-        suffixIcon: controller.isPhoneValid.value
+        suffixIcon: controller.isEmailValid.value
             ? AppImageViewer(
                 imagePath: AppImages.greentick,
                 height: 22.sp,

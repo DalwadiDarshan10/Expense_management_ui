@@ -1,16 +1,22 @@
+import 'package:expense/features/auth/services/auth_service.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class RegisterController extends GetxController {
+  final AuthService _authService = AuthService();
+  final GetStorage _storage = GetStorage();
+
   // Username field
   final usernameController = ''.obs;
   final isUsernameValid = false.obs;
   final usernameErrorText = ''.obs;
 
-  // Phone field
-  final phoneController = ''.obs;
-  final isPhoneValid = false.obs;
-  final phoneErrorText = ''.obs;
+  // Email field
+  final emailController = ''.obs;
+  final isEmailValid = false.obs;
+  final emailErrorText = ''.obs;
 
   // Password field
   final passwordController = ''.obs;
@@ -40,18 +46,18 @@ class RegisterController extends GetxController {
     }
   }
 
-  /// Validates phone number
-  void validatePhone(String value) {
-    phoneController.value = value;
+  /// Validates email
+  void validateEmail(String value) {
+    emailController.value = value;
     if (value.isEmpty) {
-      isPhoneValid.value = false;
-      phoneErrorText.value = 'Phone number is required';
-    } else if (value.length < 10) {
-      isPhoneValid.value = false;
-      phoneErrorText.value = 'Phone number must be at least 10 digits';
+      isEmailValid.value = false;
+      emailErrorText.value = 'Email is required';
+    } else if (!GetUtils.isEmail(value)) {
+      isEmailValid.value = false;
+      emailErrorText.value = 'Please enter a valid email';
     } else {
-      isPhoneValid.value = true;
-      phoneErrorText.value = '';
+      isEmailValid.value = true;
+      emailErrorText.value = '';
     }
   }
 
@@ -60,8 +66,8 @@ class RegisterController extends GetxController {
     passwordController.value = value;
     if (value.isEmpty) {
       passwordErrorText.value = 'Password is required';
-    } else if (value.length < 8) {
-      passwordErrorText.value = 'Password must be at least 8 characters';
+    } else if (value.length < 6) {
+      passwordErrorText.value = 'Password must be at least 6 characters';
     } else {
       passwordErrorText.value = '';
     }
@@ -98,8 +104,8 @@ class RegisterController extends GetxController {
     agreeToTerms.value = !agreeToTerms.value;
   }
 
-  /// Check if password is valid (minimum 8 characters)
-  bool get isPasswordValid => passwordController.value.length >= 8;
+  /// Check if password is valid
+  bool get isPasswordValid => passwordController.value.length >= 6;
 
   /// Check if passwords match
   bool get doPasswordsMatch =>
@@ -109,7 +115,7 @@ class RegisterController extends GetxController {
   /// Check if form is valid
   bool get isFormValid =>
       isUsernameValid.value &&
-      isPhoneValid.value &&
+      isEmailValid.value &&
       isPasswordValid &&
       doPasswordsMatch &&
       agreeToTerms.value;
@@ -117,7 +123,7 @@ class RegisterController extends GetxController {
   /// Validates all fields - call this on button tap
   void validateAllFields() {
     validateUsername(usernameController.value);
-    validatePhone(phoneController.value);
+    validateEmail(emailController.value);
     validatePassword(passwordController.value);
     validateConfirmPassword(confirmPasswordController.value);
   }
@@ -133,11 +139,23 @@ class RegisterController extends GetxController {
 
     try {
       FocusManager.instance.primaryFocus?.unfocus();
-      await Future.delayed(const Duration(seconds: 2));
 
-      Get.offNamed('/signup-success');
+      final credential = await _authService.signUpWithEmail(
+        email: emailController.value.trim(),
+        password: passwordController.value,
+      );
+
+      // Update display name
+      await credential.user?.updateDisplayName(usernameController.value);
+
+      // Save login state
+      _storage.write('isLoggedIn', true);
+      _storage.write('userEmail', emailController.value.trim());
+      _storage.write('username', usernameController.value.trim());
+
+      Get.offNamed(AppNamed.signupSuccess);
     } catch (e) {
-      Get.snackbar('Error', 'Registration failed. Please try again.');
+      Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }

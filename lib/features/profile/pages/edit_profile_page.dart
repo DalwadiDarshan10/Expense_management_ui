@@ -42,19 +42,69 @@ class EditProfilePage extends GetView<EditProfileController> {
               child: Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 24.h),
-                  child: Container(
-                    width: 100.w,
-                    height: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      // Placeholder for now, can be updated to show actual image
-                      child: Icon(
-                        Icons.person,
-                        size: 50.r,
-                        color: Colors.grey[600],
+                  child: Obx(
+                    () => GestureDetector(
+                      onTap: controller.pickImage,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 100.w,
+                            height: 100.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              shape: BoxShape.circle,
+                              image: _getAvatarImage(),
+                            ),
+                            child: _getAvatarImage() == null
+                                ? Center(
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 50.r,
+                                      color: Colors.grey[600],
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          // Camera icon overlay
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(8.r),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.camera_alt,
+                                size: 16.r,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                          // Upload loading indicator
+                          if (controller.isUploadingImage.value)
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black45,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
@@ -87,22 +137,37 @@ class EditProfilePage extends GetView<EditProfileController> {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: controller.saveChanges,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                child: Obx(
+                  () => ElevatedButton(
+                    onPressed: controller.isUploadingImage.value
+                        ? null
+                        : controller.saveChanges,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      elevation: 0,
                     ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    AppStrings.saveChangeBtn,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    child: controller.isUploadingImage.value
+                        ? SizedBox(
+                            height: 20.h,
+                            width: 20.h,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            AppStrings.saveChangeBtn,
+                            style: AppTextStyles.bodyLarge.copyWith(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -112,5 +177,24 @@ class EditProfilePage extends GetView<EditProfileController> {
         ),
       ),
     );
+  }
+
+  /// Get avatar image decoration
+  DecorationImage? _getAvatarImage() {
+    // Show selected image first
+    if (controller.selectedImage.value != null) {
+      return DecorationImage(
+        image: FileImage(controller.selectedImage.value!),
+        fit: BoxFit.cover,
+      );
+    }
+
+    // Show existing avatar from profile
+    final avatarUrl = controller.profileController.userAvatar.value;
+    if (avatarUrl.isNotEmpty) {
+      return DecorationImage(image: NetworkImage(avatarUrl), fit: BoxFit.cover);
+    }
+
+    return null;
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -39,16 +40,7 @@ class ProfileHeaderWidget extends StatelessWidget {
               ),
               child: Center(
                 child: avatarUrl != null && avatarUrl!.isNotEmpty
-                    ? ClipOval(
-                        child: Image.network(
-                          avatarUrl!,
-                          fit: BoxFit.cover,
-                          width: 60.w,
-                          height: 60.w,
-                          errorBuilder: (context, error, stackTrace) =>
-                              _buildPlaceholder(),
-                        ),
-                      )
+                    ? ClipOval(child: _buildAvatarImage())
                     : _buildPlaceholder(),
               ),
             ),
@@ -76,6 +68,24 @@ class ProfileHeaderWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildAvatarImage() {
+    try {
+      final file = File(avatarUrl!);
+      if (file.existsSync()) {
+        return Image.file(
+          file,
+          fit: BoxFit.cover,
+          width: 68.w,
+          height: 68.w,
+          errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+        );
+      }
+    } catch (e) {
+      // If file doesn't exist or error, show placeholder
+    }
+    return _buildPlaceholder();
   }
 
   Widget _buildPlaceholder() {

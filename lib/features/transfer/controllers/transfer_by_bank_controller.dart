@@ -40,19 +40,10 @@ class TransferByBankController extends GetxController {
     // Simplified validation: simple isNotEmpty checks
     bool amountValid = amountText.isNotEmpty;
 
-    // Optional: still try to show specific errors for feedback if we want,
-    // but the main gate 'isValid' should be loose.
-    // If strict compliance with "not empty" is requested:
-    // We can just set errors if empty.
-
     if (!amountValid) {
       // If amount is not valid (i.e., empty)
-      amountError.value =
-          null; // Clear error for empty, will be handled by onTransfer
+      amountError.value = null;
     } else {
-      // This branch assumes we still parse double.
-      // User said "not empty", so let's stick to text check primarily.
-      // But we probably still want basic number check to avoid logic errors downstream.
       final amount = double.tryParse(amountText.replaceAll(',', ''));
       if (amount == null) {
         amountError.value = "Invalid number";

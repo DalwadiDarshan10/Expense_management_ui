@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/notification/controllers/notification_controller.dart';
@@ -32,7 +33,7 @@ class NotificationPage extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Notification',
+          AppStrings.notificationTitle,
           style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w600),
         ),
         actions: [
@@ -41,17 +42,16 @@ class NotificationPage extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 Get.defaultDialog(
-                  title: "Delete Notifications",
+                  title: AppStrings.deleteNotificationsTitle,
                   titleStyle: AppTextStyles.titleMedium.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
-                  middleText:
-                      "Are you sure you want to delete all notifications?",
+                  middleText: AppStrings.deleteNotificationsMessage,
                   middleTextStyle: AppTextStyles.bodyMedium,
                   backgroundColor: AppColors.white,
                   radius: 12.r,
-                  textConfirm: "Delete",
-                  textCancel: "Cancel",
+                  textConfirm: AppStrings.delete,
+                  textCancel: AppStrings.cancel,
                   confirmTextColor: AppColors.white,
                   cancelTextColor: AppColors.primaryText,
                   buttonColor: AppColors.primary,
@@ -80,7 +80,10 @@ class NotificationPage extends StatelessWidget {
           if (controller.todayNotifications.isEmpty &&
               controller.yesterdayNotifications.isEmpty) {
             return Center(
-              child: Text("No Notifications", style: AppTextStyles.bodyLarge),
+              child: Text(
+                AppStrings.noNotifications,
+                style: AppTextStyles.bodyLarge,
+              ),
             );
           }
 
@@ -88,7 +91,7 @@ class NotificationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (controller.todayNotifications.isNotEmpty) ...[
-                _buildSectionHeader('Today'),
+                _buildSectionHeader(AppStrings.today),
                 SizedBox(height: 16.h),
                 ...controller.todayNotifications.map(
                   (item) => _buildNotificationItem(item),
@@ -98,7 +101,7 @@ class NotificationPage extends StatelessWidget {
                   controller.yesterdayNotifications.isNotEmpty)
                 SizedBox(height: 24.h),
               if (controller.yesterdayNotifications.isNotEmpty) ...[
-                _buildSectionHeader('Yesterday'),
+                _buildSectionHeader(AppStrings.yesterday),
                 SizedBox(height: 16.h),
                 ...controller.yesterdayNotifications.map(
                   (item) => _buildNotificationItem(item),

@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
@@ -78,7 +79,7 @@ class MyQrPage extends StatelessWidget {
             ],
           ),
           Text(
-            "My QR",
+            AppStrings.myQr,
             style: AppTextStyles.titleLarge.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -203,7 +204,7 @@ class MyQrPage extends StatelessWidget {
           ),
           SizedBox(width: 12.w),
           Text(
-            'Coupon',
+            AppStrings.couponLabel,
             style: AppTextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.w500,
               color: AppColors.primaryText,
@@ -221,7 +222,7 @@ class MyQrPage extends StatelessWidget {
               child: TextField(
                 controller: controller.couponController,
                 decoration: InputDecoration(
-                  hintText: 'Your coupon',
+                  hintText: AppStrings.couponHint,
                   hintStyle: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.hintText,
                   ),
@@ -266,7 +267,7 @@ class MyQrPage extends StatelessWidget {
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
-              'Use your points',
+              AppStrings.usePointsLabel,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
                 color: AppColors.primaryText,

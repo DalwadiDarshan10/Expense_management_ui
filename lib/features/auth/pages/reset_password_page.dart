@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/auth/controller/forgot_password_controller.dart';
@@ -18,7 +19,7 @@ class ResetPasswordPage extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
-          'Reset Password',
+          AppStrings.resetPasswordTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.onSurface,
             fontWeight: FontWeight.w600,
@@ -48,7 +49,7 @@ class ResetPasswordPage extends StatelessWidget {
               children: [
                 30.verticalSpace,
                 Text(
-                  'Create new password',
+                  AppStrings.createNewPassword,
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.onSurface,
                     fontWeight: FontWeight.w600,
@@ -56,7 +57,7 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 8.verticalSpace,
                 Text(
-                  'Your new password must be different from previous used passwords.',
+                  AppStrings.createNewPasswordMessage,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.secondary,
                   ),
@@ -64,8 +65,8 @@ class ResetPasswordPage extends StatelessWidget {
                 30.verticalSpace,
                 Obx(
                   () => AppTextField(
-                    label: 'New Password',
-                    hint: 'At least 6 characters',
+                    label: AppStrings.newPasswordLabel,
+                    hint: AppStrings.passwordHintShort,
                     isPassword: true,
                     onChanged: (val) =>
                         controller.newPasswordController.value = val,
@@ -74,8 +75,8 @@ class ResetPasswordPage extends StatelessWidget {
                 20.verticalSpace,
                 Obx(
                   () => AppTextField(
-                    label: 'Confirm Password',
-                    hint: 'Must match new password',
+                    label: AppStrings.confirmPasswordLabelMatches,
+                    hint: AppStrings.confirmPasswordHintMatches,
                     isPassword: true,
                     onChanged: (val) =>
                         controller.confirmPasswordController.value = val,
@@ -84,9 +85,9 @@ class ResetPasswordPage extends StatelessWidget {
                 40.verticalSpace,
                 Obx(
                   () => AppButton(
-                    text: 'Reset Password',
-                    isLoading: controller.isLoading.value,
-                    onPressed: controller.resetPassword,
+                    text: AppStrings.resetPasswordBtn,
+                    // isLoading: controller.isLoading.value,
+                    // onPressed: controller.resetPassword,
                   ),
                 ),
               ],

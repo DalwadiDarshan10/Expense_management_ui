@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/analytics/controller/analytics_controller.dart';
@@ -29,7 +30,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Analys',
+          AppStrings.analyticsTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
             fontWeight: FontWeight.w600,
@@ -79,7 +80,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
         children: [
           Expanded(
             child: SummaryCardWidget(
-              label: 'Income',
+              label: AppStrings.incomeLabel,
               amount: '\$${controller.totalIncome.toStringAsFixed(2)}',
               isIncome: true,
             ),
@@ -87,7 +88,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
           SizedBox(width: 16.w),
           Expanded(
             child: SummaryCardWidget(
-              label: 'Outcome',
+              label: AppStrings.outcomeLabel,
               amount: '\$${controller.totalOutcome.toStringAsFixed(2)}',
               isIncome: false,
             ),
@@ -102,7 +103,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Trading History',
+          AppStrings.tradingHistory,
           style: AppTextStyles.titleMedium.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColors.primaryText,

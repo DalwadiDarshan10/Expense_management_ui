@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -94,7 +95,7 @@ class RegisterPage extends StatelessWidget {
         Expanded(
           child: Center(
             child: Text(
-              'Register',
+              AppStrings.registerTitle,
               style: AppTextStyles.titleLarge.copyWith(
                 color: AppColors.onSurface,
                 fontWeight: FontWeight.w600,
@@ -113,8 +114,8 @@ class RegisterPage extends StatelessWidget {
   Widget _buildUsernameField(RegisterController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Username',
-        hint: 'Melvin Guerrero',
+        label: AppStrings.usernameLabel,
+        hint: AppStrings.usernameHint,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.words,
         showValidationIcon: true,
@@ -138,8 +139,8 @@ class RegisterPage extends StatelessWidget {
   Widget _buildEmailField(RegisterController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Email',
-        hint: 'example@email.com',
+        label: AppStrings.emailLabel,
+        hint: AppStrings.emailHint,
         keyboardType: TextInputType.emailAddress,
         showValidationIcon: true,
         isValid: controller.isEmailValid.value,
@@ -162,8 +163,8 @@ class RegisterPage extends StatelessWidget {
   Widget _buildPasswordField(RegisterController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Password',
-        hint: 'At least 6 characters',
+        label: AppStrings.passwordLabel,
+        hint: AppStrings.passwordHintShort,
         isPassword: true,
         onChanged: controller.validatePassword,
         errorText: controller.passwordErrorText.value.isNotEmpty
@@ -177,8 +178,8 @@ class RegisterPage extends StatelessWidget {
   Widget _buildConfirmPasswordField(RegisterController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Confirm password',
-        hint: 'At least 6 characters',
+        label: AppStrings.confirmPasswordLabel,
+        hint: AppStrings.passwordHintShort,
         isPassword: true,
         onChanged: controller.validateConfirmPassword,
         errorText: controller.confirmPasswordErrorText.value.isNotEmpty
@@ -224,12 +225,9 @@ class RegisterPage extends StatelessWidget {
                     color: AppColors.secondary,
                   ),
                   children: [
-                    const TextSpan(
-                      text:
-                          'By creating your account you have to agree\nwith our ',
-                    ),
+                    const TextSpan(text: AppStrings.termsPart1),
                     TextSpan(
-                      text: 'Terms and Conditions',
+                      text: AppStrings.termsPart2,
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.interactive,
                         fontWeight: FontWeight.w500,
@@ -250,7 +248,7 @@ class RegisterPage extends StatelessWidget {
   Widget _buildRegisterButton(RegisterController controller) {
     return Obx(
       () => AppButton(
-        text: 'Register',
+        text: AppStrings.registerTitle,
         isLoading: controller.isLoading.value,
         onPressed: controller.register,
       ),
@@ -264,7 +262,7 @@ class RegisterPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Already have account? ',
+            AppStrings.alreadyHaveAccount,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.secondary,
             ),
@@ -272,7 +270,7 @@ class RegisterPage extends StatelessWidget {
           GestureDetector(
             onTap: controller.goToLogin,
             child: Text(
-              'Login',
+              AppStrings.login,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.interactive,
                 fontWeight: FontWeight.w600,

@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -19,7 +20,10 @@ class TransferByBankPage extends GetView<TransferByBankController> {
       backgroundColor: AppColors
           .surface, // Matches the grey/white bg from design context usually
       appBar: AppBar(
-        title: Text('Transfer By Bank', style: AppTextStyles.titleLarge),
+        title: Text(
+          AppStrings.transferByBankTitle,
+          style: AppTextStyles.titleLarge,
+        ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         leading: IconButton(
@@ -59,9 +63,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     // To The Account
                     Obx(
                       () => LabeledInputTile(
-                        title: 'To The Account',
+                        title: AppStrings.toTheAccountLabel,
                         controller: controller.accountController,
-                        hintText: '122 456 141 250',
+                        hintText: AppStrings.toTheAccountHint,
                         keyboardType: TextInputType.number,
                         errorText: controller.accountError.value,
                       ),
@@ -77,7 +81,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Bank',
+                            AppStrings.bankLabel,
                             style: AppTextStyles.bodyMedium.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
@@ -95,7 +99,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                                   color: AppColors.secondaryText,
                                 ),
                                 hint: Text(
-                                  'Select Bank',
+                                  AppStrings.selectBank,
                                   style: AppTextStyles.bodyLarge.copyWith(
                                     color: AppColors.secondaryText,
                                   ),
@@ -128,9 +132,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     // Cash Amount
                     Obx(
                       () => LabeledInputTile(
-                        title: 'Cash',
+                        title: AppStrings.cashLabel,
                         controller: controller.amountController,
-                        hintText: '\$ 12.00.00',
+                        hintText: AppStrings.cashHintBank,
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
@@ -151,9 +155,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
 
                     // Transfer Content
                     LabeledInputTile(
-                      title: 'Transfer Content',
+                      title: AppStrings.transferContentLabel,
                       controller: controller.contentController,
-                      hintText: 'Loan Payment',
+                      hintText: AppStrings.transferContentHint,
                     ),
 
                     SizedBox(height: 40.h),
@@ -164,7 +168,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                         onAction: () async {
                           controller.onTransfer();
                         },
-                        text: "SWIPE TO TRANSFER",
+                        text: AppStrings.swipeToTransfer,
                       ),
                     ),
                   ],

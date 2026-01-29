@@ -1,4 +1,5 @@
 import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,7 @@ class TransferPage extends GetView<TransferController> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text('Transfer', style: AppTextStyles.titleLarge),
+        title: Text(AppStrings.transferTitle, style: AppTextStyles.titleLarge),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -35,13 +36,13 @@ class TransferPage extends GetView<TransferController> {
             const SizedBox(height: 8),
 
             ActionTile(
-              title: 'Transfer by Avipay wallet',
+              title: AppStrings.transferByWallet,
               icon: AppImages.walletinactive,
               onTap: controller.onTransferByWallet,
             ),
             const SizedBox(height: 8),
             ActionTile(
-              title: 'Transfer by Bank',
+              title: AppStrings.transferByBank,
               icon: AppImages.bankIcon,
               onTap: controller.onTransferByBank,
             ),
@@ -55,7 +56,7 @@ class TransferPage extends GetView<TransferController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.w),
-                    child: SectionTitle(title: 'Recent Transfer'),
+                    child: SectionTitle(title: AppStrings.recentTransfer),
                   ),
                   Obx(
                     () => ListView.separated(
@@ -93,7 +94,7 @@ class TransferPage extends GetView<TransferController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.w),
-                    child: SectionTitle(title: 'Friends'),
+                    child: SectionTitle(title: AppStrings.friends),
                   ),
 
                   Obx(

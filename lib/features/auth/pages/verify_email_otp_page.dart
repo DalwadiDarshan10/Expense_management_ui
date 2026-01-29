@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -20,7 +21,7 @@ class VerifyEmailOtpPage extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
-          'Verification',
+          AppStrings.verificationTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.onSurface,
             fontWeight: FontWeight.w600,
@@ -79,7 +80,7 @@ class VerifyEmailOtpPage extends StatelessWidget {
 
   Widget _buildTitle() {
     return Text(
-      'Verify Your Email',
+      AppStrings.verifyEmailTitle,
       style: AppTextStyles.titleLarge.copyWith(
         color: AppColors.onSurface,
         fontWeight: FontWeight.w600,
@@ -94,7 +95,7 @@ class VerifyEmailOtpPage extends StatelessWidget {
         text: TextSpan(
           style: AppTextStyles.bodyMedium.copyWith(color: AppColors.secondary),
           children: [
-            const TextSpan(text: 'Please enter the 4 digit code\nsent to '),
+            const TextSpan(text: AppStrings.verifyEmailMessagePart1),
             TextSpan(
               text: controller.emailController.value,
               style: AppTextStyles.bodyMedium.copyWith(
@@ -151,7 +152,7 @@ class VerifyEmailOtpPage extends StatelessWidget {
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(1),
               ],
-              onChanged: (value) => controller.updateOtp(index, value),
+              // onChanged: (value) => controller.updateOtp(index, value),
             ),
           ),
         );
@@ -176,9 +177,9 @@ class VerifyEmailOtpPage extends StatelessWidget {
   Widget _buildConfirmButton(ForgotPasswordController controller) {
     return Obx(
       () => AppButton(
-        text: 'Verify',
+        text: AppStrings.verifyBtn,
         isLoading: controller.isLoading.value,
-        onPressed: controller.verifyOtp,
+        // onPressed: controller.verifyOtp,
       ),
     );
   }

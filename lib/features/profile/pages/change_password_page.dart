@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/profile/controllers/change_password_controller.dart';
@@ -28,7 +29,7 @@ class ChangePasswordPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Change Password',
+          AppStrings.changePassword,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -47,8 +48,8 @@ class ChangePasswordPage extends StatelessWidget {
                   // Old Password
                   Obx(
                     () => AppTextField(
-                      label: 'Old password',
-                      hint: 'Walletavipay123',
+                      label: AppStrings.oldPasswordLabel,
+                      hint: AppStrings.oldPasswordHint,
                       controller: controller.oldPasswordController,
                       isPassword: true,
                       maxLength: 8,
@@ -63,8 +64,8 @@ class ChangePasswordPage extends StatelessWidget {
                   // New Password
                   Obx(
                     () => AppTextField(
-                      label: 'New password',
-                      hint: 'At least 8 characters',
+                      label: AppStrings.newPasswordLabel8Chars,
+                      hint: AppStrings.passwordHint8Chars,
                       controller: controller.newPasswordController,
                       isPassword: true,
                       maxLength: 8,
@@ -79,8 +80,8 @@ class ChangePasswordPage extends StatelessWidget {
                   // Confirm Password
                   Obx(
                     () => AppTextField(
-                      label: 'Confirm password',
-                      hint: 'At least 8 characters',
+                      label: AppStrings.confirmPasswordLabel,
+                      hint: AppStrings.passwordHint8Chars,
                       controller: controller.confirmPasswordController,
                       isPassword: true,
                       maxLength: 8,
@@ -122,7 +123,7 @@ class ChangePasswordPage extends StatelessWidget {
                           ),
                           SizedBox(width: 8.w),
                           Text(
-                            'Sign Out Of All Devices',
+                            AppStrings.signOutOfAllDevices,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primaryText,
                             ),
@@ -141,7 +142,7 @@ class ChangePasswordPage extends StatelessWidget {
               () => Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: AppButton(
-                  text: 'Save Change',
+                  text: AppStrings.saveChangeBtn,
                   onPressed: controller.saveChange,
                   isLoading: controller.isLoading.value,
                 ),

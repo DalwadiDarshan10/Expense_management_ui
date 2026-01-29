@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -30,7 +31,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                 children: [
                   // Add New Card Button
                   AppButton(
-                    text: 'Add New Card',
+                    text: AppStrings.btnAddNewCard,
                     onPressed: () => Get.toNamed(AppNamed.addNewCard),
                     prefixIcon: Icons.add_circle_outline,
                     isCenter: false,
@@ -57,11 +58,10 @@ class WalletsDashboardPage extends GetView<WalletController> {
                                 onPressed: (context) {
                                   final card = controller.savedCards[index];
                                   Get.defaultDialog(
-                                    title: "Delete Card?",
-                                    middleText:
-                                        "Are you sure you want to remove this card?",
-                                    textCancel: "Cancel",
-                                    textConfirm: "Delete",
+                                    title: AppStrings.deleteCardTitle,
+                                    middleText: AppStrings.deleteCardMessage,
+                                    textCancel: AppStrings.cancel,
+                                    textConfirm: AppStrings.delete,
                                     confirmTextColor: Colors.white,
                                     buttonColor: Colors.red,
                                     onConfirm: () {
@@ -134,7 +134,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                       onPressed: () => Get.back(),
                     ),
                     Text(
-                      'My Wallet',
+                      AppStrings.myWallet,
                       style: AppTextStyles.headlineSmall.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
@@ -156,7 +156,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Balance',
+                      AppStrings.balance,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.white,
                         fontSize: 18.sp,
@@ -202,14 +202,14 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         Expanded(
                           child: _buildHeaderAction(
                             icon: AppImages.topupIcon,
-                            label: 'Top up',
+                            label: AppStrings.topUp,
                             onTap: () => Get.toNamed(AppNamed.topUpPage),
                           ),
                         ),
                         Expanded(
                           child: _buildHeaderAction(
                             icon: AppImages.walletIcon,
-                            label: 'Transfer',
+                            label: AppStrings.transferTitle,
                             color: AppColors.primary,
                             onTap: () => Get.toNamed(AppNamed.transferPage),
                           ),
@@ -217,7 +217,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         Expanded(
                           child: _buildHeaderAction(
                             icon: AppImages.scanIcon,
-                            label: 'Withdraw',
+                            label: AppStrings.withdraw,
                             color: AppColors.primary,
                             onTap: () => Get.toNamed(AppNamed.withdrawPage),
                           ),
@@ -225,7 +225,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         Expanded(
                           child: _buildHeaderAction(
                             icon: AppImages.notificationIcon,
-                            label: 'History',
+                            label: AppStrings.history,
                             color: AppColors.primary,
                           ),
                         ),

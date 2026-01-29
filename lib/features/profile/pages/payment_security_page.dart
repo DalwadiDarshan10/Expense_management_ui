@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:expense/core/theme/app_colors.dart';
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,8 +32,8 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
 
   void lockApp() {
     Get.snackbar(
-      'App Locked',
-      'Session expired for security',
+      AppStrings.appLockedTitle,
+      AppStrings.sessionExpiredMessage,
       snackPosition: SnackPosition.BOTTOM,
     );
 
@@ -58,7 +59,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         ),
         centerTitle: true,
         title: Text(
-          'Payment Security',
+          AppStrings.paymentSecurity,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -76,13 +77,13 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                 child: Column(
                   children: [
                     _buildSwitchTile(
-                      title: 'Transfer Limit',
+                      title: AppStrings.transferLimit,
                       value: transferLimit,
                       onChanged: (val) => setState(() => transferLimit = val),
                     ),
                     Divider(color: AppColors.dividerColor, height: 24.h),
                     _buildDropdownTile(
-                      title: 'Transaction limit',
+                      title: AppStrings.transactionLimit,
                       value: '\$ 200',
                       onTap: () {},
                     ),
@@ -96,13 +97,13 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                 child: Column(
                   children: [
                     _buildSwitchTile(
-                      title: 'App Automatically Locks',
+                      title: AppStrings.appAutoLocks,
                       value: appLocks,
                       onChanged: (val) => setState(() => appLocks = val),
                     ),
                     Divider(color: AppColors.dividerColor, height: 24.h),
                     _buildDropdownTile(
-                      title: 'Screen lock time',
+                      title: AppStrings.screenLockTime,
                       value: selectedTimeLabel,
                       onTap: _showTimePicker,
                     ),
@@ -187,11 +188,11 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _timeOption('30 sec', 30),
-            _timeOption('1 min', 60),
-            _timeOption('2 min', 120),
-            _timeOption('3 min', 180),
-            _timeOption('5 min', 300),
+            _timeOption(AppStrings.time30Sec, 30),
+            _timeOption(AppStrings.time1Min, 60),
+            _timeOption(AppStrings.time2Min, 120),
+            _timeOption(AppStrings.time3Min, 180),
+            _timeOption(AppStrings.time5Min, 300),
           ],
         ),
       ),

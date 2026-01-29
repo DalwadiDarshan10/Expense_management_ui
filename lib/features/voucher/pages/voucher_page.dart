@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/voucher/widgets/banner_carousel.dart';
@@ -15,7 +16,7 @@ class VoucherPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: Text('Voucher', style: AppTextStyles.titleLarge),
+        title: Text(AppStrings.voucherTitle, style: AppTextStyles.titleLarge),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
@@ -39,7 +40,10 @@ class VoucherPage extends StatelessWidget {
             // Categories
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Text('Categories', style: AppTextStyles.titleMedium),
+              child: Text(
+                AppStrings.categories,
+                style: AppTextStyles.titleMedium,
+              ),
             ),
             SizedBox(height: 16.h),
             SizedBox(
@@ -49,7 +53,7 @@ class VoucherPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 children: [
                   CategoryItem(
-                    title: 'All',
+                    title: AppStrings.categoryAll,
                     icon: Icons.grid_view_rounded,
                     color: AppColors
                         .primary, // Using primary for "All" based on design (blueish)
@@ -58,28 +62,28 @@ class VoucherPage extends StatelessWidget {
                   ),
                   SizedBox(width: 20.w),
                   CategoryItem(
-                    title: 'Internet',
+                    title: AppStrings.categoryInternet,
                     icon: Icons.wifi,
                     color: AppColors.interactive, // Blue
                     onTap: () {},
                   ),
                   SizedBox(width: 20.w),
                   CategoryItem(
-                    title: 'Electricity',
+                    title: AppStrings.categoryElectricity,
                     icon: Icons.electric_bolt,
                     color: AppColors.primarySup, // Yellow/Amber
                     onTap: () {},
                   ),
                   SizedBox(width: 20.w),
                   CategoryItem(
-                    title: 'Market',
+                    title: AppStrings.categoryMarket,
                     icon: Icons.shopping_cart,
                     color: AppColors.success, // Green
                     onTap: () {},
                   ),
                   SizedBox(width: 20.w),
                   CategoryItem(
-                    title: 'Medical',
+                    title: AppStrings.categoryMedical,
                     icon: Icons.medical_services,
                     color: AppColors.critical, // Red
                     onTap: () {},
@@ -96,9 +100,12 @@ class VoucherPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Top Trending Deals', style: AppTextStyles.titleMedium),
                   Text(
-                    'View all',
+                    AppStrings.topTrendingDeals,
+                    style: AppTextStyles.titleMedium,
+                  ),
+                  Text(
+                    AppStrings.viewAll,
                     style: AppTextStyles.labelSmall.copyWith(
                       color: AppColors.primary,
                     ),
@@ -141,9 +148,9 @@ class VoucherPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Sale Off 50%', style: AppTextStyles.titleMedium),
+                  Text(AppStrings.saleOff50, style: AppTextStyles.titleMedium),
                   Text(
-                    'View all',
+                    AppStrings.viewAll,
                     style: AppTextStyles.labelSmall.copyWith(
                       color: AppColors.primary,
                     ),

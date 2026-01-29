@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/withdraw/controllers/withdraw_controller.dart';
@@ -23,7 +24,7 @@ class WithdrawPage extends GetView<WithdrawController> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Withdraw',
+          AppStrings.withdrawTitle,
           style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -54,7 +55,7 @@ class WithdrawPage extends GetView<WithdrawController> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: AppSwipeButton(
-                text: 'SWIPE TO WITHDRAW',
+                text: AppStrings.swipeToWithdraw,
                 onAction: () async {
                   controller.performWithdraw();
                 },
@@ -74,7 +75,7 @@ class WithdrawPage extends GetView<WithdrawController> {
         padding: const EdgeInsets.all(8.0),
         child: ListTile(
           title: Text(
-            'Withdraw To AVI Bank',
+            AppStrings.withdrawToAviBank,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -103,7 +104,7 @@ class WithdrawPage extends GetView<WithdrawController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Denominations',
+            AppStrings.denominations,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
               fontSize: 16.sp,
@@ -160,10 +161,10 @@ class WithdrawPage extends GetView<WithdrawController> {
 
   Widget _buildCashSection() {
     return LabeledInputTile(
-      title: 'Cash',
+      title: AppStrings.cashLabel,
       controller: controller.customAmountController,
       keyboardType: TextInputType.number,
-      hintText: 'Enter amount',
+      hintText: AppStrings.enterAmountHint,
       prefix: Text("\$ "),
 
       onChanged: (val) {

@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/friends/controller/add_friend_controller.dart';
@@ -25,7 +26,7 @@ class AddFriendPage extends GetView<AddFriendController> {
         ),
         centerTitle: true,
         title: Text(
-          'Add New Friend',
+          AppStrings.addNewFriendTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -40,8 +41,8 @@ class AddFriendPage extends GetView<AddFriendController> {
             // Form Fields using LabeledInputTile
             Obx(
               () => LabeledInputTile(
-                title: "Full name",
-                hintText: "Enter full name",
+                title: AppStrings.fullNameLabel,
+                hintText: AppStrings.fullNameHint,
                 controller: controller.nameController,
                 errorText: controller.nameError.value,
                 onChanged: controller.validateName,
@@ -50,8 +51,8 @@ class AddFriendPage extends GetView<AddFriendController> {
             SizedBox(height: 8.h),
             Obx(
               () => LabeledInputTile(
-                title: "Phone number",
-                hintText: "Enter phone number",
+                title: AppStrings.phoneNumberLabel,
+                hintText: AppStrings.enterPhoneNumberHint,
                 controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
@@ -62,8 +63,8 @@ class AddFriendPage extends GetView<AddFriendController> {
             SizedBox(height: 8.h),
             Obx(
               () => LabeledInputTile(
-                title: "Email",
-                hintText: "Enter email address",
+                title: AppStrings.emailLabel,
+                hintText: AppStrings.enterEmailHint,
                 controller: controller.emailController,
                 keyboardType: TextInputType.emailAddress,
                 errorText: controller.emailError.value,
@@ -88,7 +89,7 @@ class AddFriendPage extends GetView<AddFriendController> {
                     elevation: 0,
                   ),
                   child: Text(
-                    'Add New Contact',
+                    AppStrings.addNewContactBtn,
                     style: AppTextStyles.bodyLarge.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,

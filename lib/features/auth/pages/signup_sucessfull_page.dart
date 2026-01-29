@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -39,7 +40,7 @@ class SignupSuccessfulPage extends StatelessWidget {
 
               // Success title
               Text(
-                'Sign Up Successfully',
+                AppStrings.signupSuccessfulTitle,
                 style: AppTextStyles.headlineSmall.copyWith(
                   color: AppColors.onSurface,
                   fontWeight: FontWeight.w600,
@@ -50,7 +51,7 @@ class SignupSuccessfulPage extends StatelessWidget {
 
               // Success subtitle
               Text(
-                'Everything will be fine!',
+                AppStrings.signupSuccessfulMessage,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.secondary,
                 ),
@@ -60,7 +61,7 @@ class SignupSuccessfulPage extends StatelessWidget {
 
               // Done button
               AppButton(
-                text: 'Done',
+                text: AppStrings.doneBtn,
                 onPressed: () {
                   // Navigate to login or home
                   Get.toNamed(AppNamed.menuPage);

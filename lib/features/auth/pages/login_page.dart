@@ -1,4 +1,5 @@
 import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/auth/controller/login_controller.dart';
@@ -82,7 +83,7 @@ class LoginPage extends StatelessWidget {
         Expanded(
           child: Center(
             child: Text(
-              'Login',
+              AppStrings.login,
               style: AppTextStyles.titleLarge.copyWith(
                 color: AppColors.onSurface,
                 fontWeight: FontWeight.w600,
@@ -100,8 +101,8 @@ class LoginPage extends StatelessWidget {
   Widget _buildPhoneField(LoginController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Email',
-        hint: 'example@email.com',
+        label: AppStrings.emailLabel,
+        hint: AppStrings.emailHint,
         keyboardType: TextInputType.emailAddress,
         showValidationIcon: true,
         isValid: controller.isEmailValid.value,
@@ -123,8 +124,8 @@ class LoginPage extends StatelessWidget {
   Widget _buildPasswordField(LoginController controller) {
     return Obx(
       () => AppTextField(
-        label: 'Password',
-        hint: 'At least 8 characters',
+        label: AppStrings.passwordLabel,
+        hint: AppStrings.passwordHint,
         isPassword: true,
         maxLength: 8,
         onChanged: controller.validatePassword,
@@ -158,7 +159,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     color: controller.savePassword.value
                         ? AppColors.primary
-                        : Colors.transparent,
+                        : AppColors.transparent,
                   ),
                   child: controller.savePassword.value
                       ? Icon(Icons.check, size: 14.sp, color: AppColors.white)
@@ -166,7 +167,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 8.horizontalSpace,
                 Text(
-                  'Save password',
+                  AppStrings.savePassword,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.secondary,
                   ),
@@ -180,7 +181,7 @@ class LoginPage extends StatelessWidget {
         GestureDetector(
           onTap: controller.goToForgotPassword,
           child: Text(
-            'Forgot password?',
+            AppStrings.forgotPassword,
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.interactive,
               fontWeight: FontWeight.w500,
@@ -194,7 +195,7 @@ class LoginPage extends StatelessWidget {
   Widget _buildLoginButton(LoginController controller) {
     return Obx(
       () => AppButton(
-        text: 'Log in',
+        text: AppStrings.loginBtn,
         isLoading: controller.isLoading.value,
         onPressed: controller.login,
       ),
@@ -207,7 +208,7 @@ class LoginPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Don't have account? ",
+            AppStrings.dontHaveAccount,
             style: AppTextStyles.bodyMedium.copyWith(
               color: AppColors.secondary,
             ),
@@ -215,7 +216,7 @@ class LoginPage extends StatelessWidget {
           GestureDetector(
             onTap: controller.goToSignUp,
             child: Text(
-              'Sign Up',
+              AppStrings.signUp,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.interactive,
                 fontWeight: FontWeight.w600,

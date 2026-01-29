@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -48,7 +49,7 @@ class OnboardingPage extends StatelessWidget {
                     20.verticalSpace,
 
                     Text(
-                      "Avipay",
+                      AppStrings.appName,
                       style: AppTextStyles.headlineSmall.copyWith(
                         color: AppColors.onSurface,
                         fontWeight: FontWeight.w600,
@@ -58,7 +59,7 @@ class OnboardingPage extends StatelessWidget {
                     12.verticalSpace,
 
                     Text(
-                      "Consumer Loan Payment, pay bills\nand many other services",
+                      AppStrings.onboardingMessage,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.secondary,
@@ -72,7 +73,7 @@ class OnboardingPage extends StatelessWidget {
 
                 // Bottom button
                 AppButton(
-                  text: "Get Started",
+                  text: AppStrings.getStartedBtn,
                   onPressed: () => Get.toNamed(AppNamed.login),
                 ),
 

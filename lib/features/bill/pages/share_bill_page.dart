@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/bill/controller/share_bill_controller.dart';
@@ -34,7 +35,7 @@ class ShareBillPage extends GetView<ShareBillController> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Share Bill',
+          AppStrings.shareBillTitle,
           style: AppTextStyles.headlineSmall.copyWith(
             color: AppColors.primaryText,
             fontWeight: FontWeight.w500,
@@ -53,7 +54,7 @@ class ShareBillPage extends GetView<ShareBillController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Shared With',
+                AppStrings.sharedWithTitle,
                 style: AppTextStyles.titleMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 18.sp,
@@ -66,7 +67,7 @@ class ShareBillPage extends GetView<ShareBillController> {
                 children: [
                   Expanded(
                     child: AppTextField(
-                      hint: 'Phone number',
+                      hint: AppStrings.phoneNumberHint,
                       controller: phoneController,
                       onChanged: controller.updateSearchQuery,
                       fillColor: AppColors.inputBackground,
@@ -78,7 +79,7 @@ class ShareBillPage extends GetView<ShareBillController> {
                     width: 83.w,
                     height: 50.h,
                     child: AppButton(
-                      text: 'Send',
+                      text: AppStrings.sendBtn,
                       textStyle: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.white,
                         fontWeight: FontWeight.w400,
@@ -91,8 +92,8 @@ class ShareBillPage extends GetView<ShareBillController> {
                         }
                         if (phoneController.text.isNotEmpty) {
                           Get.snackbar(
-                            'Sent',
-                            'Share message sent successfully',
+                            AppStrings.sentSuccessTitle,
+                            AppStrings.sentSuccessMessage,
                             snackPosition: SnackPosition.BOTTOM,
                           );
                           controller.addContact(phoneController.text);
@@ -100,8 +101,8 @@ class ShareBillPage extends GetView<ShareBillController> {
                           controller.updateSearchQuery('');
                         } else {
                           Get.snackbar(
-                            'Error',
-                            'Please enter a phone number',
+                            AppStrings.errorTitle,
+                            AppStrings.enterPhoneError,
                             snackPosition: SnackPosition.BOTTOM,
                           );
                         }
@@ -123,7 +124,7 @@ class ShareBillPage extends GetView<ShareBillController> {
                         padding: EdgeInsets.symmetric(vertical: 24.h),
                         child: Center(
                           child: Text(
-                            'No contacts found',
+                            AppStrings.noContactsFound,
                             style: AppTextStyles.bodyMedium.copyWith(
                               color: AppColors.secondaryText,
                             ),
@@ -180,7 +181,7 @@ class ShareBillPage extends GetView<ShareBillController> {
 
         Expanded(
           child: Text(
-            'Learn about sharing',
+            AppStrings.learnSharing,
             style: AppTextStyles.bodyLarge.copyWith(
               color: AppColors.secondaryText,
             ),
@@ -197,7 +198,7 @@ class ShareBillPage extends GetView<ShareBillController> {
             Clipboard.setData(
               const ClipboardData(text: 'https://example.com/share-link'),
             );
-            Get.snackbar('Copied', 'Link copied to clipboard');
+            Get.snackbar(AppStrings.copiedTitle, AppStrings.copiedMessage);
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -207,7 +208,7 @@ class ShareBillPage extends GetView<ShareBillController> {
               border: Border.all(color: AppColors.dividerColor),
             ),
             child: Text(
-              'Copy link',
+              AppStrings.copyLinkBtn,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
               ),

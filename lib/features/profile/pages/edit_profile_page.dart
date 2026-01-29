@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/profile/controller/edit_profile_controller.dart';
@@ -26,7 +27,7 @@ class EditProfilePage extends GetView<EditProfileController> {
         ),
         centerTitle: true,
         title: Text(
-          'Edit Profile',
+          AppStrings.editProfileTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -64,18 +65,18 @@ class EditProfilePage extends GetView<EditProfileController> {
 
             // Form Fields
             LabeledInputTile(
-              title: "Full name",
+              title: AppStrings.fullNameLabel,
               controller: controller.nameController,
             ),
             SizedBox(height: 8.h),
             LabeledInputTile(
-              title: "Phone number",
+              title: AppStrings.phoneNumberLabel,
               controller: controller.phoneController,
               keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 8.h),
             LabeledInputTile(
-              title: "Email",
+              title: AppStrings.emailLabel,
               controller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
             ),
@@ -97,7 +98,7 @@ class EditProfilePage extends GetView<EditProfileController> {
                     elevation: 0,
                   ),
                   child: Text(
-                    'Save Change',
+                    AppStrings.saveChangeBtn,
                     style: AppTextStyles.bodyLarge.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,

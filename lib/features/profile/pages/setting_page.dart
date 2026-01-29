@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/profile/controllers/setting_controller.dart';
@@ -29,7 +30,7 @@ class SettingPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Setting',
+          AppStrings.settingTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -42,7 +43,10 @@ class SettingPage extends StatelessWidget {
             Container(
               color: AppColors.white,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: _buildSettingItem(title: 'Change Face ID', onTap: () {}),
+              child: _buildSettingItem(
+                title: AppStrings.changeFaceId,
+                onTap: () {},
+              ),
             ),
             SizedBox(height: 8.h),
             Container(
@@ -53,7 +57,7 @@ class SettingPage extends StatelessWidget {
                   SizedBox(height: 8.h),
                   Obx(
                     () => _buildSettingItem(
-                      title: 'Change Language',
+                      title: AppStrings.changeLanguage,
                       onTap: () {
                         _showLanguageBottomSheet(context, controller);
                       },
@@ -84,7 +88,7 @@ class SettingPage extends StatelessWidget {
               color: AppColors.white,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: _buildSettingItem(
-                title: 'Change Password',
+                title: AppStrings.changePassword,
                 onTap: () {
                   Get.to(() => const ChangePasswordPage());
                 },
@@ -100,7 +104,7 @@ class SettingPage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.h),
                     child: Text(
-                      'Other',
+                      AppStrings.otherLabel,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primaryText,
                         fontWeight: FontWeight.bold,
@@ -108,7 +112,7 @@ class SettingPage extends StatelessWidget {
                     ),
                   ),
                   _buildSettingItem(
-                    title: 'Application infomation',
+                    title: AppStrings.applicationInformation,
                     onTap: () {},
                   ),
                 ],
@@ -146,7 +150,7 @@ class SettingPage extends StatelessWidget {
                 children: [
                   SizedBox(width: 24.w), // Spacer for centering
                   Text(
-                    'Change Language',
+                    AppStrings.changeLanguage,
                     style: AppTextStyles.titleLarge.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

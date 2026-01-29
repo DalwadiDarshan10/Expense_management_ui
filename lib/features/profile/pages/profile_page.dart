@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -36,7 +37,7 @@ class ProfilePage extends GetView<ProfileController> {
         ),
         centerTitle: true,
         title: Text(
-          'Profile',
+          AppStrings.profileTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.primaryText,
           ),
@@ -75,7 +76,7 @@ class ProfilePage extends GetView<ProfileController> {
                     SizedBox(height: 16.h),
                     // Menu Items
                     ProfileMenuItemWidget(
-                      title: 'Cards/Bank Accounts',
+                      title: AppStrings.cardsBankAccounts,
                       icon: AppImageViewer(
                         imagePath: AppImages.walletinactive,
                         height: 22,
@@ -90,7 +91,7 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
 
                     ProfileMenuItemWidget(
-                      title: 'Affiliate Service',
+                      title: AppStrings.affiliateService,
                       icon: AppImageViewer(
                         imagePath: AppImages.discountInactive,
                         height: 22.h,
@@ -105,7 +106,7 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
 
                     ProfileMenuItemWidget(
-                      title: 'Manage group of friend',
+                      title: AppStrings.manageGroupFriends,
                       icon: Icon(Icons.group_outlined, size: 24.r),
                       onTap: () {
                         Get.toNamed(AppNamed.friends);
@@ -117,7 +118,7 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
 
                     ProfileMenuItemWidget(
-                      title: 'Payment Security',
+                      title: AppStrings.paymentSecurity,
                       icon: Icon(Icons.lock_outline, size: 24.r),
                       onTap: () {
                         Get.toNamed(AppNamed.paymentSecurity);
@@ -129,7 +130,7 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
 
                     ProfileMenuItemWidget(
-                      title: 'Setting',
+                      title: AppStrings.settingTitle,
                       icon: Icon(Icons.settings_outlined, size: 24.r),
                       onTap: () {
                         Get.toNamed(AppNamed.setting);
@@ -155,7 +156,7 @@ class ProfilePage extends GetView<ProfileController> {
                   elevation: 0,
                 ),
                 child: Text(
-                  'Log out',
+                  AppStrings.logoutBtn,
                   style: AppTextStyles.bodyLarge.copyWith(
                     color: AppColors.white,
                     fontWeight: FontWeight.bold,

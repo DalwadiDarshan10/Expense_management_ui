@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:expense/widgets/labeled_input_tile.dart' show LabeledInputTile;
@@ -17,7 +18,10 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBar(
-        title: Text('Transfer By Wallet', style: AppTextStyles.titleLarge),
+        title: Text(
+          AppStrings.transferByWalletTitle,
+          style: AppTextStyles.titleLarge,
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -84,18 +88,18 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                     // Selected User Card
                     SizedBox(height: 8.h),
                     LabeledInputTile(
-                      title: "Cash",
+                      title: AppStrings.cashLabel,
                       controller: controller.amountController,
-                      hintText: "\$ 12,000.00",
+                      hintText: AppStrings.cashHintWallet,
                       keyboardType: TextInputType.number,
                       errorText: controller.amountError.value,
                     ),
                     SizedBox(height: 8.h),
                     // Transfer Content
                     LabeledInputTile(
-                      title: "Transfer Content",
+                      title: AppStrings.transferContentLabel,
                       controller: controller.contentController,
-                      hintText: "Loan Payment",
+                      hintText: AppStrings.transferContentHint,
                     ),
                     SizedBox(height: 16.h),
                     Container(
@@ -108,7 +112,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Greeting Cards",
+                            AppStrings.greetingCards,
                             style: AppTextStyles.titleMedium,
                           ),
                           SizedBox(height: 12.h),
@@ -163,7 +167,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                         onAction: () async {
                           controller.onTransfer();
                         },
-                        text: "SWIPE TO TRANSFER",
+                        text: AppStrings.swipeToTransfer,
                       ),
                     ),
                   ],

@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
@@ -31,7 +32,7 @@ class AddNewCardPage extends GetView<WalletController> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Add New Card',
+          AppStrings.addNewCardTitle,
           style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -45,8 +46,8 @@ class AddNewCardPage extends GetView<WalletController> {
             // Form Fields
             Obx(
               () => _buildTextField(
-                label: 'Card Number',
-                hint: '1234 4567 8901 2345',
+                label: AppStrings.cardNumberLabel,
+                hint: AppStrings.cardNumberHint,
                 controller: controller.cardNumberController,
                 keyboardType: TextInputType.number,
                 errorText: controller.cardNumberError.value,
@@ -60,8 +61,8 @@ class AddNewCardPage extends GetView<WalletController> {
             SizedBox(height: 16.h),
             Obx(
               () => _buildTextField(
-                label: 'Expired',
-                hint: '12/24',
+                label: AppStrings.expiredLabel,
+                hint: AppStrings.expiredHint,
                 controller: controller.expiryDateController,
                 keyboardType: TextInputType.number,
                 errorText: controller.expiryDateError.value,
@@ -75,7 +76,7 @@ class AddNewCardPage extends GetView<WalletController> {
             SizedBox(height: 16.h),
             // Bank Dropdown
             Text(
-              "Bank",
+              AppStrings.bankLabel,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
                 color: AppColors.secondaryText,
@@ -106,7 +107,7 @@ class AddNewCardPage extends GetView<WalletController> {
                   ),
                 ),
                 hint: Text(
-                  "Select Bank",
+                  AppStrings.selectBank,
                   style: AppTextStyles.bodyLarge.copyWith(
                     color: AppColors.secondaryText.withValues(alpha: 0.5),
                   ),
@@ -135,8 +136,8 @@ class AddNewCardPage extends GetView<WalletController> {
             SizedBox(height: 16.h),
             Obx(
               () => _buildTextField(
-                label: 'Card Holder Name',
-                hint: 'Melvin Guerrero',
+                label: AppStrings.cardHolderNameLabel,
+                hint: AppStrings.cardHolderNameHint,
                 controller: controller.cardHolderNameController,
                 errorText: controller.cardHolderNameError.value,
               ),
@@ -144,7 +145,7 @@ class AddNewCardPage extends GetView<WalletController> {
             SizedBox(height: 40.h),
             // Result (Live Preview)
             Text(
-              'Result',
+              AppStrings.resultLabel,
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -167,7 +168,7 @@ class AddNewCardPage extends GetView<WalletController> {
                   ),
                 ),
                 child: Text(
-                  'Add New Card',
+                  AppStrings.btnAddNewCard,
                   style: AppTextStyles.titleMedium.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

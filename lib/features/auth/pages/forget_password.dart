@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/auth/controller/forgot_password_controller.dart';
@@ -18,7 +19,7 @@ class ForgotPasswordPage extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
-          'Forgot Password',
+          AppStrings.forgotPasswordTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: AppColors.onSurface,
             fontWeight: FontWeight.w600,
@@ -46,7 +47,7 @@ class ForgotPasswordPage extends StatelessWidget {
             children: [
               40.verticalSpace,
               Text(
-                'Enter your email address to receive a password reset link.',
+                AppStrings.forgotPasswordMessage,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.secondary,
@@ -55,8 +56,8 @@ class ForgotPasswordPage extends StatelessWidget {
               40.verticalSpace,
               Obx(
                 () => AppTextField(
-                  label: 'Email',
-                  hint: 'example@email.com',
+                  label: AppStrings.emailLabel,
+                  hint: AppStrings.emailHint,
                   keyboardType: TextInputType.emailAddress,
                   onChanged: controller.validateEmail,
                   errorText: controller.emailErrorText.value.isNotEmpty
@@ -67,9 +68,9 @@ class ForgotPasswordPage extends StatelessWidget {
               40.verticalSpace,
               Obx(
                 () => AppButton(
-                  text: 'Send OTP',
-                  isLoading: controller.isLoading.value,
-                  onPressed: controller.sendOtp,
+                  text: AppStrings.sendOtpBtn,
+                  // isLoading: controller.isLoading.value,
+                  onPressed: () {},
                 ),
               ),
             ],

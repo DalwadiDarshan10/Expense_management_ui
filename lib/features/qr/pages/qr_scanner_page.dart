@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -111,7 +112,7 @@ class QrScannerPage extends GetView<QrScannerController> {
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    "Flashlight",
+                    AppStrings.flashlight,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.white,
                     ),
@@ -141,7 +142,9 @@ class QrScannerPage extends GetView<QrScannerController> {
                     ), // Dynamic icon
                     SizedBox(width: 8.w),
                     Text(
-                      isQr ? "Switch to barcode" : "Switch to QR Code",
+                      isQr
+                          ? AppStrings.switchToBarcode
+                          : AppStrings.switchToQrCode,
                       style: AppTextStyles.bodyLarge.copyWith(
                         color: AppColors.black,
                         fontWeight: FontWeight.w600,
@@ -166,7 +169,7 @@ class QrScannerPage extends GetView<QrScannerController> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildTabItem(
-            label: "QR Scan",
+            label: AppStrings.qrScan,
             icon: AppImages.scanIcon,
             isActive: true, // Always active on this page
           ),
@@ -179,7 +182,7 @@ class QrScannerPage extends GetView<QrScannerController> {
             },
             child: _buildTabItem(
               // Should be inactive look but navigable
-              label: "My QR",
+              label: AppStrings.myQr,
               icon: AppImages.myQrcodeIcon,
               isActive: false,
             ),

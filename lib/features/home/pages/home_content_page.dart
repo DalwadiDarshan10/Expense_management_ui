@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -96,7 +97,7 @@ class HomePage extends StatelessWidget {
                 ),
                 // Balance Section
                 Text(
-                  'Balance',
+                  AppStrings.balance,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.white,
                     fontSize: 18.sp,
@@ -130,7 +131,7 @@ class HomePage extends StatelessWidget {
                             },
                             child: _buildActionButton(
                               icon: AppImages.topupIcon,
-                              label: 'Top up',
+                              label: AppStrings.topUp,
                             ),
                           ),
                         ),
@@ -141,7 +142,7 @@ class HomePage extends StatelessWidget {
                             },
                             child: _buildActionButton(
                               icon: AppImages.walletIcon,
-                              label: 'Wallet',
+                              label: AppStrings.wallet,
                             ),
                           ),
                         ),
@@ -152,7 +153,7 @@ class HomePage extends StatelessWidget {
                             },
                             child: _buildActionButton(
                               icon: AppImages.scanIcon,
-                              label: 'QR Scan',
+                              label: AppStrings.qrScan,
                             ),
                           ),
                         ),
@@ -163,7 +164,7 @@ class HomePage extends StatelessWidget {
                             },
                             child: _buildActionButton(
                               icon: AppImages.myQrcodeIcon,
-                              label: 'My QR',
+                              label: AppStrings.myQr,
                             ),
                           ),
                         ),
@@ -204,7 +205,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Send Again',
+            AppStrings.sendAgain,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -280,42 +281,42 @@ class HomePage extends StatelessWidget {
     final paymentItems = [
       {
         'icon': AppImages.electricityBadge,
-        'label': 'Electricity',
+        'label': AppStrings.categoryElectricity,
         // 'color': const Color(0xFF4CAF50),
       },
       {
         'icon': AppImages.internetBadge,
-        'label': 'Internet',
+        'label': AppStrings.categoryInternet,
         // 'color': const Color(0xFF9C27B0),
       },
       {
         'icon': AppImages.insuranceBadge,
-        'label': 'Insurance',
+        'label': AppStrings.insurance,
         // 'color': const Color(0xFF2196F3),
       },
       {
         'icon': AppImages.medicalBadge,
-        'label': 'Medical',
+        'label': AppStrings.categoryMedical,
         // 'color': const Color(0xFFF44336),
       },
       {
         'icon': AppImages.marketBadge,
-        'label': 'Market',
+        'label': AppStrings.categoryMarket,
         // 'color': const Color(0xFF4CAF50),
       },
       {
         'icon': AppImages.electricBillBadge,
-        'label': 'Electric bill',
+        'label': AppStrings.electricBill,
         // 'color': const Color(0xFFFF9800),
       },
       {
         'icon': AppImages.televisionBadge,
-        'label': 'Television',
+        'label': AppStrings.television,
         // 'color': const Color(0xFF2196F3),
       },
       {
         'icon': AppImages.waterbillBadge,
-        'label': 'Waterbill',
+        'label': AppStrings.waterBill,
         // 'color': const Color(0xFF03A9F4),
       },
     ];
@@ -326,7 +327,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Payment List',
+            AppStrings.paymentList,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -379,7 +380,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Trading History',
+            AppStrings.tradingHistory,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -387,8 +388,8 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 16.h),
           _buildTransactionItem(
             icon: AppImages.electricBillBadge,
-            title: 'Electric Bill',
-            subtitle: 'Sent',
+            title: AppStrings.electricBillTitle,
+            subtitle: AppStrings.sent,
             amount: '-\$420',
             isNegative: true,
             date: "Today - 3.14",
@@ -397,8 +398,8 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 20.h),
           _buildTransactionItem(
             icon: AppImages.televisionBadge,
-            title: 'Television Bill',
-            subtitle: 'Sent',
+            title: AppStrings.televisionBillTitle,
+            subtitle: AppStrings.sent,
             amount: '\$420',
             isNegative: true,
             date: "22 jan- 3.14",

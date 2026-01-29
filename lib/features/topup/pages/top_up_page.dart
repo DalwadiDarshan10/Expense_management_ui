@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
@@ -24,7 +25,7 @@ class TopUpPage extends GetView<TopUpController> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Top Up',
+          AppStrings.topUpTitle,
           style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -69,7 +70,7 @@ class TopUpPage extends GetView<TopUpController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Denominations',
+            AppStrings.denominations,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w500,
               fontSize: 18.sp,
@@ -125,7 +126,7 @@ class TopUpPage extends GetView<TopUpController> {
 
   Widget _buildCashSection() {
     return LabeledInputTile(
-      title: 'Cash',
+      title: AppStrings.cashLabel,
       controller: controller.customAmountController,
       keyboardType: TextInputType.number,
       hintText: '\$ Enter amount',
@@ -176,7 +177,7 @@ class TopUpPage extends GetView<TopUpController> {
               SizedBox(width: 12.w),
               Expanded(
                 child: Text(
-                  'No cards available',
+                  AppStrings.noCardsAvailable,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.secondaryText,
                   ),

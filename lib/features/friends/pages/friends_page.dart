@@ -1,7 +1,9 @@
+import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/friends/controller/friends_controller.dart';
 import 'package:expense/routes/app_named.dart';
+import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -32,18 +34,20 @@ class FriendsPage extends GetView<FriendsController> {
         ),
         actions: [
           Obx(
-            () => IconButton(
-              onPressed: () {
-                controller.toggleDeleteMode();
-              },
-              icon: Icon(
-                controller.isDeleteMode.value
-                    ? Icons.check
-                    : Icons.delete_outline,
-                color: AppColors.primary,
-                size: 24.r,
-              ),
-            ),
+            () => controller.isDeleteMode.value
+                ? IconButton(
+                    onPressed: () => controller.toggleDeleteMode(),
+                    icon: Icon(
+                      Icons.check,
+                      color: AppColors.primary,
+                      size: 24.r,
+                    ),
+                  )
+                : AppImageViewer(
+                    height: 24.r,
+                    width: 24.r,
+                    imagePath: AppImages.deleteIcon,
+                  ),
           ),
         ],
       ),

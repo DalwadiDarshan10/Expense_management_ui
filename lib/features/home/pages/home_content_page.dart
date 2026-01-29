@@ -14,22 +14,25 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Top Blue Header Section with Background Image
-          _buildHeaderSection(context),
-          SizedBox(height: 24.h),
-          // Send Again Section
-          _buildSendAgainSection(),
-          SizedBox(height: 24.h),
-          // Payment List Section
-          _buildPaymentListSection(),
-          SizedBox(height: 24.h),
-          // Trading History Section
-          _buildTradingHistorySection(),
-          SizedBox(height: 24.h),
-        ],
+      child: Container(
+        color: AppColors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top Blue Header Section with Background Image
+            _buildHeaderSection(context),
+            SizedBox(height: 24.h),
+            // Send Again Section
+            _buildSendAgainSection(),
+            Container(height: 8.h, color: AppColors.background),
+            // Payment List Section
+            _buildPaymentListSection(),
+            Container(height: 8.h, color: AppColors.background),
+            // Trading History Section
+            _buildTradingHistorySection(),
+            SizedBox(height: 24.h),
+          ],
+        ),
       ),
     );
   }
@@ -41,10 +44,13 @@ class HomePage extends StatelessWidget {
         SizedBox(
           height: 210.h,
           width: double.infinity,
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(32.r),
-              bottomRight: Radius.circular(32.r),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(40.r),
+                bottomRight: Radius.circular(40.r),
+              ),
             ),
             child: AppImageViewer(
               imagePath: AppImages.menuPageBackground,
@@ -212,7 +218,7 @@ class HomePage extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           SizedBox(
-            height: 90.h,
+            height: 120.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: contacts.length,
@@ -233,33 +239,35 @@ class HomePage extends StatelessWidget {
 
   Widget _buildContactAvatar({required String name, required Color color}) {
     return Column(
-      mainAxisSize: MainAxisSize.min, // ✅ FIX
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 60.w,
-          height: 60.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.primary, width: 2),
-          ),
-          child: Center(
-            child: Container(
-              width: 48.w,
-              height: 48.w,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-              child: Center(
-                child: Text(
-                  name.substring(0, 1).toUpperCase(),
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+        FittedBox(
+          child: Container(
+            width: 60.w,
+            height: 60.w,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.primary, width: 2),
+            ),
+            child: Center(
+              child: Container(
+                width: 48.w,
+                height: 48.w,
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                child: Center(
+                  child: Text(
+                    name.substring(0, 1).toUpperCase(),
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
-        SizedBox(height: 6.h), // slightly reduced
+        SizedBox(height: 6.h),
         SizedBox(
           width: 64.w,
           child: Text(
@@ -269,7 +277,8 @@ class HomePage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppTextStyles.labelLarge.copyWith(
               color: AppColors.secondaryText,
-              height: 1.2, // ✅ tighter line height
+              height: 1.2,
+              fontSize: 12.sp, // Explicit font size to ensure fit
             ),
           ),
         ),
@@ -322,7 +331,7 @@ class HomePage extends StatelessWidget {
     ];
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -375,7 +384,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildTradingHistorySection() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

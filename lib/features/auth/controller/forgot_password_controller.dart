@@ -1,44 +1,14 @@
-import 'package:email_otp/email_otp.dart';
-
-import 'package:flutter/widgets.dart';
+import 'package:expense/features/auth/services/auth_service.dart';
+import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordController extends GetxController {
-  // Use EmailOTP package
-  final EmailOTP _emailAuth = EmailOTP();
+  final AuthService _authService = AuthService();
 
   final emailController = ''.obs;
   final emailErrorText = ''.obs;
 
-  // OTP Logic
-  final otpController = ''.obs;
-  final otpErrorText = ''.obs;
-  final otpDigits = List.generate(4, (_) => ''.obs);
-  final List<FocusNode> focusNodes = List.generate(4, (_) => FocusNode());
-
-  // New Password
-  final newPasswordController = ''.obs;
-  final confirmPasswordController = ''.obs;
-  final passwordErrorText = ''.obs;
-  final confirmPasswordErrorText = ''.obs;
-  final isPasswordVisible = false.obs;
-  final isConfirmPasswordVisible = false.obs;
-
   final isLoading = false.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    // Configure Email OTP
-    // Note: API might vary by version. Using robust config.
-    _emailAuth.setConfig(
-      appEmail: "support@expenseapp.com",
-      appName: "Expense App",
-      userEmail: emailController.value,
-      otpLength: 4,
-      otpType: OTPType.digitsOnly,
-    );
-  }
 
   void validateEmail(String value) {
     emailController.value = value;
@@ -48,6 +18,30 @@ class ForgotPasswordController extends GetxController {
       emailErrorText.value = 'Please enter a valid email';
     } else {
       emailErrorText.value = '';
+    }
+  }
+
+  Future<void> sendPasswordResetEmail() async {
+    validateEmail(emailController.value);
+    if (emailErrorText.value.isNotEmpty) return;
+
+    try {
+      isLoading.value = true;
+      await _authService.sendPasswordResetEmail(emailController.value);
+
+      Get.snackbar(
+        'Success',
+        'Password reset link sent to your email',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+      // Navigate back to login or stay here?
+      // Usually good to go back or let user know check email
+      Get.offAllNamed(AppNamed.login);
+    } catch (e) {
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      isLoading.value = false;
     }
   }
 }

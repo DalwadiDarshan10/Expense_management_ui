@@ -1,8 +1,10 @@
+import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/notification/controllers/notification_controller.dart';
 import 'package:expense/features/notification/widgets/notification_item_widget.dart';
+import 'package:expense/widgets/app_image_viewer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,10 +67,10 @@ class NotificationPage extends StatelessWidget {
                   },
                 );
               },
-              child: Icon(
-                Icons.delete_outline,
-                color: AppColors.primary,
-                size: 24.sp,
+              child: AppImageViewer(
+                height: 24.r,
+                width: 24.r,
+                imagePath: AppImages.deleteIcon,
               ),
             ),
           ),

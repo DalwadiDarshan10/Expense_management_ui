@@ -68,6 +68,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                         hintText: AppStrings.toTheAccountHint,
                         keyboardType: TextInputType.number,
                         errorText: controller.accountError.value,
+                        maxLength: 16,
                       ),
                     ),
 

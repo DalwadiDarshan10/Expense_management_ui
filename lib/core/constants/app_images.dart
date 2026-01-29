@@ -94,6 +94,9 @@ class AppImages {
       "$_imagePath/sucess_page_bg_image.svg";
   static const String couponIcon = "$_iconPath/coupon_icon.svg";
   static const String starIcon = "$_iconPath/Star_icon.svg";
+  static const String deleteIcon = "$_iconPath/delete_icon.svg";
+  static const String shareIcon = "$_iconPath/share_icon.svg";
+  static const String rightTickMarkIcon = "$_iconPath/right_tickmark_icon.svg";
 
   // greeting cards
   static const String greetingCard1 = "$_iconPath/greeting_card1.svg";

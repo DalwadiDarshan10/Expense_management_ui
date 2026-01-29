@@ -27,106 +27,109 @@ class AnalyticsBarChartWidget extends GetView<AnalyticsController> {
         );
       }
 
-      return Container(
-        height: 220.h,
-        padding: EdgeInsets.only(top: 16.h, right: 16.w),
-        child: BarChart(
-          BarChartData(
-            alignment: BarChartAlignment.spaceAround,
-            maxY: _getMaxY(),
-            minY: _getMinY(),
-            barTouchData: BarTouchData(
-              enabled: true,
-              touchTooltipData: BarTouchTooltipData(
-                getTooltipColor: (group) => AppColors.onSurface,
-                tooltipPadding: EdgeInsets.all(8.r),
-                tooltipMargin: 8.h,
-                getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                  final chartItem = data[groupIndex];
-                  final isIncome = rodIndex == 0;
-                  return BarTooltipItem(
-                    '${isIncome ? 'Income' : 'Expense'}\n',
-                    AppTextStyles.labelSmall.copyWith(color: AppColors.white),
-                    children: [
-                      TextSpan(
-                        text:
-                            '\$${isIncome ? chartItem.income.toStringAsFixed(0) : chartItem.expense.toStringAsFixed(0)}',
-                        style: AppTextStyles.titleSmall.copyWith(
-                          color: isIncome
-                              ? AppColors.success
-                              : AppColors.critical,
-                          fontWeight: FontWeight.bold,
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Container(
+          height: 220.h,
+          padding: EdgeInsets.only(top: 16.h, right: 16.w),
+          child: BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.spaceAround,
+              maxY: _getMaxY(),
+              minY: _getMinY(),
+              barTouchData: BarTouchData(
+                enabled: true,
+                touchTooltipData: BarTouchTooltipData(
+                  getTooltipColor: (group) => AppColors.onSurface,
+                  tooltipPadding: EdgeInsets.all(8.r),
+                  tooltipMargin: 8.h,
+                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                    final chartItem = data[groupIndex];
+                    final isIncome = rodIndex == 0;
+                    return BarTooltipItem(
+                      '${isIncome ? 'Income' : 'Expense'}\n',
+                      AppTextStyles.labelSmall.copyWith(color: AppColors.white),
+                      children: [
+                        TextSpan(
+                          text:
+                              '\$${isIncome ? chartItem.income.toStringAsFixed(0) : chartItem.expense.toStringAsFixed(0)}',
+                          style: AppTextStyles.titleSmall.copyWith(
+                            color: isIncome
+                                ? AppColors.success
+                                : AppColors.critical,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (value, meta) {
-                    final index = value.toInt();
-                    if (index >= 0 && index < data.length) {
+              titlesData: FlTitlesData(
+                show: true,
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      final index = value.toInt();
+                      if (index >= 0 && index < data.length) {
+                        return Padding(
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            data[index].date,
+                            style: AppTextStyles.labelSmall.copyWith(
+                              color: AppColors.secondaryText,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                    reservedSize: 30.h,
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
                       return Padding(
-                        padding: EdgeInsets.only(top: 8.h),
+                        padding: EdgeInsets.only(right: 8.w),
                         child: Text(
-                          data[index].date,
+                          value.toInt().toString(),
                           style: AppTextStyles.labelSmall.copyWith(
                             color: AppColors.secondaryText,
                             fontSize: 10.sp,
                           ),
                         ),
                       );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                  reservedSize: 30.h,
+                    },
+                    reservedSize: 40.w,
+                    interval: _getInterval(),
+                  ),
+                ),
+                topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
                 ),
               ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  getTitlesWidget: (value, meta) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 8.w),
-                      child: Text(
-                        value.toInt().toString(),
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.secondaryText,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                    );
-                  },
-                  reservedSize: 40.w,
-                  interval: _getInterval(),
+              borderData: FlBorderData(show: false),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                horizontalInterval: _getInterval(),
+                getDrawingHorizontalLine: (value) => FlLine(
+                  color: AppColors.borderNor.withValues(alpha: 0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
                 ),
               ),
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
+              barGroups: _buildBarGroups(),
             ),
-            borderData: FlBorderData(show: false),
-            gridData: FlGridData(
-              show: true,
-              drawVerticalLine: false,
-              horizontalInterval: _getInterval(),
-              getDrawingHorizontalLine: (value) => FlLine(
-                color: AppColors.borderNor.withValues(alpha: 0.5),
-                strokeWidth: 1,
-                dashArray: [5, 5],
-              ),
-            ),
-            barGroups: _buildBarGroups(),
+            duration: const Duration(milliseconds: 300),
           ),
-          duration: const Duration(milliseconds: 300),
         ),
       );
     });

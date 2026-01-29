@@ -55,7 +55,7 @@ class TransactionSuccessPage extends StatelessWidget {
           Positioned(
             top: 50.h,
             right: 20.w,
-            child: const Icon(Icons.ios_share, color: Colors.white),
+            child: AppImageViewer(imagePath: AppImages.shareIcon),
           ),
 
           Center(

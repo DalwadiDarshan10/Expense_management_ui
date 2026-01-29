@@ -70,10 +70,9 @@ class MyQrPage extends StatelessWidget {
                 onTap: () {
                   Get.toNamed(AppNamed.shareQr);
                 },
-                child: Icon(
-                  Icons.ios_share,
-                  color: AppColors.black,
-                  size: 24.sp,
+                child: AppImageViewer(
+                  imagePath: AppImages.shareIcon,
+                  color: AppColors.primary,
                 ),
               ),
             ],

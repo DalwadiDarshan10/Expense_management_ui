@@ -31,27 +31,23 @@ class DealCard extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(16.r),
+              borderRadius: BorderRadius.circular(8.r),
             ),
           ),
           SizedBox(height: 12.h),
-          Text(
-            title,
-            style: AppTextStyles.labelLarge.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(height: 4.h),
+
+          // Row 1: Title + Badge
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Text(
-                  description,
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.secondaryText,
+                  title,
+                  style: AppTextStyles.labelLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14.sp,
+                    color: AppColors.onSurface,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -62,28 +58,43 @@ class DealCard extends StatelessWidget {
                   badgeText!,
                   style: AppTextStyles.labelSmall.copyWith(
                     color: AppColors.success,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12.sp,
                   ),
                 ),
             ],
           ),
+
           SizedBox(height: 4.h),
+
+          // Row 2: Subtitle + Rating
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Burgers • Fastfood', // Hardcoded for demo matching design
-                style: AppTextStyles.labelSmall.copyWith(
-                  color: AppColors.secondaryText,
-                  fontSize: 10.sp,
+              Expanded(
+                child: Text(
+                  description, // Using description as subtitle/category
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.secondaryText,
+                    fontSize: 12.sp,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Spacer(),
-              Icon(Icons.star, color: Colors.amber, size: 14.sp),
-              Text(
-                rating.toString(),
-                style: AppTextStyles.labelSmall.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Icon(Icons.star, color: Colors.amber, size: 14.sp),
+                  SizedBox(width: 4.w),
+                  Text(
+                    rating.toString(),
+                    style: AppTextStyles.labelSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.sp,
+                      color: AppColors.onSurface,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

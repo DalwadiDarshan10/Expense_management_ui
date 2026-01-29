@@ -103,18 +103,18 @@ class WalletsDashboardPage extends GetView<WalletController> {
     return Stack(
       children: [
         // Blue curved background using SVG image/Asset
-        SizedBox(
-          height: 200.h, // Adjusted height to accommodate extra wallet content
-          width: double.infinity,
-          child: ClipRRect(
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary,
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(32.r),
-              bottomRight: Radius.circular(32.r),
+              bottomLeft: Radius.circular(40.r),
+              bottomRight: Radius.circular(40.r),
             ),
-            child: AppImageViewer(
-              imagePath: AppImages.menuPageBackground,
-              fit: BoxFit.fill,
-            ),
+          ),
+          width: double.infinity,
+          child: AppImageViewer(
+            imagePath: AppImages.menuPageBackground,
+            fit: BoxFit.fill,
           ),
         ),
         // Content on top of the background
@@ -227,6 +227,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                             icon: AppImages.notificationIcon,
                             label: AppStrings.history,
                             color: AppColors.primary,
+                            onTap: () => Get.toNamed(AppNamed.notificationPage),
                           ),
                         ),
                       ],

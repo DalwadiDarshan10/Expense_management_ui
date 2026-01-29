@@ -31,4 +31,5 @@ class AppNamed {
   static const String friends = '/friends';
   static const String addNewFriend = '/add-new-friend';
   static const String transactionSuccess = '/transaction-success';
+  static const String voucherDeals = '/voucher-deals';
 }

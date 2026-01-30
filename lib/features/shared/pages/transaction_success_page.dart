@@ -166,33 +166,35 @@ class TransactionSuccessPage extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    args.recipientName ??
-                                                        "AVI BANK",
-                                                    style: AppTextStyles
-                                                        .bodyLarge
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              AppColors.black,
-                                                        ),
-                                                  ),
-                                                  SizedBox(width: 10.w),
-                                                  Text(
-                                                    "\$ ${args.amount}", // Showing amount again in the row? Image shows "$ 12,769.00" next to AVI BANK.
-                                                    style: AppTextStyles
-                                                        .bodyMedium
-                                                        .copyWith(
-                                                          fontWeight: FontWeight
-                                                              .bold, // Regular weight? Image looks boldish.
-                                                          color:
-                                                              AppColors.black,
-                                                        ),
-                                                  ),
-                                                ],
+                                              FittedBox(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      args.recipientName ??
+                                                          "AVI BANK",
+                                                      style: AppTextStyles
+                                                          .bodyLarge
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                AppColors.black,
+                                                          ),
+                                                    ),
+                                                    SizedBox(width: 10.w),
+                                                    Text(
+                                                      "\$ ${args.amount}", // Showing amount again in the row? Image shows "$ 12,769.00" next to AVI BANK.
+                                                      style: AppTextStyles
+                                                          .bodyMedium
+                                                          .copyWith(
+                                                            fontWeight: FontWeight
+                                                                .bold, // Regular weight? Image looks boldish.
+                                                            color:
+                                                                AppColors.black,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                               SizedBox(height: 4.h),
                                               Text(

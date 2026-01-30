@@ -181,6 +181,7 @@ class RegisterPage extends StatelessWidget {
         label: AppStrings.confirmPasswordLabel,
         hint: AppStrings.passwordHintShort,
         isPassword: true,
+        maxLength: 8,
         onChanged: controller.validateConfirmPassword,
         errorText: controller.confirmPasswordErrorText.value.isNotEmpty
             ? controller.confirmPasswordErrorText.value

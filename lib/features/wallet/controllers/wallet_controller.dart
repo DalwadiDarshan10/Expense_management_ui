@@ -16,6 +16,11 @@ class WalletController extends GetxController {
   // Current card being added (for live preview in UI)
   final Rx<CardModel> currentCard = CardModel.empty().obs;
 
+  // List of saved bank accounts (Observed from Firestore)
+  // Maps bankId (or docId) to dynamic data: {balance: int, ...}
+  final RxList<Map<String, dynamic>> savedBankAccounts =
+      <Map<String, dynamic>>[].obs;
+
   // Form controllers
   final TextEditingController bankNameController = TextEditingController();
   final TextEditingController cardNumberController = TextEditingController();
@@ -41,13 +46,18 @@ class WalletController extends GetxController {
 
   final _uuid = const Uuid();
 
+  // Wallet Balance
+  final RxInt walletBalance = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
 
     // START Firestore Logic
     fetchCards();
+    fetchBankAccounts();
     ensureWalletExists();
+    fetchWalletBalance();
     // END Firestore Logic
 
     // Set default image for new card
@@ -110,6 +120,32 @@ class WalletController extends GetxController {
     }
   }
 
+  /// FETCH WALLET BALANCE (REAL-TIME)
+  void fetchWalletBalance() {
+    try {
+      AppLogger.info("Listening to wallet balance...");
+      FirestoreService.userDoc()
+          .collection('wallet')
+          .doc('main')
+          .snapshots()
+          .listen(
+            (snapshot) {
+              if (snapshot.exists) {
+                walletBalance.value = snapshot.data()?['balance'] ?? 0;
+                AppLogger.info(
+                  "Wallet balance updated: ${walletBalance.value}",
+                );
+              }
+            },
+            onError: (e) {
+              AppLogger.error("Error in wallet balance stream", e);
+            },
+          );
+    } catch (e, s) {
+      AppLogger.error("Error setting up wallet balance fetch", e, s);
+    }
+  }
+
   /// FETCH CARDS (REAL-TIME)
   void fetchCards() {
     try {
@@ -132,6 +168,137 @@ class WalletController extends GetxController {
     } catch (e, s) {
       AppLogger.error("Error setting up card fetch", e, s);
     }
+  }
+
+  /// FETCH BANK ACCOUNTS (REAL-TIME)
+  void fetchBankAccounts() {
+    try {
+      AppLogger.info("Listening to bankAccounts collection...");
+      FirestoreService.userDoc()
+          .collection('bankAccounts')
+          .snapshots()
+          .listen(
+            (snapshot) {
+              savedBankAccounts.value = snapshot.docs.map((e) {
+                final data = e.data();
+                data['id'] = e.id;
+                return data;
+              }).toList();
+              AppLogger.info(
+                "Fetched ${savedBankAccounts.length} bank accounts.",
+              );
+            },
+            onError: (e) {
+              AppLogger.error("Error in bank accounts stream", e);
+            },
+          );
+    } catch (e, s) {
+      AppLogger.error("Error setting up bank accounts fetch", e, s);
+    }
+  }
+
+  /// GET BANK ACCOUNT FOR CARD
+  Map<String, dynamic>? getBankAccountForCard(String? cardId) {
+    if (cardId == null) return null;
+    // We look for a bank account that has 'linkedCardId' == cardId
+    return savedBankAccounts.firstWhereOrNull(
+      (element) => element['linkedCardId'] == cardId,
+    );
+  }
+
+  /// TOP-UP: Bank ➜ Wallet
+  Future<void> topUp({required String bankId, required int amount}) async {
+    final userDoc = FirestoreService.userDoc();
+
+    final walletRef = userDoc.collection('wallet').doc('main');
+    final bankRef = userDoc.collection('bankAccounts').doc(bankId);
+    final txnRef = userDoc.collection('transactions').doc();
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      /// READ CURRENT DATA
+      final walletSnap = await transaction.get(walletRef);
+      final bankSnap = await transaction.get(bankRef);
+
+      if (!walletSnap.exists || !bankSnap.exists) {
+        throw Exception("Wallet or Bank account not found");
+      }
+
+      final int walletBalance = walletSnap['balance'] ?? 0;
+      final int bankBalance = bankSnap['balance'] ?? 0;
+
+      /// VALIDATION
+      if (amount <= 0) {
+        throw Exception("Invalid top-up amount");
+      }
+
+      if (bankBalance < amount) {
+        throw Exception("Insufficient bank balance");
+      }
+
+      /// UPDATE BANK (↓)
+      transaction.update(bankRef, {"balance": bankBalance - amount});
+
+      /// UPDATE WALLET (↑)
+      transaction.update(walletRef, {"balance": walletBalance + amount});
+
+      /// SAVE TRANSACTION
+      transaction.set(txnRef, {
+        "type": "topup",
+        "amount": amount,
+        "from": "bank",
+        "to": "wallet",
+        "status": "success",
+        "createdAt": Timestamp.now(),
+      });
+    });
+  }
+
+  /// WITHDRAW: Wallet ➜ Bank
+  Future<void> withdraw({required String bankId, required int amount}) async {
+    final userDoc = FirestoreService.userDoc();
+
+    final walletRef = userDoc.collection('wallet').doc('main');
+    final bankRef = userDoc.collection('bankAccounts').doc(bankId);
+    final txnRef = userDoc.collection('transactions').doc();
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      /// READ CURRENT DATA
+      final walletSnap = await transaction.get(walletRef);
+      final bankSnap = await transaction.get(bankRef);
+
+      if (!walletSnap.exists || !bankSnap.exists) {
+        throw Exception("Wallet or Bank account not found");
+      }
+
+      final int walletBalance = walletSnap['balance'];
+      final int bankBalance = bankSnap['balance'];
+
+      /// VALIDATION
+      if (amount <= 0) {
+        throw Exception("Invalid withdraw amount");
+      }
+
+      if (walletBalance < amount) {
+        throw Exception("Insufficient wallet balance");
+      }
+
+      /// UPDATE WALLET (↓)
+      transaction.update(walletRef, {"balance": walletBalance - amount});
+
+      /// UPDATE BANK (↑)
+      transaction.update(bankRef, {"balance": bankBalance + amount});
+
+      /// SAVE TRANSACTION
+      transaction.set(txnRef, {
+        "type": "withdraw",
+        "amount": amount,
+        "from": "wallet",
+        "to": "bank",
+        "bankId": bankId,
+        "status": "success",
+        "createdAt": Timestamp.now(),
+      });
+    });
   }
 
   /// ADD CARD + CREATE BANK ACCOUNT WITH $1000
@@ -166,15 +333,15 @@ class WalletController extends GetxController {
 
     AppLogger.info("Card saved to Firestore: $cardId");
 
-    /// Create bank account with $1000
+    /// Create bank account with $5000
     await userDoc.collection('bankAccounts').doc(bankId).set({
       "bankName": bankName,
       "linkedCardId": cardId,
-      "balance": 1000,
+      "balance": 5000,
       "createdAt": Timestamp.now(),
     });
 
-    AppLogger.info("Bank account created: $bankId with \$1000");
+    AppLogger.info("Bank account created: $bankId with \$5000");
   }
 
   void updateCardImage(int index) {

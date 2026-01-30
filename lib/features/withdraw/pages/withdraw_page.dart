@@ -73,24 +73,27 @@ class WithdrawPage extends GetView<WithdrawController> {
       decoration: BoxDecoration(color: AppColors.white),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          title: Text(
-            AppStrings.withdrawToAviBank,
-            style: AppTextStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w500,
+        child: Obx(() {
+          final details = controller.primaryBankDetails;
+          return ListTile(
+            title: Text(
+              details['name']!,
+              style: AppTextStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          subtitle: Text(
-            '123 456 789 000',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondaryText,
+            subtitle: Text(
+              details['number']!,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.secondaryText,
+              ),
             ),
-          ),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-          onTap: () {
-            Get.toNamed(AppNamed.walletsDashboard);
-          },
-        ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              Get.toNamed(AppNamed.walletsDashboard);
+            },
+          );
+        }),
       ),
     );
   }
@@ -180,11 +183,13 @@ class WithdrawPage extends GetView<WithdrawController> {
               color: AppColors.secondaryText,
             ),
           ),
-          Text(
-            '\$ 12,769.00',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
+          Obx(
+            () => Text(
+              '\$ ${controller.walletBalance.value.toStringAsFixed(2)}',
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           Text(

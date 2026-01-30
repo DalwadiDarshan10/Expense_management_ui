@@ -49,10 +49,13 @@ class TopUpPage extends GetView<TopUpController> {
 
             SizedBox(height: 40.h),
 
-            AppSwipeButton(
-              onAction: () async {
-                controller.performTopUp();
-              },
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: AppSwipeButton(
+                onAction: () async {
+                  controller.performTopUp();
+                },
+              ),
             ),
           ],
         ),
@@ -125,33 +128,35 @@ class TopUpPage extends GetView<TopUpController> {
   }
 
   Widget _buildCashSection() {
-    return LabeledInputTile(
-      title: AppStrings.cashLabel,
-      controller: controller.customAmountController,
-      keyboardType: TextInputType.number,
-      hintText: '\$ Enter amount',
-      trailingWidget: Row(
-        children: [
-          Text(
-            '(Surplus: ',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondaryText,
+    return Obx(
+      () => LabeledInputTile(
+        title: AppStrings.cashLabel,
+        controller: controller.customAmountController,
+        keyboardType: TextInputType.number,
+        hintText: '\$ Enter amount',
+        trailingWidget: Row(
+          children: [
+            Text(
+              '(Surplus: ',
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.secondaryText,
+              ),
             ),
-          ),
-          Text(
-            '\$12,789.00',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w400,
+            Text(
+              '\$${controller.selectedBankBalance}',
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-          Text(
-            ')',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondaryText,
+            Text(
+              ')',
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.secondaryText,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -230,7 +235,14 @@ class TopUpPage extends GetView<TopUpController> {
               ),
             ),
             // More Options
-            Icon(Icons.more_horiz, color: AppColors.secondaryText, size: 24.sp),
+            GestureDetector(
+              onTap: () => controller.changeBank(),
+              child: Icon(
+                Icons.more_horiz,
+                color: AppColors.secondaryText,
+                size: 24.sp,
+              ),
+            ),
           ],
         ),
       );

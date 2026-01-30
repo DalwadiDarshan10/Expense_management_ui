@@ -183,12 +183,14 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         ),
                       ),
                     ),
-                    Text(
-                      '\$12,769.00',
-                      style: AppTextStyles.headingLarge.copyWith(
-                        color: AppColors.primarySup,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
+                    Obx(
+                      () => Text(
+                        '\$${controller.walletBalance.value.toStringAsFixed(2)}',
+                        style: AppTextStyles.headingLarge.copyWith(
+                          color: AppColors.primarySup,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],

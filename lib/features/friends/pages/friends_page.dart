@@ -234,8 +234,7 @@ class FriendsPage extends GetView<FriendsController> {
                                       padding: const EdgeInsets.all(3.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.secondaryText
-                                              .withOpacity(0.2),
+                                          color: AppColors.secondaryText,
                                           shape: BoxShape.circle,
                                         ),
                                         child: Center(

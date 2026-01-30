@@ -147,8 +147,8 @@ class AppButton extends StatelessWidget {
           : MainAxisAlignment.start,
       children: [
         if (prefixIcon != null) ...[
-          Icon(prefixIcon, color: contentColor, size: 20.sp),
-          SizedBox(width: 4.w),
+          Icon(prefixIcon, color: contentColor, size: 24.sp),
+          SizedBox(width: 10.w),
         ],
         Flexible(
           child: Text(

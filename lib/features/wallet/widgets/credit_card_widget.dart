@@ -12,19 +12,9 @@ class CreditCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 190.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
       child: Stack(
         children: [
           // Background Image
@@ -59,7 +49,7 @@ class CreditCardWidget extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 5.h),
                   child: Text(
                     card.cardNumber.isNotEmpty
-                        ? _formatCardNumber(card.cardNumber)
+                        ? card.cardNumber
                         : '**** **** **** ****',
                     style: AppTextStyles.titleSmall.copyWith(
                       color: Colors.white,
@@ -133,17 +123,5 @@ class CreditCardWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatCardNumber(String number) {
-    number = number.replaceAll(RegExp(r'\D'), '');
-    final buffer = StringBuffer();
-    for (int i = 0; i < number.length; i++) {
-      if (i > 0 && i % 4 == 0) {
-        buffer.write('  '); // Add space every 4 digits
-      }
-      buffer.write(number[i]);
-    }
-    return buffer.toString();
   }
 }

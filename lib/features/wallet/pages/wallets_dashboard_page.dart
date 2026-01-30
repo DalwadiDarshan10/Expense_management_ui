@@ -30,13 +30,18 @@ class WalletsDashboardPage extends GetView<WalletController> {
               child: Column(
                 children: [
                   // Add New Card Button
-                  AppButton(
-                    text: AppStrings.btnAddNewCard,
-                    onPressed: () => Get.toNamed(AppNamed.addNewCard),
-                    prefixIcon: Icons.add_circle_outline,
-                    isCenter: false,
+                  SizedBox(
+                    height: 58.h,
+                    child: AppButton(
+                      text: AppStrings.btnAddNewCard,
+                      onPressed: () {
+                        controller.resetForm();
+                        Get.toNamed(AppNamed.addNewCard);
+                      },
+                      prefixIcon: Icons.add_circle_outline,
+                      isCenter: false,
+                    ),
                   ),
-
                   // Saved Cards List
                   Obx(
                     () => ListView.separated(
@@ -83,8 +88,16 @@ class WalletsDashboardPage extends GetView<WalletController> {
                               ),
                             ],
                           ),
-                          child: CreditCardWidget(
-                            card: controller.savedCards[index],
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.populateForEdit(
+                                controller.savedCards[index],
+                              );
+                              Get.toNamed(AppNamed.addNewCard);
+                            },
+                            child: CreditCardWidget(
+                              card: controller.savedCards[index],
+                            ),
                           ),
                         );
                       },
@@ -104,6 +117,8 @@ class WalletsDashboardPage extends GetView<WalletController> {
       children: [
         // Blue curved background using SVG image/Asset
         Container(
+          height: 200.h,
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: AppColors.primary,
             borderRadius: BorderRadius.only(
@@ -141,13 +156,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                       ),
                     ),
                     // Placeholder for balance/alignment
-                    const Opacity(
-                      opacity: 0,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                        onPressed: null,
-                      ),
-                    ),
+                    SizedBox(width: 40.w),
                   ],
                 ),
                 SizedBox(height: 14.h),

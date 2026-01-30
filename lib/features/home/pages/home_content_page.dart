@@ -45,6 +45,7 @@ class HomePage extends StatelessWidget {
           height: 210.h,
           width: double.infinity,
           child: Container(
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               color: AppColors.primary,
               borderRadius: BorderRadius.only(

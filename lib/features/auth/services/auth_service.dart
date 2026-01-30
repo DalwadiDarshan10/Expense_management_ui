@@ -134,25 +134,6 @@ class AuthService {
     }
   }
 
-  // Update Photo URL
-  Future<void> updatePhotoURL(String photoURL) async {
-    try {
-      AppLogger.info('Updating photo URL to: $photoURL');
-      await _auth.currentUser?.updatePhotoURL(photoURL);
-      await _auth.currentUser?.reload();
-    } on FirebaseAuthException catch (e) {
-      AppLogger.error(
-        'Update Photo URL Error: ${e.code} - ${e.message}',
-        e,
-        e.stackTrace,
-      );
-      throw _handleAuthException(e);
-    } catch (e, stack) {
-      AppLogger.error('Unknown Update Photo URL Error', e, stack);
-      throw 'An unknown error occurred';
-    }
-  }
-
   // Helper to parse Firebase Exceptions
   String _handleAuthException(FirebaseAuthException e) {
     AppLogger.warning('Handling Auth Exception: ${e.code}');

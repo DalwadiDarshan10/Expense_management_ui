@@ -3,6 +3,7 @@ import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/wallet/widgets/credit_card_widget.dart';
+import 'package:expense/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,11 +16,12 @@ class AddNewCardPage extends GetView<WalletController> {
   Widget build(BuildContext context) {
     // Dropdown list for Bank Name setup
     final List<String> bankNames = [
-      'CBB BANK',
-      'AVI BANK',
-      'My Bank',
-      'Citi Bank',
-      'Chase',
+      "State Bank Of India",
+      "HDFC Bank",
+      "ICICI Bank",
+      "Axis Bank",
+      "Kotak Mahindra Bank",
+      "Bank Of Baroda",
     ];
 
     return Scaffold(
@@ -31,18 +33,23 @@ class AddNewCardPage extends GetView<WalletController> {
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
           onPressed: () => Get.back(),
         ),
-        title: Text(
-          AppStrings.addNewCardTitle,
-          style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w600),
+        title: Obx(
+          () => Text(
+            controller.editingCardId.value != null
+                ? 'Edit Card'
+                : AppStrings.addNewCardTitle,
+            style: AppTextStyles.titleLarge.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 24.h),
+            // SizedBox(height: 24.h),
             // Form Fields
             Obx(
               () => _buildTextField(
@@ -51,6 +58,9 @@ class AddNewCardPage extends GetView<WalletController> {
                 controller: controller.cardNumberController,
                 keyboardType: TextInputType.number,
                 errorText: controller.cardNumberError.value,
+                readOnly:
+                    controller.editingCardId.value !=
+                    null, // Read-only if editing
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(16),
@@ -58,7 +68,8 @@ class AddNewCardPage extends GetView<WalletController> {
                 ],
               ),
             ),
-            SizedBox(height: 16.h),
+            Container(color: AppColors.background, height: 8.h),
+
             Obx(
               () => _buildTextField(
                 label: AppStrings.expiredLabel,
@@ -73,67 +84,88 @@ class AddNewCardPage extends GetView<WalletController> {
                 ],
               ),
             ),
-            SizedBox(height: 16.h),
+            Container(color: AppColors.background, height: 8.h),
             // Bank Dropdown
-            Text(
-              AppStrings.bankLabel,
-              style: AppTextStyles.bodyMedium.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColors.secondaryText,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    AppStrings.bankLabel,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondaryText,
+                    ),
+                  ),
+                  Obx(
+                    () => DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.white,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 12.h,
+                        ),
+                        errorText: controller.bankNameError.value,
+                        errorStyle: AppTextStyles.bodySmall.copyWith(
+                          color: Colors.red,
+                        ),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primary),
+                        ),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+                        ),
+                        // Disable decoration appearance if editing
+                        enabled: controller.editingCardId.value == null,
+                      ),
+                      value: controller.bankNameController.text.isNotEmpty
+                          // Check if value actually exists in dropdown list to avoid error
+                          ? (bankNames.contains(
+                                  controller.bankNameController.text,
+                                )
+                                ? controller.bankNameController.text
+                                : null)
+                          : null,
+                      hint: Text(
+                        AppStrings.selectBank,
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: AppColors.secondaryText.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      items: bankNames.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: controller.editingCardId.value != null
+                          ? null // Disable interaction if editing
+                          : (val) {
+                              if (val != null) {
+                                controller.bankNameController.text =
+                                    val; // Manually update the controller or use a dedicated one
+                                controller.currentCard.update((card) {
+                                  card?.bankName = val;
+                                });
+                                // Clear error when value is selected
+                                if (controller.bankNameError.value != null) {
+                                  controller.bankNameError.value = null;
+                                }
+                              }
+                            },
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 8.h),
-            Obx(
-              () => DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 0,
-                    vertical: 12.h,
-                  ),
-                  errorText: controller.bankNameError.value,
-                  errorStyle: AppTextStyles.bodySmall.copyWith(
-                    color: Colors.red,
-                  ),
-                  border: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFE0E0E0)),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFE0E0E0)),
-                  ),
-                ),
-                hint: Text(
-                  AppStrings.selectBank,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.secondaryText.withValues(alpha: 0.5),
-                  ),
-                ),
-                items: bankNames.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    controller.bankNameController.text =
-                        val; // Manually update the controller or use a dedicated one
-                    controller.currentCard.update((card) {
-                      card?.bankName = val;
-                    });
-                    // Clear error when value is selected
-                    if (controller.bankNameError.value != null) {
-                      controller.bankNameError.value = null;
-                    }
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 16.h),
+
+            Container(color: AppColors.background, height: 8.h),
             Obx(
               () => _buildTextField(
                 label: AppStrings.cardHolderNameLabel,
@@ -142,41 +174,48 @@ class AddNewCardPage extends GetView<WalletController> {
                 errorText: controller.cardHolderNameError.value,
               ),
             ),
-            SizedBox(height: 40.h),
+            Container(color: AppColors.background, height: 8.h),
             // Result (Live Preview)
-            Text(
-              AppStrings.resultLabel,
-              style: AppTextStyles.titleMedium.copyWith(
-                fontWeight: FontWeight.w600,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    AppStrings.resultLabel,
+                    style: AppTextStyles.titleMedium.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Obx(
+                    () => CreditCardWidget(card: controller.currentCard.value),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 16.h),
-            Obx(() => CreditCardWidget(card: controller.currentCard.value)),
 
-            SizedBox(height: 24.h),
+            Container(color: AppColors.background, height: 24.h),
 
             // Add Card Button
-            SizedBox(
-              width: double.infinity,
-              height: 56.h,
-              child: ElevatedButton(
-                onPressed: controller.addNewCard,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                ),
-                child: Text(
-                  AppStrings.btnAddNewCard,
-                  style: AppTextStyles.titleMedium.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
+            Container(
+              color: AppColors.background,
+
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Obx(
+                  () => AppButton(
+                    text: controller.editingCardId.value != null
+                        ? 'Update Card'
+                        : AppStrings.btnAddNewCard,
+                    onPressed: controller.addNewCard,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            Container(color: AppColors.background, height: 24.h),
+            Container(color: AppColors.background, child: Spacer()),
           ],
         ),
       ),
@@ -191,46 +230,56 @@ class AddNewCardPage extends GetView<WalletController> {
     bool obscureText = false,
     List<TextInputFormatter>? inputFormatters,
     String? errorText,
+    bool readOnly = false,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.bodyMedium.copyWith(
-            fontWeight: FontWeight.w500,
-            color: AppColors.secondaryText,
-          ),
-        ),
-        SizedBox(height: 8.h),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          inputFormatters: inputFormatters,
-          style: AppTextStyles.titleMedium,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: AppTextStyles.bodyLarge.copyWith(
-              color: AppColors.secondaryText.withValues(alpha: 0.5),
-            ),
-            errorText: errorText,
-            errorStyle: AppTextStyles.bodySmall.copyWith(color: Colors.red),
-            filled: true,
-            fillColor: AppColors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12.h),
-            border: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFE0E0E0)),
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: AppColors.primary),
-            ),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.bodyMedium.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.secondaryText,
             ),
           ),
-        ),
-      ],
+
+          TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            inputFormatters: inputFormatters,
+            readOnly: readOnly,
+            style: AppTextStyles.titleMedium.copyWith(
+              color: readOnly ? Colors.grey : AppColors.primaryText,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: AppTextStyles.bodyLarge.copyWith(
+                color: AppColors.secondaryText.withValues(alpha: 0.5),
+              ),
+              errorText: errorText,
+              errorStyle: AppTextStyles.bodySmall.copyWith(color: Colors.red),
+              filled: true,
+              fillColor: readOnly ? Colors.grey.shade200 : AppColors.white,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 0,
+                vertical: 12.h,
+              ),
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.primary),
+              ),
+              enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

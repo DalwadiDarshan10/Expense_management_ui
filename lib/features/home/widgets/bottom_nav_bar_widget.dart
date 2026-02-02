@@ -45,10 +45,10 @@ class BottomNavBarWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.theme.cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.theme.shadowColor.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -64,6 +64,7 @@ class BottomNavBarWidget extends StatelessWidget {
                 item: _navItems[index],
                 isSelected: controller.currentIndex.value == index,
                 onTap: () => controller.changePage(index),
+                context: context,
               ),
             ),
           ),
@@ -76,15 +77,25 @@ class BottomNavBarWidget extends StatelessWidget {
     required NavItem item,
     required bool isSelected,
     required VoidCallback onTap,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(10.0),
-        child: AppImageViewer(
-          imagePath: isSelected ? item.activeIcon : item.inactiveIcon,
-          height: 24.h,
-          width: 24.w,
+        color: Colors.transparent, // Ensures touch area includes padding
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: AppImageViewer(
+            imagePath: isSelected ? item.activeIcon : item.inactiveIcon,
+            height: 24.h,
+            width: 24.w,
+            // Apply primary color if selected, otherwise use theme icon color (dimmed)
+            color: isSelected
+                ? AppColors.primary
+                : Theme.of(context).iconTheme.color,
+          ),
         ),
       ),
     );

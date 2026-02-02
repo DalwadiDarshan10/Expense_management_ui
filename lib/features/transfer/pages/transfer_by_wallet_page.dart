@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/transfer/controllers/transfer_by_wallet_controller.dart';
@@ -14,8 +13,6 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
 
   @override
   Widget build(BuildContext context) {
-    // Force dark theme mood specifically for this premium screen if acceptable,
-    // or just use deep colors.
     final backgroundColor = Color(0xFF1F2937); // Deep premium blue/grey
 
     return Scaffold(

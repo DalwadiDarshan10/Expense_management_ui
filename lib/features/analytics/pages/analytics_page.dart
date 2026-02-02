@@ -1,6 +1,6 @@
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/constants/app_strings.dart';
-import 'package:expense/core/theme/app_colors.dart';
+
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/analytics/controller/analytics_controller.dart';
 import 'package:expense/features/analytics/widgets/analytics_bar_chart_widget.dart';
@@ -19,14 +19,14 @@ class AnalyticsPage extends GetView<AnalyticsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: context.theme.scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: AppColors.primaryText,
+            color: context.theme.iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
@@ -34,7 +34,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
         title: Text(
           AppStrings.analyticsTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: context.theme.textTheme.titleLarge?.color,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -54,24 +54,24 @@ class AnalyticsPage extends GetView<AnalyticsController> {
           children: [
             // Income & Outcome Summary Cards
             Container(
-              decoration: BoxDecoration(color: AppColors.white),
+              decoration: BoxDecoration(color: context.theme.cardColor),
               child: _buildSummaryCardsSection(),
             ),
             SizedBox(height: 8.h),
             // Time Filter Tabs
             Container(
-              decoration: BoxDecoration(color: AppColors.white),
+              decoration: BoxDecoration(color: context.theme.cardColor),
               child: const TimeFilterTabsWidget(),
             ),
             Container(
-              decoration: BoxDecoration(color: AppColors.white),
+              decoration: BoxDecoration(color: context.theme.cardColor),
               child: const AnalyticsBarChartWidget(),
             ),
             SizedBox(height: 8.h),
             // Trading History Section
             Container(
-              decoration: BoxDecoration(color: AppColors.white),
-              child: _buildTradingHistorySection(),
+              decoration: BoxDecoration(color: context.theme.cardColor),
+              child: _buildTradingHistorySection(context),
             ),
           ],
         ),
@@ -106,7 +106,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
     });
   }
 
-  Widget _buildTradingHistorySection() {
+  Widget _buildTradingHistorySection(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Column(
@@ -116,7 +116,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
             AppStrings.tradingHistory,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.primaryText,
+              color: context.theme.textTheme.bodyLarge?.color,
             ),
           ),
           SizedBox(height: 12.h),

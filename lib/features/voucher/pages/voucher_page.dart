@@ -15,22 +15,25 @@ class VoucherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(AppStrings.voucherTitle, style: AppTextStyles.titleLarge),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: context.theme.iconTheme.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: context.theme.cardColor,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: AppColors.white,
+              color: context.theme.cardColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -42,7 +45,9 @@ class VoucherPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Text(
                       AppStrings.categories,
-                      style: AppTextStyles.titleMedium,
+                      style: AppTextStyles.titleMedium.copyWith(
+                        color: context.theme.textTheme.titleMedium?.color,
+                      ),
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -102,7 +107,7 @@ class VoucherPage extends StatelessWidget {
             // Top Trending Deals
             Container(
               padding: EdgeInsets.only(bottom: 16.h, top: 12.h),
-              color: AppColors.white,
+              color: context.theme.cardColor,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -110,7 +115,9 @@ class VoucherPage extends StatelessWidget {
                   children: [
                     Text(
                       AppStrings.topTrendingDeals,
-                      style: AppTextStyles.titleMedium,
+                      style: AppTextStyles.titleMedium.copyWith(
+                        color: context.theme.textTheme.titleMedium?.color,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -153,7 +160,7 @@ class VoucherPage extends StatelessWidget {
               ),
             ),
             Container(
-              color: AppColors.white,
+              color: context.theme.cardColor,
               height: 170.h,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -181,7 +188,7 @@ class VoucherPage extends StatelessWidget {
             SizedBox(height: 8.h),
             // Sale Off 50%
             Container(
-              color: AppColors.white,
+              color: context.theme.cardColor,
               child: Column(
                 children: [
                   Padding(
@@ -194,7 +201,9 @@ class VoucherPage extends StatelessWidget {
                       children: [
                         Text(
                           AppStrings.saleOff50,
-                          style: AppTextStyles.titleMedium,
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: context.theme.textTheme.titleMedium?.color,
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {

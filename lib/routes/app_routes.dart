@@ -1,7 +1,6 @@
 import 'package:expense/features/auth/bindings/login_binding.dart';
 import 'package:expense/features/auth/bindings/register_binding.dart';
 import 'package:expense/features/auth/pages/forget_password.dart';
-import 'package:expense/features/auth/pages/verify_email_otp_page.dart';
 import 'package:expense/features/auth/pages/login_page.dart';
 import 'package:expense/features/auth/pages/onboarding_page.dart';
 import 'package:expense/features/auth/pages/register_page.dart';
@@ -64,10 +63,6 @@ class AppRoutes {
     GetPage(
       name: AppNamed.forgotPassword,
       page: () => const ForgotPasswordPage(),
-    ),
-    GetPage(
-      name: AppNamed.verifyEmailOtp,
-      page: () => const VerifyEmailOtpPage(),
     ),
     // GetPage(
     //   name: AppNamed.resetPassword,

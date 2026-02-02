@@ -1,4 +1,3 @@
-import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/features/analytics/controller/analytics_controller.dart';
 import 'package:expense/features/analytics/pages/analytics_page.dart';
 import 'package:expense/features/home/pages/home_content_page.dart';
@@ -35,7 +34,7 @@ class MainNavigationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: Obx(
         () => IndexedStack(
           index: controller.currentIndex.value,

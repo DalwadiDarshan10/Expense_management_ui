@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -24,13 +24,19 @@ class HomePage extends StatelessWidget {
             _buildHeaderSection(context),
             SizedBox(height: 24.h),
             // Send Again Section
-            _buildSendAgainSection(),
-            Container(height: 8.h, color: AppColors.background),
+            _buildSendAgainSection(context),
+            Container(
+              height: 8.h,
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
             // Payment List Section
-            _buildPaymentListSection(),
-            Container(height: 8.h, color: AppColors.background),
+            _buildPaymentListSection(context),
+            Container(
+              height: 8.h,
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
             // Trading History Section
-            _buildTradingHistorySection(),
+            _buildTradingHistorySection(context),
             SizedBox(height: 24.h),
           ],
         ),
@@ -88,14 +94,7 @@ class HomePage extends StatelessWidget {
                             Positioned(
                               right: 0,
                               top: 0,
-                              child: Container(
-                                width: 8.w,
-                                height: 8.h,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.primarySup,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
+                              child: Container(color: AppColors.primarySup),
                             ),
                           ],
                         ),
@@ -140,7 +139,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.r),
-                    color: AppColors.backLanding,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -212,7 +211,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSendAgainSection() {
+  Widget _buildSendAgainSection(BuildContext context) {
     final contacts = [
       {'name': 'John', 'color': const Color(0xFFFFB74D)},
       {'name': 'Lovi ', 'color': const Color(0xFF4FC3F7)},
@@ -230,6 +229,7 @@ class HomePage extends StatelessWidget {
             AppStrings.sendAgain,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
+              color: Theme.of(context).textTheme.titleMedium?.color,
             ),
           ),
           SizedBox(height: 16.h),
@@ -302,7 +302,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentListSection() {
+  Widget _buildPaymentListSection(BuildContext context) {
     final paymentItems = [
       {
         'icon': AppImages.electricityBadge,
@@ -355,6 +355,7 @@ class HomePage extends StatelessWidget {
             AppStrings.paymentList,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
+              color: Theme.of(context).textTheme.titleMedium?.color,
             ),
           ),
           GridView.builder(
@@ -372,6 +373,7 @@ class HomePage extends StatelessWidget {
               return _buildPaymentItem(
                 icon: item['icon'] as String,
                 label: item['label'] as String,
+                context: context,
               );
             },
           ),
@@ -380,7 +382,11 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentItem({required String icon, required String label}) {
+  Widget _buildPaymentItem({
+    required String icon,
+    required String label,
+    required BuildContext context,
+  }) {
     return Column(
       children: [
         AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
@@ -388,7 +394,7 @@ class HomePage extends StatelessWidget {
         Text(
           label,
           style: AppTextStyles.titleSmall.copyWith(
-            color: AppColors.secondaryText,
+            color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           textAlign: TextAlign.center,
           maxLines: 1,
@@ -398,7 +404,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTradingHistorySection() {
+  Widget _buildTradingHistorySection(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       child: Column(
@@ -408,6 +414,7 @@ class HomePage extends StatelessWidget {
             AppStrings.tradingHistory,
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
+              color: Theme.of(context).textTheme.titleMedium?.color,
             ),
           ),
           SizedBox(height: 16.h),
@@ -419,6 +426,7 @@ class HomePage extends StatelessWidget {
             isNegative: true,
             date: "Today - 3.14",
             onTap: () => Get.toNamed(AppNamed.shareBill),
+            context: context,
           ),
           SizedBox(height: 20.h),
           _buildTransactionItem(
@@ -429,6 +437,7 @@ class HomePage extends StatelessWidget {
             isNegative: true,
             date: "22 jan- 3.14",
             onTap: () => Get.toNamed(AppNamed.shareBill),
+            context: context,
           ),
         ],
       ),
@@ -443,6 +452,7 @@ class HomePage extends StatelessWidget {
     required bool isNegative,
     required String date,
     VoidCallback? onTap,
+    required BuildContext context,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -461,6 +471,7 @@ class HomePage extends StatelessWidget {
                       title,
                       style: AppTextStyles.bodyLarge.copyWith(
                         fontWeight: FontWeight.w400,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                     Text(
@@ -468,7 +479,7 @@ class HomePage extends StatelessWidget {
                       style: AppTextStyles.bodyLarge.copyWith(
                         color: isNegative
                             ? AppColors.success
-                            : AppColors.primaryText,
+                            : Theme.of(context).textTheme.bodyLarge?.color,
 
                         fontWeight: FontWeight.w600,
                       ),
@@ -519,6 +530,7 @@ class HomePage extends StatelessWidget {
               "My Accounts",
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
             SizedBox(height: 16.h),
@@ -545,12 +557,17 @@ class HomePage extends StatelessWidget {
                           color: AppColors.primary,
                         ),
                       ),
-                      title: Text(bankName, style: AppTextStyles.bodyLarge),
+                      title: Text(
+                        bankName,
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                        ),
+                      ),
                       trailing: Text(
                         "\$${balance.toString()}",
                         style: AppTextStyles.bodyLarge.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primaryText,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                     );
@@ -567,6 +584,7 @@ class HomePage extends StatelessWidget {
                   "Total Balance",
                   style: AppTextStyles.titleMedium.copyWith(
                     fontWeight: FontWeight.w600,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
                   ),
                 ),
                 Obx(

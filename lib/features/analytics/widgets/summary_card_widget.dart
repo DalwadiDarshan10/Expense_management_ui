@@ -23,7 +23,7 @@ class SummaryCardWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
@@ -58,7 +58,7 @@ class SummaryCardWidget extends StatelessWidget {
                 Text(
                   label,
                   style: AppTextStyles.labelLarge.copyWith(
-                    color: AppColors.secondaryText,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
                 ),
                 SizedBox(height: 2.h),

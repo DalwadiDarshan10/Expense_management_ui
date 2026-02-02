@@ -14,13 +14,13 @@ class FriendsPage extends GetView<FriendsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
@@ -29,7 +29,7 @@ class FriendsPage extends GetView<FriendsController> {
         title: Text(
           'Friends',
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
         actions: [
@@ -39,7 +39,7 @@ class FriendsPage extends GetView<FriendsController> {
                     onPressed: () => controller.toggleDeleteMode(),
                     icon: Icon(
                       Icons.check,
-                      color: AppColors.primary,
+                      color: Theme.of(context).iconTheme.color,
                       size: 24.r,
                     ),
                   )
@@ -63,7 +63,7 @@ class FriendsPage extends GetView<FriendsController> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-                decoration: BoxDecoration(color: AppColors.white),
+                decoration: BoxDecoration(color: Theme.of(context).cardColor),
                 child: Row(
                   children: [
                     Container(
@@ -81,7 +81,7 @@ class FriendsPage extends GetView<FriendsController> {
                     Text(
                       'Add New Friend',
                       style: AppTextStyles.bodyLarge.copyWith(
-                        color: AppColors.primaryText,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -94,7 +94,7 @@ class FriendsPage extends GetView<FriendsController> {
 
             // Friends List
             Container(
-              decoration: BoxDecoration(color: AppColors.white),
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
               child: Obx(() {
                 final grouped = controller.groupedFriends;
                 final sortedKeys = grouped.keys.toList()..sort();
@@ -165,7 +165,7 @@ class FriendsPage extends GetView<FriendsController> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: friends.length,
                           separatorBuilder: (context, index) => Divider(
-                            color: AppColors.dividerColor,
+                            color: Theme.of(context).dividerColor,
                             height: 1,
                             indent: 60.w,
                           ),
@@ -199,7 +199,11 @@ class FriendsPage extends GetView<FriendsController> {
                                               border: Border.all(
                                                 color: friend.isSelected.value
                                                     ? AppColors.primary
-                                                    : AppColors.secondaryText,
+                                                    : Theme.of(
+                                                            context,
+                                                          ).iconTheme.color ??
+                                                          AppColors
+                                                              .secondaryText,
                                               ),
                                             ),
                                             child: friend.isSelected.value
@@ -233,7 +237,7 @@ class FriendsPage extends GetView<FriendsController> {
                                       padding: const EdgeInsets.all(3.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.background,
+                                          color: Theme.of(context).cardColor,
                                           shape: BoxShape.circle,
                                         ),
                                         child: Center(
@@ -243,7 +247,9 @@ class FriendsPage extends GetView<FriendsController> {
                                                 : '?',
                                             style: AppTextStyles.titleMedium
                                                 .copyWith(
-                                                  color: AppColors.primaryText,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodyLarge?.color,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                           ),
@@ -256,14 +262,18 @@ class FriendsPage extends GetView<FriendsController> {
                               title: Text(
                                 friend.name,
                                 style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.primaryText,
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodyLarge?.color,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               subtitle: Text(
                                 friend.phone,
                                 style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.secondaryText,
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.color,
                                 ),
                               ),
                             );

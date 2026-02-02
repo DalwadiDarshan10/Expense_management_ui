@@ -22,17 +22,26 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
                   _buildTab(
                     label: 'The last 7 days',
                     filter: TimeFilter.last7Days,
+                    context: context,
                   ),
                   SizedBox(width: 8.w),
-                  _buildTab(label: '30 days', filter: TimeFilter.thirtyDays),
+                  _buildTab(
+                    label: '30 days',
+                    filter: TimeFilter.thirtyDays,
+                    context: context,
+                  ),
                   SizedBox(width: 8.w),
-                  _buildTab(label: 'Custom', filter: TimeFilter.custom),
+                  _buildTab(
+                    label: 'Custom',
+                    filter: TimeFilter.custom,
+                    context: context,
+                  ),
                 ],
               ),
             ),
             if (controller.selectedFilter.value == TimeFilter.custom) ...[
               SizedBox(height: 12.h),
-              _buildDateRangeRow(),
+              _buildDateRangeRow(context),
             ],
           ],
         ),
@@ -40,7 +49,11 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
     });
   }
 
-  Widget _buildTab({required String label, required TimeFilter filter}) {
+  Widget _buildTab({
+    required String label,
+    required TimeFilter filter,
+    required BuildContext context,
+  }) {
     final isSelected = controller.selectedFilter.value == filter;
 
     return GestureDetector(
@@ -48,7 +61,9 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.white : Colors.transparent,
+          color: isSelected
+              ? AppColors.primary.withOpacity(0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.borderNor,
@@ -58,7 +73,9 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
         child: Text(
           label,
           style: AppTextStyles.labelMedium.copyWith(
-            color: isSelected ? AppColors.primary : AppColors.secondaryText,
+            color: isSelected
+                ? AppColors.primary
+                : Theme.of(context).textTheme.bodySmall?.color,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),
         ),
@@ -66,21 +83,21 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
     );
   }
 
-  Widget _buildDateRangeRow() {
+  Widget _buildDateRangeRow(BuildContext context) {
     return Row(
       children: [
-        _buildDateButton(controller.formattedStartDate),
+        _buildDateButton(controller.formattedStartDate, context),
         SizedBox(width: 16.w),
-        _buildDateButton(controller.formattedEndDate),
+        _buildDateButton(controller.formattedEndDate, context),
       ],
     );
   }
 
-  Widget _buildDateButton(String date) {
+  Widget _buildDateButton(String date, BuildContext context) {
     return GestureDetector(
       onTap: () async {
         final picked = await showDatePicker(
-          context: Get.context!,
+          context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2020),
           lastDate: DateTime.now(),
@@ -117,14 +134,14 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(color: AppColors.borderNor),
         ),
         child: Text(
           date,
           style: AppTextStyles.labelMedium.copyWith(
-            color: AppColors.secondaryText,
+            color: Theme.of(context).textTheme.bodySmall?.color,
           ),
         ),
       ),

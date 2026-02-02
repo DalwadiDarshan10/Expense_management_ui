@@ -13,14 +13,14 @@ class EditProfilePage extends GetView<EditProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
@@ -29,7 +29,7 @@ class EditProfilePage extends GetView<EditProfileController> {
         title: Text(
           AppStrings.editProfileTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -38,7 +38,7 @@ class EditProfilePage extends GetView<EditProfileController> {
           children: [
             // Avatar
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               child: Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 24.h),
@@ -75,7 +75,7 @@ class EditProfilePage extends GetView<EditProfileController> {
                                 color: AppColors.primary,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: AppColors.white,
+                                  color: Theme.of(context).cardColor,
                                   width: 2,
                                 ),
                               ),

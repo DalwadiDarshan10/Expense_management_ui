@@ -15,13 +15,13 @@ class SettingPage extends StatelessWidget {
     final controller = Get.put(SettingController());
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () {
@@ -32,7 +32,7 @@ class SettingPage extends StatelessWidget {
         title: Text(
           AppStrings.settingTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -41,22 +41,24 @@ class SettingPage extends StatelessWidget {
           children: [
             SizedBox(height: 8.h),
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: _buildSettingItem(
+                context,
                 title: AppStrings.changeFaceId,
                 onTap: () {},
               ),
             ),
             SizedBox(height: 8.h),
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
               child: Column(
                 children: [
                   SizedBox(height: 8.h),
                   Obx(
                     () => _buildSettingItem(
+                      context,
                       title: AppStrings.changeLanguage,
                       onTap: () {
                         _showLanguageBottomSheet(context, controller);
@@ -71,7 +73,9 @@ class SettingPage extends StatelessWidget {
                           Text(
                             controller.selectedLanguage.value,
                             style: AppTextStyles.bodyLarge.copyWith(
-                              color: AppColors.secondaryText,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodySmall?.color,
                             ),
                           ),
                         ],
@@ -85,9 +89,10 @@ class SettingPage extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: _buildSettingItem(
+                context,
                 title: AppStrings.changePassword,
                 onTap: () {
                   Get.to(() => const ChangePasswordPage());
@@ -96,7 +101,7 @@ class SettingPage extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Container(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,12 +111,13 @@ class SettingPage extends StatelessWidget {
                     child: Text(
                       AppStrings.otherLabel,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.primaryText,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   _buildSettingItem(
+                    context,
                     title: AppStrings.applicationInformation,
                     onTap: () {},
                   ),
@@ -135,7 +141,7 @@ class SettingPage extends StatelessWidget {
         ),
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
@@ -159,7 +165,7 @@ class SettingPage extends StatelessWidget {
                     onTap: () => Get.back(),
                     child: Icon(
                       Icons.close,
-                      color: AppColors.primaryText,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       size: 24.sp,
                     ),
                   ),
@@ -172,7 +178,7 @@ class SettingPage extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: controller.languages.length,
                 separatorBuilder: (context, index) => Divider(
-                  color: AppColors.dividerColor,
+                  color: Theme.of(context).dividerColor,
                   height: 1,
                   thickness: 0.5,
                 ),
@@ -199,7 +205,7 @@ class SettingPage extends StatelessWidget {
                                 : FontWeight.w500,
                             color: isSelected
                                 ? AppColors.primary
-                                : AppColors.primaryText,
+                                : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                         trailing: isSelected
@@ -225,7 +231,8 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem({
+  Widget _buildSettingItem(
+    BuildContext context, {
     required String title,
     required VoidCallback onTap,
     Widget? trailing,
@@ -243,7 +250,7 @@ class SettingPage extends StatelessWidget {
             Text(
               title,
               style: AppTextStyles.bodyLarge.copyWith(
-                color: AppColors.primaryText,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -256,7 +263,7 @@ class SettingPage extends StatelessWidget {
                     isDropdown
                         ? Icons.keyboard_arrow_down
                         : Icons.chevron_right,
-                    color: AppColors.secondaryText,
+                    color: Theme.of(context).iconTheme.color,
                     size: 24.r,
                   ),
                 ],

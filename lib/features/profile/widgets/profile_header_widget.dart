@@ -25,7 +25,7 @@ class ProfileHeaderWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
@@ -52,13 +52,16 @@ class ProfileHeaderWidget extends StatelessWidget {
                 children: [
                   Text(
                     userName,
-                    style: AppTextStyles.labelLarge.copyWith(fontSize: 18.sp),
+                    style: AppTextStyles.labelLarge.copyWith(
+                      fontSize: 18.sp,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
                   ),
                   SizedBox(height: 4.h),
                   Text(
                     userPhone,
                     style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.secondaryText,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
                 ],

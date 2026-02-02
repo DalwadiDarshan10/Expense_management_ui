@@ -47,7 +47,7 @@ class DealCard extends StatelessWidget {
                   style: AppTextStyles.labelLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 14.sp,
-                    color: AppColors.onSurface,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -75,7 +75,7 @@ class DealCard extends StatelessWidget {
                 child: Text(
                   description, // Using description as subtitle/category
                   style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.secondaryText,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                     fontSize: 12.sp,
                   ),
                   maxLines: 1,
@@ -91,7 +91,7 @@ class DealCard extends StatelessWidget {
                     style: AppTextStyles.labelSmall.copyWith(
                       fontWeight: FontWeight.bold,
                       fontSize: 12.sp,
-                      color: AppColors.onSurface,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
                 ],

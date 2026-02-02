@@ -24,37 +24,51 @@ class ProfileStatsWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         children: [
-          _buildRow('Poin', points.toString(), valueColor: AppColors.success),
+          _buildRow(
+            context,
+            'Poin',
+            points.toString(),
+            valueColor: AppColors.success,
+          ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 3.h),
-            child: Divider(color: AppColors.dividerColor),
+            child: Divider(color: Theme.of(context).dividerColor),
           ),
-          _buildRow('Balance in wallet', currencyFormatter.format(balance)),
+          _buildRow(
+            context,
+            'Balance in wallet',
+            currencyFormatter.format(balance),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildRow(String label, String value, {Color? valueColor}) {
+  Widget _buildRow(
+    BuildContext context,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: AppTextStyles.bodyLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w400,
           ),
         ),
         Text(
           value,
           style: AppTextStyles.bodyLarge.copyWith(
-            color: valueColor ?? AppColors.primaryText,
+            color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w500,
           ),
         ),

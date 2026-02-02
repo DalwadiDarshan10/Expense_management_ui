@@ -1,6 +1,6 @@
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
-import 'package:expense/core/theme/app_colors.dart';
+
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:expense/features/profile/widgets/profile_header_widget.dart';
@@ -19,13 +19,13 @@ class ProfilePage extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: context.theme.cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: context.theme.primaryColor,
             size: 20.r,
           ),
           onPressed: () {
@@ -39,7 +39,7 @@ class ProfilePage extends GetView<ProfileController> {
         title: Text(
           AppStrings.profileTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: context.theme.textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -68,7 +68,7 @@ class ProfilePage extends GetView<ProfileController> {
             SizedBox(height: 8.h),
 
             Container(
-              color: AppColors.white,
+              color: context.theme.cardColor,
               child: Padding(
                 padding: EdgeInsets.only(left: 32.w, right: 32.w),
                 child: Column(
@@ -80,6 +80,7 @@ class ProfilePage extends GetView<ProfileController> {
                       icon: AppImageViewer(
                         imagePath: AppImages.walletinactive,
                         height: 22,
+                        color: context.theme.iconTheme.color,
                       ),
                       onTap: () {
                         Get.toNamed(AppNamed.walletsDashboard);
@@ -87,7 +88,7 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(color: AppColors.dividerColor),
+                      child: Divider(color: context.theme.dividerColor),
                     ),
 
                     ProfileMenuItemWidget(
@@ -95,6 +96,7 @@ class ProfilePage extends GetView<ProfileController> {
                       icon: AppImageViewer(
                         imagePath: AppImages.discountInactive,
                         height: 22.h,
+                        color: context.theme.iconTheme.color,
                       ),
                       onTap: () {
                         Get.to(() => const AffiliateServicePage());
@@ -102,36 +104,48 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(color: AppColors.dividerColor),
+                      child: Divider(color: context.theme.dividerColor),
                     ),
 
                     ProfileMenuItemWidget(
                       title: AppStrings.manageGroupFriends,
-                      icon: Icon(Icons.group_outlined, size: 24.r),
+                      icon: Icon(
+                        Icons.group_outlined,
+                        size: 24.r,
+                        color: context.theme.iconTheme.color,
+                      ),
                       onTap: () {
                         Get.toNamed(AppNamed.friends);
                       },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(color: AppColors.dividerColor),
+                      child: Divider(color: context.theme.dividerColor),
                     ),
 
                     ProfileMenuItemWidget(
                       title: AppStrings.paymentSecurity,
-                      icon: Icon(Icons.lock_outline, size: 24.r),
+                      icon: Icon(
+                        Icons.lock_outline,
+                        size: 24.r,
+                        color: context.theme.iconTheme.color,
+                      ),
                       onTap: () {
                         Get.toNamed(AppNamed.paymentSecurity);
                       },
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(color: AppColors.dividerColor),
+                      child: Divider(color: context.theme.dividerColor),
                     ),
 
                     ProfileMenuItemWidget(
                       title: AppStrings.settingTitle,
-                      icon: Icon(Icons.settings_outlined, size: 24.r),
+                      icon: Icon(
+                        Icons.settings_outlined,
+                        size: 24.r,
+                        color: context.theme.iconTheme.color,
+                      ),
                       onTap: () {
                         Get.toNamed(AppNamed.setting);
                       },
@@ -148,7 +162,7 @@ class ProfilePage extends GetView<ProfileController> {
               child: ElevatedButton(
                 onPressed: controller.logout,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: context.theme.primaryColor,
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
@@ -158,7 +172,7 @@ class ProfilePage extends GetView<ProfileController> {
                 child: Text(
                   AppStrings.logoutBtn,
                   style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.white,
+                    color: context.theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

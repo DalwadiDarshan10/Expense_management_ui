@@ -44,13 +44,13 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () {
@@ -61,7 +61,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         title: Text(
           AppStrings.paymentSecurity,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -72,7 +72,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
             children: [
               SizedBox(height: 8.h),
               Container(
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
                 child: Column(
                   children: [
@@ -81,7 +81,10 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                       value: transferLimit,
                       onChanged: (val) => setState(() => transferLimit = val),
                     ),
-                    Divider(color: AppColors.dividerColor, height: 24.h),
+                    Divider(
+                      color: Theme.of(context).dividerColor,
+                      height: 24.h,
+                    ),
                     _buildDropdownTile(
                       title: AppStrings.transactionLimit,
                       value: '\$ 200',
@@ -92,7 +95,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
               ),
               SizedBox(height: 8.h),
               Container(
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
                 child: Column(
                   children: [
@@ -101,7 +104,10 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                       value: appLocks,
                       onChanged: (val) => setState(() => appLocks = val),
                     ),
-                    Divider(color: AppColors.dividerColor, height: 24.h),
+                    Divider(
+                      color: Theme.of(context).dividerColor,
+                      height: 24.h,
+                    ),
                     _buildDropdownTile(
                       title: AppStrings.screenLockTime,
                       value: selectedTimeLabel,
@@ -128,7 +134,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         Text(
           title,
           style: AppTextStyles.bodyLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -155,7 +161,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
           Text(
             title,
             style: AppTextStyles.bodyLarge.copyWith(
-              color: AppColors.secondaryText,
+              color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
           Row(
@@ -163,14 +169,14 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
               Text(
                 value,
                 style: AppTextStyles.bodyLarge.copyWith(
-                  color: AppColors.primaryText,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               SizedBox(width: 8.w),
               Icon(
                 Icons.keyboard_arrow_down,
-                color: AppColors.secondaryText,
+                color: Theme.of(context).iconTheme.color,
                 size: 24.r,
               ),
             ],
@@ -183,7 +189,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
   void _showTimePicker() {
     Get.bottomSheet(
       Container(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         padding: EdgeInsets.all(20.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,

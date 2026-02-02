@@ -13,13 +13,13 @@ class AddFriendPage extends GetView<AddFriendController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
@@ -28,7 +28,7 @@ class AddFriendPage extends GetView<AddFriendController> {
         title: Text(
           AppStrings.addNewFriendTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -91,7 +91,7 @@ class AddFriendPage extends GetView<AddFriendController> {
                   child: Text(
                     AppStrings.addNewContactBtn,
                     style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

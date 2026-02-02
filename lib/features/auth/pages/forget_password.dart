@@ -41,7 +41,6 @@ class ForgotPasswordPage extends StatelessWidget {
           ),
         ),
         backgroundColor: context.theme.appBarTheme.backgroundColor,
-        elevation: 0,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

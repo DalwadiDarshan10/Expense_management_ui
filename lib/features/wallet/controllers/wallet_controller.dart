@@ -197,6 +197,16 @@ class WalletController extends GetxController {
     }
   }
 
+  /// COMPUTED: Total Bank Balance
+  double get totalBankBalance {
+    return savedBankAccounts.fold(0.0, (sum, bank) {
+      final balance = bank['balance'];
+      if (balance is int) return sum + balance;
+      if (balance is double) return sum + balance;
+      return sum;
+    });
+  }
+
   /// GET BANK ACCOUNT FOR CARD
   Map<String, dynamic>? getBankAccountForCard(String? cardId) {
     if (cardId == null) return null;
@@ -207,7 +217,7 @@ class WalletController extends GetxController {
   }
 
   /// TOP-UP: Bank ➜ Wallet
-  Future<void> topUp({required String bankId, required int amount}) async {
+  Future<void> topUp({required String bankId, required num amount}) async {
     final userDoc = FirestoreService.userDoc();
 
     final walletRef = userDoc.collection('wallet').doc('main');
@@ -223,8 +233,8 @@ class WalletController extends GetxController {
         throw Exception("Wallet or Bank account not found");
       }
 
-      final int walletBalance = walletSnap['balance'] ?? 0;
-      final int bankBalance = bankSnap['balance'] ?? 0;
+      final num walletBalance = walletSnap['balance'] ?? 0;
+      final num bankBalance = bankSnap['balance'] ?? 0;
 
       /// VALIDATION
       if (amount <= 0) {
@@ -254,7 +264,7 @@ class WalletController extends GetxController {
   }
 
   /// WITHDRAW: Wallet ➜ Bank
-  Future<void> withdraw({required String bankId, required int amount}) async {
+  Future<void> withdraw({required String bankId, required num amount}) async {
     final userDoc = FirestoreService.userDoc();
 
     final walletRef = userDoc.collection('wallet').doc('main');
@@ -270,8 +280,8 @@ class WalletController extends GetxController {
         throw Exception("Wallet or Bank account not found");
       }
 
-      final int walletBalance = walletSnap['balance'];
-      final int bankBalance = bankSnap['balance'];
+      final num walletBalance = walletSnap['balance'];
+      final num bankBalance = bankSnap['balance'];
 
       /// VALIDATION
       if (amount <= 0) {
@@ -295,6 +305,81 @@ class WalletController extends GetxController {
         "from": "wallet",
         "to": "bank",
         "bankId": bankId,
+        "status": "success",
+        "createdAt": Timestamp.now(),
+      });
+    });
+  }
+
+  /// TRANSFER FROM BANK (P2P): My Bank ➜ Recipient
+  /// TRANSFER FROM BANK (P2P): My Bank ➜ Recipient
+  Future<void> transferFromBank({
+    required String bankId,
+    required double amount,
+    required String recipientAccount,
+    String? recipientBankName,
+    String? recipientName, // Kept optional for UI/Logging but simplified schema
+  }) async {
+    final userDoc = FirestoreService.userDoc();
+    final bankRef = userDoc.collection('bankAccounts').doc(bankId);
+    final txnRef = userDoc.collection('transactions').doc();
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final bankSnap = await transaction.get(bankRef);
+      if (!bankSnap.exists) throw Exception("Source Bank account not found");
+
+      final num currentBalance = bankSnap['balance'] ?? 0;
+
+      if (amount <= 0) throw Exception("Invalid amount");
+      if (currentBalance < amount) throw Exception("Insufficient bank funds");
+
+      // Deduct from My Bank
+      transaction.update(bankRef, {"balance": currentBalance - amount});
+
+      // Record Transaction
+      transaction.set(txnRef, {
+        "type": "transfer",
+        "amount": amount,
+        "from": "bank",
+        "sourceBankId": bankId,
+        "recipientAccount":
+            recipientAccount, // Removed recipientName from storage
+        "recipientBankName": recipientBankName,
+        "status": "success",
+        "createdAt": Timestamp.now(),
+      });
+    });
+  }
+
+  /// TRANSFER FROM WALLET (P2P): My Wallet ➜ Recipient
+  /// TRANSFER FROM WALLET (P2P): My Wallet ➜ Recipient
+  Future<void> transferFromWallet({
+    required double amount,
+    required String recipientInfo,
+    String? recipientName,
+  }) async {
+    final userDoc = FirestoreService.userDoc();
+    final walletRef = userDoc.collection('wallet').doc('main');
+    final txnRef = userDoc.collection('transactions').doc();
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final walletSnap = await transaction.get(walletRef);
+      if (!walletSnap.exists) throw Exception("Wallet not found");
+
+      final num currentBalance = walletSnap['balance'] ?? 0;
+
+      if (amount <= 0) throw Exception("Invalid amount");
+      if (currentBalance < amount) throw Exception("Insufficient wallet funds");
+
+      // Deduct from Wallet
+      transaction.update(walletRef, {"balance": currentBalance - amount});
+
+      // Record Transaction
+      transaction.set(txnRef, {
+        "type": "transfer",
+        "amount": amount,
+        "from": "wallet",
+        "recipientInfo": recipientInfo, // Removed recipientName from storage
         "status": "success",
         "createdAt": Timestamp.now(),
       });

@@ -7,6 +7,7 @@ import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -82,7 +83,7 @@ class HomePage extends StatelessWidget {
                               imagePath: AppImages.notificationIcon,
                               height: 24.h,
                               width: 24.w,
-                              color: Colors.white,
+                              color: AppColors.white,
                             ),
                             Positioned(
                               right: 0,
@@ -103,21 +104,35 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 // Balance Section
-                Text(
-                  AppStrings.balance,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  '\$12,769.00',
-                  style: AppTextStyles.headingLarge.copyWith(
-                    color: AppColors.primarySup,
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w500,
+                GestureDetector(
+                  onTap: () {
+                    final walletController = Get.find<WalletController>();
+                    _showBalanceDetails(context, walletController);
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        AppStrings.balance,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.white,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Obx(() {
+                        final walletController = Get.find<WalletController>();
+                        // Helper to format currency if needed, or just toStringAsFixed
+                        return Text(
+                          '\$${walletController.totalBankBalance.toStringAsFixed(2)}',
+                          style: AppTextStyles.headingLarge.copyWith(
+                            color: AppColors.primarySup,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                      }),
+                    ],
                   ),
                 ),
                 SizedBox(height: 18.h),
@@ -485,6 +500,92 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showBalanceDetails(BuildContext context, WalletController controller) {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20.r),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "My Accounts",
+              style: AppTextStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            Flexible(
+              child: Obx(
+                () => ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: controller.savedBankAccounts.length,
+                  separatorBuilder: (context, index) => Divider(),
+                  itemBuilder: (context, index) {
+                    final bank = controller.savedBankAccounts[index];
+                    final bankName = bank['bankName'] ?? 'Bank Account';
+                    final balance = bank['balance'] ?? 0;
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Container(
+                        padding: EdgeInsets.all(8.r),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.account_balance,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      title: Text(bankName, style: AppTextStyles.bodyLarge),
+                      trailing: Text(
+                        "\$${balance.toString()}",
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryText,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Divider(thickness: 1.5),
+            SizedBox(height: 8.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Balance",
+                  style: AppTextStyles.titleMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Obx(
+                  () => Text(
+                    "\$${controller.totalBankBalance.toStringAsFixed(2)}",
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10.h),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
     );
   }
 }

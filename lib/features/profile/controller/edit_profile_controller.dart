@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
 import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:expense/features/profile/services/image_storage_service.dart';
@@ -127,12 +129,22 @@ class EditProfileController extends GetxController {
       // Update display name in Firebase if changed
       if (nameController.text != profileController.userName.value) {
         await _authService.updateDisplayName(nameController.text);
+
+        // Also update in Firestore
+        await FirestoreService.userDoc().set({
+          'name': nameController.text,
+        }, SetOptions(merge: true));
+
         profileController.userName.value = nameController.text;
         _storage.write('username', nameController.text);
       }
 
-      // Update phone number in storage (Firebase doesn't directly support phone updates)
+      // Update phone number in Firestore
       if (phoneController.text != profileController.userPhone.value) {
+        await FirestoreService.userDoc().set({
+          'phoneNumber': phoneController.text,
+        }, SetOptions(merge: true));
+
         profileController.userPhone.value = phoneController.text;
         _storage.write('userPhone', phoneController.text);
       }

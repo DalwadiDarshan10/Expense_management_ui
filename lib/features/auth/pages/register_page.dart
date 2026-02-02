@@ -212,7 +212,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 color: controller.agreeToTerms.value
                     ? AppColors.primary
-                    : Colors.transparent,
+                    : AppColors.transparent,
               ),
               child: controller.agreeToTerms.value
                   ? Icon(Icons.check, size: 14.sp, color: AppColors.white)

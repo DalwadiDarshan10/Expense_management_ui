@@ -1,3 +1,4 @@
+import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,14 +21,33 @@ class ProfileController extends GetxController {
     _loadUserProfile();
   }
 
-  void _loadUserProfile() {
+  void _loadUserProfile() async {
     final user = _authService.currentUser;
     if (user != null) {
       // Load data from Firebase Auth
       userName.value = user.displayName ?? 'No Name';
       userEmail.value = user.email ?? 'No Email';
-      userPhone.value =
-          user.phoneNumber ?? _storage.read('userPhone') ?? 'No Phone';
+
+      try {
+        // Fetch from Firestore
+        final doc = await FirestoreService.userDoc().get();
+        if (doc.exists) {
+          final data = doc.data() as Map<String, dynamic>;
+          userPhone.value = data['phoneNumber'] ?? '';
+          userName.value = data['name'] ?? userName.value;
+          // Note: We prioritize Firestore name if available, else Auth name
+        } else {
+          // Fallback to local storage or auth if no firestore doc
+          userPhone.value =
+              user.phoneNumber ?? _storage.read('userPhone') ?? 'No Phone';
+        }
+      } catch (e) {
+        debugPrint('Error fetching user profile from Firestore: $e');
+        // Fallback on error
+        userPhone.value =
+            user.phoneNumber ?? _storage.read('userPhone') ?? 'No Phone';
+      }
+
       userAvatar.value = _storage.read('userAvatarPath') ?? '';
 
       // Load additional data from storage if available

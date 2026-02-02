@@ -6,6 +6,7 @@ import 'package:expense/features/home/widgets/bottom_nav_bar_widget.dart';
 import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:expense/features/profile/pages/profile_page.dart';
 import 'package:expense/features/voucher/pages/voucher_page.dart';
+import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +23,6 @@ class MainNavigationController extends GetxController {
 class MainNavigationPage extends StatelessWidget {
   MainNavigationPage({super.key});
 
-  // Controller initialized here
   final MainNavigationController controller = Get.put(
     MainNavigationController(),
   );
@@ -30,6 +30,7 @@ class MainNavigationPage extends StatelessWidget {
     AnalyticsController(),
   );
   final ProfileController profileController = Get.put(ProfileController());
+  final WalletController walletController = Get.put(WalletController());
 
   @override
   Widget build(BuildContext context) {

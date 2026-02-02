@@ -16,17 +16,19 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                _buildTab(
-                  label: 'The last 7 days',
-                  filter: TimeFilter.last7Days,
-                ),
-                SizedBox(width: 8.w),
-                _buildTab(label: '30 days', filter: TimeFilter.thirtyDays),
-                SizedBox(width: 8.w),
-                _buildTab(label: 'Custom', filter: TimeFilter.custom),
-              ],
+            FittedBox(
+              child: Row(
+                children: [
+                  _buildTab(
+                    label: 'The last 7 days',
+                    filter: TimeFilter.last7Days,
+                  ),
+                  SizedBox(width: 8.w),
+                  _buildTab(label: '30 days', filter: TimeFilter.thirtyDays),
+                  SizedBox(width: 8.w),
+                  _buildTab(label: 'Custom', filter: TimeFilter.custom),
+                ],
+              ),
             ),
             if (controller.selectedFilter.value == TimeFilter.custom) ...[
               SizedBox(height: 12.h),

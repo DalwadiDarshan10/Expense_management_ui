@@ -45,18 +45,75 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                   children: [
                     SizedBox(height: 10.h),
 
-                    // Bank Card (Source) - using SelectedUserTile
-                    SelectedUserTile(
-                      name: 'AVI BANK',
-                      subtitle: '123 456 789 000',
-                      isArrowRight: true,
-                      isBig: true,
-                      isBorder: true,
-                      onTap: () {}, // Potentially open source selector
-                      avatar: AppImageViewer(
-                        imagePath: AppImages.appLogoSquare,
-                      ),
-                    ),
+                    // Bank Card (Source) - Selectable
+                    Obx(() {
+                      final bank = controller.selectedSourceBank.value;
+                      final bankName = bank != null
+                          ? bank['bankName']
+                          : "Select Bank";
+                      final balance = bank != null
+                          ? "\$${bank['balance']}"
+                          : "";
+
+                      return SelectedUserTile(
+                        name: bankName ?? "Unknown Bank",
+                        subtitle: balance,
+                        isArrowRight: true,
+                        isBig: true,
+                        isBorder: true,
+                        onTap: () {
+                          // Show Bottom Sheet to select Source Bank
+                          Get.bottomSheet(
+                            Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.all(16.w),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Select Source Bank",
+                                    style: AppTextStyles.titleMedium,
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Expanded(
+                                    child: Obx(
+                                      () => ListView.builder(
+                                        itemCount: controller
+                                            .walletController
+                                            .savedBankAccounts
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          final b = controller
+                                              .walletController
+                                              .savedBankAccounts[index];
+                                          return ListTile(
+                                            title: Text(
+                                              b['bankName'] ?? "Bank",
+                                            ),
+                                            subtitle: Text(
+                                              "Balance: \$${b['balance']}",
+                                            ),
+                                            onTap: () {
+                                              controller.onSourceBankSelected(
+                                                b,
+                                              );
+                                              Get.back();
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        avatar: AppImageViewer(
+                          imagePath: AppImages.appLogoSquare,
+                        ),
+                      );
+                    }),
 
                     SizedBox(height: 12.h),
 
@@ -74,7 +131,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
 
                     SizedBox(height: 12.h),
 
-                    // Bank Selection - Custom implementation to match style since LabeledInputTile is TextField only
+                    // Bank Selection (Recipient Bank)
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
                       decoration: const BoxDecoration(color: Colors.white),
@@ -93,7 +150,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                           Obx(
                             () => DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
-                                value: controller.selectedBank.value,
+                                value: controller.selectedRecipientBank.value,
                                 isExpanded: true,
                                 icon: const Icon(
                                   Icons.keyboard_arrow_down,
@@ -105,7 +162,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                                     color: AppColors.secondaryText,
                                   ),
                                 ),
-                                items: controller.banks.map((String bank) {
+                                items: controller.recipientBanks.map((
+                                  String bank,
+                                ) {
                                   return DropdownMenuItem<String>(
                                     value: bank,
                                     child: Text(
@@ -114,11 +173,10 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                                     ),
                                   );
                                 }).toList(),
-                                onChanged: controller.onBankSelected,
+                                onChanged: controller.onRecipientBankSelected,
                               ),
                             ),
                           ),
-                          // Add a divider line to match LabeledInputTile look
                           const Divider(
                             color: AppColors.dividerColor,
                             height: 1,
@@ -131,8 +189,10 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     SizedBox(height: 12.h),
 
                     // Cash Amount
-                    Obx(
-                      () => LabeledInputTile(
+                    Obx(() {
+                      final balance =
+                          controller.selectedSourceBank.value?['balance'] ?? 0;
+                      return LabeledInputTile(
                         title: AppStrings.cashLabel,
                         controller: controller.amountController,
                         hintText: AppStrings.cashHintBank,
@@ -141,16 +201,14 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                         ),
                         errorText: controller.amountError.value,
                         trailingWidget: Text(
-                          '(balance \$${controller.balance.toStringAsFixed(2)})',
+                          '(balance \$${balance.toString()})',
                           style: AppTextStyles.bodyMedium.copyWith(
-                            color: const Color(
-                              0xFF6B7280,
-                            ), // Cool gray / blurple text
+                            color: const Color(0xFF6B7280),
                             fontSize: 12.sp,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
 
                     SizedBox(height: 12.h),
 
@@ -167,7 +225,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: AppSwipeButton(
                         onAction: () async {
-                          controller.onTransfer();
+                          await controller.onTransfer();
                         },
                         text: AppStrings.swipeToTransfer,
                       ),

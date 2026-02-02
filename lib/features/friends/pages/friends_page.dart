@@ -135,7 +135,7 @@ class FriendsPage extends GetView<FriendsController> {
                                   child: Text(
                                     letter,
                                     style: AppTextStyles.bodyLarge.copyWith(
-                                      color: Colors.white,
+                                      color: AppColors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -144,8 +144,6 @@ class FriendsPage extends GetView<FriendsController> {
                               if (sectionIndex == 0)
                                 GestureDetector(
                                   onTap: () {
-                                    // Logic for 'Choose': Toggle selection for the first group or enter delete mode?
-                                    // Design implies selection. We'll map it to group selection for now.
                                     controller.toggleGroupSelection(letter);
                                   },
                                   child: Text(

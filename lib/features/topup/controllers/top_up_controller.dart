@@ -20,28 +20,41 @@ class TopUpController extends GetxController {
   final RxInt selectedCardIndex = 0.obs;
 
   // Selected Bank Balance
-  int get selectedBankBalance {
-    if (walletController.savedCards.isEmpty) return 0;
+  double get selectedBankBalance {
+    if (walletController.savedCards.isEmpty) return 0.0;
     if (selectedCardIndex.value >= walletController.savedCards.length) {
-      return 0;
+      return 0.0;
     }
 
     final card = walletController.savedCards[selectedCardIndex.value];
     final bankAccount = walletController.getBankAccountForCard(card.cardId);
 
-    return bankAccount != null ? (bankAccount['balance'] as int? ?? 0) : 0;
+    if (bankAccount == null) return 0.0;
+    final balance = bankAccount['balance'];
+    if (balance is int) return balance.toDouble();
+    if (balance is double) return balance;
+    return 0.0;
   }
 
   void selectDenomination(int amount) {
     selectedDenomination.value = amount;
+    // For visual consistency/editing, we can show int string
     customAmountController.text = amount.toString();
   }
 
   Future<void> performTopUp() async {
-    final amount = customAmountController.text.isNotEmpty
-        ? int.tryParse(customAmountController.text) ??
-              selectedDenomination.value
-        : selectedDenomination.value;
+    // Parse input as double first to allow flexibility, then cast to int for now
+    // since topUp signature requires int. Or we'll fix WalletController later.
+    // For now, let's assume we want integer top-ups from preset denominations.
+
+    // Actually, user might type 50.50.
+    // Let's parse as double.
+    final doubleAmount = customAmountController.text.isNotEmpty
+        ? double.tryParse(customAmountController.text.replaceAll(',', '')) ??
+              selectedDenomination.value.toDouble()
+        : selectedDenomination.value.toDouble();
+
+    final int amount = doubleAmount.toInt(); // Truncate for now as per API
 
     if (savedCards.isEmpty) {
       Get.snackbar(

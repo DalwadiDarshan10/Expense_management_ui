@@ -1,11 +1,15 @@
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
+import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/transfer/models/contact_model.dart';
 import 'package:expense/core/constants/app_images.dart';
+import 'package:flutter/material.dart'; // For Colors, SnackPosition
 
 class TransferByWalletController extends GetxController {
+  final WalletController walletController = Get.find<WalletController>();
+
   final amountController = TextEditingController();
   final contentController = TextEditingController();
 
@@ -13,8 +17,8 @@ class TransferByWalletController extends GetxController {
   final isValid = false.obs;
   final amountError = RxnString();
 
-  // Hardcoded balance for demo
-  final double balance = 12769.00;
+  // Use WalletController balance
+  double get balance => walletController.walletBalance.value.toDouble();
 
   @override
   void onInit() {
@@ -28,6 +32,26 @@ class TransferByWalletController extends GetxController {
     amountController.addListener(_validate);
   }
 
+  // Keypad Logic
+  void onNumberPress(String value) {
+    if (amountController.text.contains('.') && value == '.') return;
+    if (amountController.text.length > 8) return; // Prevent too long numbers
+
+    // If text is "0" and we press a number (not .), replace 0
+    if (amountController.text == "0" && value != ".") {
+      amountController.text = value;
+    } else {
+      amountController.text += value;
+    }
+  }
+
+  void onBackspace() {
+    final text = amountController.text;
+    if (text.isNotEmpty) {
+      amountController.text = text.substring(0, text.length - 1);
+    }
+  }
+
   @override
   void onClose() {
     amountController.dispose();
@@ -37,52 +61,81 @@ class TransferByWalletController extends GetxController {
 
   void _validate() {
     final amountText = amountController.text;
-    // Simplified: Check only if text is not empty.
-    // If user inputs "0" or valid text, we consider it valid for "not empty" rule.
     bool amountValid = amountController.text.isNotEmpty;
 
     if (!amountValid && amountText.isNotEmpty) {
-      // Just keep existing error logic if useful but don't block invalid logic on pure text empty check
       amountError.value = null;
     } else {
-      // if we want to show invalid number error:
       final amount = double.tryParse(amountText.replaceAll(',', ''));
       if (amount == null && amountText.isNotEmpty) {
         amountError.value = "Invalid number";
+      } else if (amount != null && amount > balance) {
+        amountError.value = "Insufficient funds";
+        amountValid = false;
       } else {
         amountError.value = null;
       }
     }
 
-    // We still need a contact to transfer TO.
-    isValid.value = amountValid && selectedContact.value != null;
+    isValid.value = amountValid;
   }
 
-  void onTransfer() {
-    bool isAmountEmpty = amountController.text.isEmpty;
+  Future<void> onTransfer() async {
+    // Reset error
+    amountError.value = null;
 
-    if (isAmountEmpty) {
-      if (isAmountEmpty) {
-        amountError.value = "Amount required";
-      }
+    final amountText = amountController.text;
 
-      Get.snackbar(
-        "Invalid Input",
-        "Please enter an amount",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+    if (amountText.isEmpty) {
+      amountError.value = "Amount required";
       return;
     }
 
-    Get.toNamed(
-      AppNamed.transactionSuccess,
-      arguments: TransactionSuccessArgs(
-        type: TransactionType.transfer,
-        amount: amountController.text,
-        recipientName: selectedContact.value?.name ?? "Unknown",
-        recipientInfo: selectedContact.value?.phone ?? "",
-      ),
-    );
+    final amount = double.tryParse(amountText.replaceAll(',', ''));
+    if (amount == null) {
+      amountError.value = "Invalid number";
+      return;
+    }
+
+    if (amount > balance) {
+      amountError.value = "Insufficient funds";
+      return;
+    }
+
+    try {
+      await walletController.transferFromWallet(
+        amount: amount,
+        // recipientName is not stored in Firestore schema anymore (optional parameter)
+        // We pass it if we want, but schema doesn't require it.
+        // We'll pass it as optional to verify interface consistency or omit it.
+        // Based on signature: transferFromWallet({amount, recipientInfo, recipientName})
+        recipientName: selectedContact.value?.name ?? "Direct Debit",
+        recipientInfo: selectedContact.value?.phone ?? "Wallet Transfer",
+      );
+
+      Get.toNamed(
+        AppNamed.transactionSuccess,
+        arguments: TransactionSuccessArgs(
+          type: TransactionType.transfer,
+          amount: amountController.text,
+          recipientName: selectedContact.value?.name ?? "My Wallet",
+          recipientInfo: selectedContact.value?.phone ?? "Debit",
+        ),
+      );
+    } catch (e) {
+      String msg = e.toString().replaceAll("Exception:", "").trim();
+      if (msg.contains("Insufficient")) {
+        amountError.value = msg;
+      } else {
+        Get.snackbar(
+          "Transfer Failed",
+          msg,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    }
   }
 
   final RxInt selectedGreetingIndex = (-1).obs;

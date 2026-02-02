@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
     final controller = Get.find<RegisterController>();
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -53,7 +53,7 @@ class RegisterPage extends StatelessWidget {
                 16.verticalSpace,
 
                 // Terms and conditions checkbox
-                _buildTermsCheckbox(controller),
+                _buildTermsCheckbox(controller, context),
 
                 32.verticalSpace,
 
@@ -63,7 +63,7 @@ class RegisterPage extends StatelessWidget {
                 20.verticalSpace,
 
                 // Login link
-                _buildLoginLink(controller),
+                _buildLoginLink(controller, context),
 
                 24.verticalSpace,
               ],
@@ -86,7 +86,7 @@ class RegisterPage extends StatelessWidget {
             child: Icon(
               Icons.arrow_back_ios,
               size: 20.sp,
-              color: AppColors.onSurface,
+              color: context.theme.iconTheme.color,
             ),
           ),
         ),
@@ -97,7 +97,7 @@ class RegisterPage extends StatelessWidget {
             child: Text(
               AppStrings.registerTitle,
               style: AppTextStyles.titleLarge.copyWith(
-                color: AppColors.onSurface,
+                color: context.theme.textTheme.titleLarge?.color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -166,6 +166,7 @@ class RegisterPage extends StatelessWidget {
         label: AppStrings.passwordLabel,
         hint: AppStrings.passwordHintShort,
         isPassword: true,
+        maxLength: 8,
         onChanged: controller.validatePassword,
         errorText: controller.passwordErrorText.value.isNotEmpty
             ? controller.passwordErrorText.value
@@ -191,7 +192,10 @@ class RegisterPage extends StatelessWidget {
   }
 
   /// Build terms and conditions checkbox
-  Widget _buildTermsCheckbox(RegisterController controller) {
+  Widget _buildTermsCheckbox(
+    RegisterController controller,
+    BuildContext context,
+  ) {
     return Obx(
       () => GestureDetector(
         onTap: controller.toggleAgreeToTerms,
@@ -223,7 +227,7 @@ class RegisterPage extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.secondary,
+                    color: context.theme.textTheme.bodySmall?.color,
                   ),
                   children: [
                     const TextSpan(text: AppStrings.termsPart1),
@@ -257,7 +261,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   /// Build login link
-  Widget _buildLoginLink(RegisterController controller) {
+  Widget _buildLoginLink(RegisterController controller, BuildContext context) {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -265,7 +269,7 @@ class RegisterPage extends StatelessWidget {
           Text(
             AppStrings.alreadyHaveAccount,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondary,
+              color: context.theme.textTheme.bodyMedium?.color,
             ),
           ),
           GestureDetector(

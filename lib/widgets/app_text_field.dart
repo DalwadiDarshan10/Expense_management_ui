@@ -6,20 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// A custom text field widget that matches the app's design system.
-///
-/// This widget provides a text field with a label above it, rounded corners,
-/// and support for suffix icons (like validation checkmarks or password visibility toggles).
-///
-/// Example usage:
-/// ```dart
-/// AppTextField(
-///   label: 'Phone',
-///   hint: 'Enter your phone number',
-///   controller: phoneController,
-///   suffixIcon: isValid ? Icon(Icons.check_circle, color: AppColors.success) : null,
-/// )
-/// ```
 class AppTextField extends StatefulWidget {
   /// The label text displayed above the text field
   final String? label;
@@ -222,7 +208,7 @@ class _AppTextFieldState extends State<AppTextField> {
           Text(
             widget.label!,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.primaryText,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -251,8 +237,8 @@ class _AppTextFieldState extends State<AppTextField> {
           onFieldSubmitted: widget.onSubmitted,
           style: AppTextStyles.bodyLarge.copyWith(
             color: widget.enabled
-                ? AppColors.primaryText
-                : AppColors.secondaryText,
+                ? Theme.of(context).textTheme.bodyLarge?.color
+                : Theme.of(context).disabledColor,
           ),
 
           decoration: InputDecoration(
@@ -263,10 +249,10 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             errorText: widget.errorText,
             errorStyle: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.error,
+              color: Theme.of(context).colorScheme.error,
             ),
             filled: true,
-            fillColor: widget.fillColor ?? AppColors.surface,
+            fillColor: widget.fillColor ?? Theme.of(context).cardColor,
             prefixIcon: widget.prefixIcon,
             suffixIcon: _buildSuffixIcon() != null
                 ? Padding(
@@ -284,33 +270,44 @@ class _AppTextFieldState extends State<AppTextField> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
               borderSide: BorderSide(
-                color: widget.borderColor ?? AppColors.primary,
+                color: widget.borderColor ?? Theme.of(context).primaryColor,
                 width: widget.borderWidth.w,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
               borderSide: hasError
-                  ? BorderSide(color: AppColors.error, width: 1.w)
+                  ? BorderSide(
+                      color: Theme.of(context).colorScheme.error,
+                      width: 1.w,
+                    )
                   : BorderSide(
-                      color: widget.borderColor ?? AppColors.borderNor,
+                      color:
+                          widget.borderColor ?? Theme.of(context).dividerColor,
                       width: widget.borderWidth.w,
                     ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
               borderSide: BorderSide(
-                color: widget.focusedBorderColor ?? AppColors.primary,
+                color:
+                    widget.focusedBorderColor ?? Theme.of(context).primaryColor,
                 width: 1.5.w,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
-              borderSide: BorderSide(color: AppColors.error, width: 1.w),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.error,
+                width: 1.w,
+              ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),
-              borderSide: BorderSide(color: AppColors.error, width: 1.5.w),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.error,
+                width: 1.5.w,
+              ),
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius.r),

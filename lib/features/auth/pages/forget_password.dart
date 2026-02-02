@@ -1,6 +1,6 @@
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
-import 'package:expense/core/theme/app_colors.dart';
+
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/auth/controller/forgot_password_controller.dart';
 import 'package:expense/widgets/app_button.dart';
@@ -19,12 +19,12 @@ class ForgotPasswordPage extends StatelessWidget {
     final controller = Get.put(ForgotPasswordController());
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           AppStrings.forgotPasswordTitle,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.onSurface,
+            color: context.theme.textTheme.titleLarge?.color,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -36,11 +36,11 @@ class ForgotPasswordPage extends StatelessWidget {
             child: Icon(
               Icons.arrow_back_ios,
               size: 20.sp,
-              color: AppColors.onSurface,
+              color: context.theme.iconTheme.color,
             ),
           ),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: context.theme.appBarTheme.backgroundColor,
         elevation: 0,
       ),
       body: SafeArea(
@@ -56,7 +56,7 @@ class ForgotPasswordPage extends StatelessWidget {
                   AppStrings.forgotPasswordMessage,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.secondary,
+                    color: context.theme.textTheme.bodyMedium?.color,
                   ),
                 ),
                 40.verticalSpace,

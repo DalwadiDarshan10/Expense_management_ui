@@ -49,6 +49,7 @@ class FriendsPage extends GetView<FriendsController> {
                     imagePath: AppImages.deleteIcon,
                   ),
           ),
+          SizedBox(width: 24.w),
         ],
       ),
       body: SingleChildScrollView(
@@ -232,7 +233,7 @@ class FriendsPage extends GetView<FriendsController> {
                                       padding: const EdgeInsets.all(3.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.secondaryText,
+                                          color: AppColors.background,
                                           shape: BoxShape.circle,
                                         ),
                                         child: Center(

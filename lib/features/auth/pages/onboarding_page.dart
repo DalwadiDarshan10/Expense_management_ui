@@ -1,6 +1,6 @@
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
-import 'package:expense/core/theme/app_colors.dart';
+
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_button.dart';
@@ -15,7 +15,7 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -51,7 +51,7 @@ class OnboardingPage extends StatelessWidget {
                     Text(
                       AppStrings.appName,
                       style: AppTextStyles.headlineSmall.copyWith(
-                        color: AppColors.onSurface,
+                        color: context.theme.textTheme.headlineSmall?.color,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -62,7 +62,7 @@ class OnboardingPage extends StatelessWidget {
                       AppStrings.onboardingMessage,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.secondary,
+                        color: context.theme.textTheme.bodyMedium?.color,
                         height: 1.5,
                       ),
                     ),

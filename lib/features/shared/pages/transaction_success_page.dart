@@ -85,7 +85,7 @@ class TransactionSuccessPage extends StatelessWidget {
                         // Height needs to be constrained or calculated.
                         // Using constrained box or fixed height for now to match approx image proportion.
                         height: 480.h,
-                        color: Colors.white,
+                        color: context.theme.cardColor,
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         child: Column(
                           children: [
@@ -101,7 +101,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                   Text(
                                     _getTitle(args.type),
                                     style: AppTextStyles.headlineSmall.copyWith(
-                                      color: AppColors.black,
+                                      color: context
+                                          .theme
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.color,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -110,7 +114,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                     _getSubtitle(args.type),
                                     maxLines: 1,
                                     style: AppTextStyles.bodyLarge.copyWith(
-                                      color: AppColors.secondaryText,
+                                      color: context
+                                          .theme
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color,
                                       fontWeight: FontWeight.w400,
                                     ),
                                     textAlign: TextAlign.center,
@@ -119,7 +127,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                   Text(
                                     _getAmountLabel(args.type),
                                     style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.secondaryText,
+                                      color: context
+                                          .theme
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color,
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -128,7 +140,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                   Text(
                                     "\$ ${args.amount}",
                                     style: AppTextStyles.headlineSmall.copyWith(
-                                      color: AppColors.black,
+                                      color: context
+                                          .theme
+                                          .textTheme
+                                          .headlineSmall
+                                          ?.color,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -177,8 +193,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                                           .copyWith(
                                                             fontWeight:
                                                                 FontWeight.w400,
-                                                            color:
-                                                                AppColors.black,
+                                                            color: context
+                                                                .theme
+                                                                .textTheme
+                                                                .bodyLarge
+                                                                ?.color,
                                                           ),
                                                     ),
                                                     SizedBox(width: 10.w),
@@ -189,8 +208,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                                           .copyWith(
                                                             fontWeight: FontWeight
                                                                 .bold, // Regular weight? Image looks boldish.
-                                                            color:
-                                                                AppColors.black,
+                                                            color: context
+                                                                .theme
+                                                                .textTheme
+                                                                .bodyMedium
+                                                                ?.color,
                                                           ),
                                                     ),
                                                   ],
@@ -201,8 +223,11 @@ class TransactionSuccessPage extends StatelessWidget {
                                                 args.recipientInfo ?? "",
                                                 style: AppTextStyles.bodyMedium
                                                     .copyWith(
-                                                      color: AppColors
-                                                          .secondaryText,
+                                                      color: context
+                                                          .theme
+                                                          .textTheme
+                                                          .bodyMedium
+                                                          ?.color,
                                                     ),
                                               ),
                                             ],
@@ -241,8 +266,9 @@ class TransactionSuccessPage extends StatelessWidget {
                         Container(
                           height: 70.h,
                           width: 70.w,
-                          decoration: const BoxDecoration(
-                            color: Colors.white, // Matches card color
+                          decoration: BoxDecoration(
+                            color:
+                                context.theme.cardColor, // Matches card color
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -265,21 +291,33 @@ class TransactionSuccessPage extends StatelessWidget {
                         Positioned(
                           left: -30.w,
                           top: 50.h,
-                          child: _buildDot(size: 22, borderWidth: 4),
+                          child: _buildDot(
+                            size: 22,
+                            borderWidth: 4,
+                            context: context,
+                          ),
                         ),
 
                         // Right Dot (Medium)
                         Positioned(
                           right: -20.w,
                           top: 32.h,
-                          child: _buildDot(size: 18, borderWidth: 4),
+                          child: _buildDot(
+                            size: 18,
+                            borderWidth: 4,
+                            context: context,
+                          ),
                         ),
 
                         // Right Dot (Small)
                         Positioned(
                           right: -35.w,
                           top: 50.h,
-                          child: _buildDot(size: 8, borderWidth: 0),
+                          child: _buildDot(
+                            size: 8,
+                            borderWidth: 0,
+                            context: context,
+                          ),
                         ),
                       ],
                     ),
@@ -310,7 +348,11 @@ class TransactionSuccessPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDot({required double size, double borderWidth = 0}) {
+  Widget _buildDot({
+    required double size,
+    required BuildContext context,
+    double borderWidth = 0,
+  }) {
     return Container(
       width: size.w,
       height: size.h,
@@ -318,7 +360,7 @@ class TransactionSuccessPage extends StatelessWidget {
         color: AppColors.success,
         shape: BoxShape.circle,
         border: borderWidth > 0
-            ? Border.all(color: Colors.white, width: borderWidth.w)
+            ? Border.all(color: context.theme.cardColor, width: borderWidth.w)
             : null,
       ),
     );

@@ -19,7 +19,7 @@ class LoginPage extends StatelessWidget {
     final controller = Get.find<LoginController>();
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                 16.verticalSpace,
 
                 // Save password & Forgot password row
-                _buildOptionsRow(controller),
+                _buildOptionsRow(controller, context),
 
                 40.verticalSpace,
 
@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
                 16.verticalSpace,
 
                 // Sign up link
-                _buildSignUpLink(controller),
+                _buildSignUpLink(controller, context),
               ],
             ),
           ),
@@ -74,7 +74,7 @@ class LoginPage extends StatelessWidget {
             child: Icon(
               Icons.arrow_back_ios,
               size: 20.sp,
-              color: AppColors.onSurface,
+              color: context.theme.iconTheme.color,
             ),
           ),
         ),
@@ -85,7 +85,7 @@ class LoginPage extends StatelessWidget {
             child: Text(
               AppStrings.login,
               style: AppTextStyles.titleLarge.copyWith(
-                color: AppColors.onSurface,
+                color: context.theme.textTheme.titleLarge?.color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -136,7 +136,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOptionsRow(LoginController controller) {
+  Widget _buildOptionsRow(LoginController controller, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -169,7 +169,7 @@ class LoginPage extends StatelessWidget {
                 Text(
                   AppStrings.savePassword,
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.secondary,
+                    color: context.theme.textTheme.bodySmall?.color,
                   ),
                 ),
               ],
@@ -202,7 +202,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSignUpLink(LoginController controller) {
+  Widget _buildSignUpLink(LoginController controller, BuildContext context) {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -210,7 +210,7 @@ class LoginPage extends StatelessWidget {
           Text(
             AppStrings.dontHaveAccount,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.secondary,
+              color: context.theme.textTheme.bodyMedium?.color,
             ),
           ),
           GestureDetector(

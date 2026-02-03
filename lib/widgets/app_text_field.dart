@@ -233,7 +233,6 @@ class _AppTextFieldState extends State<AppTextField> {
           validator: widget.validator,
           autofocus: widget.autofocus,
           onChanged: widget.onChanged,
-
           onFieldSubmitted: widget.onSubmitted,
           style: AppTextStyles.bodyLarge.copyWith(
             color: widget.enabled
@@ -252,7 +251,8 @@ class _AppTextFieldState extends State<AppTextField> {
               color: Theme.of(context).colorScheme.error,
             ),
             filled: true,
-            fillColor: widget.fillColor ?? Theme.of(context).cardColor,
+            fillColor:
+                widget.fillColor ?? Theme.of(context).colorScheme.surface,
             prefixIcon: widget.prefixIcon,
             suffixIcon: _buildSuffixIcon() != null
                 ? Padding(

@@ -16,29 +16,32 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: Theme.of(context).cardColor,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top Blue Header Section with Background Image
-            _buildHeaderSection(context),
-            SizedBox(height: 24.h),
-            // Send Again Section
-            _buildSendAgainSection(context),
-            Container(
-              height: 8.h,
-              color: Theme.of(context).scaffoldBackgroundColor,
-            ),
-            // Payment List Section
-            _buildPaymentListSection(context),
-            Container(
-              height: 8.h,
-              color: Theme.of(context).scaffoldBackgroundColor,
-            ),
-            // Trading History Section
-            _buildTradingHistorySection(context),
-            SizedBox(height: 24.h),
-          ],
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Container(
+          color: Theme.of(context).cardColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Blue Header Section with Background Image
+              _buildHeaderSection(context),
+              SizedBox(height: 24.h),
+              // Send Again Section
+              _buildSendAgainSection(context),
+              Container(
+                height: 8.h,
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              // Payment List Section
+              _buildPaymentListSection(context),
+              Container(
+                height: 8.h,
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              // Trading History Section
+              _buildTradingHistorySection(context),
+              SizedBox(height: 24.h),
+            ],
+          ),
         ),
       ),
     );
@@ -220,35 +223,38 @@ class HomePage extends StatelessWidget {
       {'name': 'Lane R.', 'color': const Color(0xFFBA68C8)},
     ];
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.sendAgain,
-            style: AppTextStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.titleMedium?.color,
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppStrings.sendAgain,
+              style: AppTextStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).textTheme.titleMedium?.color,
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          SizedBox(
-            height: 120.h,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: contacts.length,
-              separatorBuilder: (context, index) => SizedBox(width: 16.w),
-              itemBuilder: (context, index) {
-                final contact = contacts[index];
-                return _buildContactAvatar(
-                  name: contact['name'] as String,
-                  color: contact['color'] as Color,
-                );
-              },
+            SizedBox(height: 16.h),
+            SizedBox(
+              height: 100.h,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: contacts.length,
+                separatorBuilder: (context, index) => SizedBox(width: 16.w),
+                itemBuilder: (context, index) {
+                  final contact = contacts[index];
+                  return _buildContactAvatar(
+                    name: contact['name'] as String,
+                    color: contact['color'] as Color,
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -346,38 +352,41 @@ class HomePage extends StatelessWidget {
       },
     ];
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.paymentList,
-            style: AppTextStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.titleMedium?.color,
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppStrings.paymentList,
+              style: AppTextStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).textTheme.titleMedium?.color,
+              ),
             ),
-          ),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 11.h,
-              // crossAxisSpacing: 1.w,
-              childAspectRatio: 0.85,
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                mainAxisSpacing: 11.h,
+                // crossAxisSpacing: 1.w,
+                childAspectRatio: 0.85,
+              ),
+              itemCount: paymentItems.length,
+              itemBuilder: (context, index) {
+                final item = paymentItems[index];
+                return _buildPaymentItem(
+                  icon: item['icon'] as String,
+                  label: item['label'] as String,
+                  context: context,
+                );
+              },
             ),
-            itemCount: paymentItems.length,
-            itemBuilder: (context, index) {
-              final item = paymentItems[index];
-              return _buildPaymentItem(
-                icon: item['icon'] as String,
-                label: item['label'] as String,
-                context: context,
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -405,41 +414,44 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildTradingHistorySection(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.tradingHistory,
-            style: AppTextStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.titleMedium?.color,
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppStrings.tradingHistory,
+              style: AppTextStyles.titleMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).textTheme.titleMedium?.color,
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          _buildTransactionItem(
-            icon: AppImages.electricBillBadge,
-            title: AppStrings.electricBillTitle,
-            subtitle: AppStrings.sent,
-            amount: '-\$420',
-            isNegative: true,
-            date: "Today - 3.14",
-            onTap: () => Get.toNamed(AppNamed.shareBill),
-            context: context,
-          ),
-          SizedBox(height: 20.h),
-          _buildTransactionItem(
-            icon: AppImages.televisionBadge,
-            title: AppStrings.televisionBillTitle,
-            subtitle: AppStrings.sent,
-            amount: '\$420',
-            isNegative: true,
-            date: "22 jan- 3.14",
-            onTap: () => Get.toNamed(AppNamed.shareBill),
-            context: context,
-          ),
-        ],
+            SizedBox(height: 16.h),
+            _buildTransactionItem(
+              icon: AppImages.electricBillBadge,
+              title: AppStrings.electricBillTitle,
+              subtitle: AppStrings.sent,
+              amount: '-\$420',
+              isNegative: true,
+              date: "Today - 3.14",
+              onTap: () => Get.toNamed(AppNamed.shareBill),
+              context: context,
+            ),
+            SizedBox(height: 20.h),
+            _buildTransactionItem(
+              icon: AppImages.televisionBadge,
+              title: AppStrings.televisionBillTitle,
+              subtitle: AppStrings.sent,
+              amount: '\$420',
+              isNegative: true,
+              date: "22 jan- 3.14",
+              onTap: () => Get.toNamed(AppNamed.shareBill),
+              context: context,
+            ),
+          ],
+        ),
       ),
     );
   }

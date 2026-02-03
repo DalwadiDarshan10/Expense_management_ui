@@ -67,7 +67,7 @@ class RegisterController extends GetxController {
     if (value.isEmpty) {
       passwordErrorText.value = 'Password is required';
     } else if (value.length < 6) {
-      passwordErrorText.value = 'Password must be at least 6 characters';
+      passwordErrorText.value = 'Password must be 8 characters';
     } else {
       passwordErrorText.value = '';
     }

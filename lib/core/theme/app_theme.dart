@@ -44,7 +44,7 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.dark,
     primaryColor: AppColors.primary,
-    scaffoldBackgroundColor: const Color(0xFF121212), // Dark background
+    scaffoldBackgroundColor: AppColors.black, // Dark background
     cardColor: const Color(0xFF1E1E1E), // Dark card
     dividerColor: Colors.grey[800],
     colorScheme: const ColorScheme.dark(
@@ -56,9 +56,6 @@ class AppTheme {
       onSecondary: Colors.white,
       onSurface: Colors.white,
     ),
-    // We might need to adjust text styles for dark mode if they are hardcoded to dark colors
-    // For now, we'll let existing styles stand but override color in the theme if possible
-    // or rely on widgets using Theme.of(context).textTheme
     textTheme: TextTheme(
       displayLarge: AppTextStyles.displayLarge.copyWith(color: Colors.white),
       displayMedium: AppTextStyles.displayMedium.copyWith(color: Colors.white),

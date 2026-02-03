@@ -136,7 +136,7 @@ class WalletController extends GetxController {
               if (snapshot.exists) {
                 final data = snapshot.data();
                 AppLogger.info("Snapshot found! Data: $data");
-                walletBalance.value = data?['balance'] ?? 0;
+                walletBalance.value = data?['balance'] ?? 0.0;
                 AppLogger.info(
                   "Wallet balance updated: ${walletBalance.value}",
                 );

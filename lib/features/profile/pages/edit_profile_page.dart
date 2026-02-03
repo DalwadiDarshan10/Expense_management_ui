@@ -123,6 +123,7 @@ class EditProfilePage extends GetView<EditProfileController> {
               title: AppStrings.phoneNumberLabel,
               controller: controller.phoneController,
               keyboardType: TextInputType.phone,
+              maxLength: 10,
             ),
             SizedBox(height: 8.h),
             LabeledInputTile(

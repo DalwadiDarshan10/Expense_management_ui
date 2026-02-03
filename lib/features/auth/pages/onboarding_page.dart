@@ -1,6 +1,7 @@
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 
+import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_button.dart';
@@ -15,7 +16,7 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.scaffoldBackgroundColor,
+      backgroundColor: context.isDarkMode ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

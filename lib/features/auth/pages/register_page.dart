@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
     final controller = Get.find<RegisterController>();
 
     return Scaffold(
-      backgroundColor: context.theme.scaffoldBackgroundColor,
+      backgroundColor: context.isDarkMode ? AppColors.black : AppColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

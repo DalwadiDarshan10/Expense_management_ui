@@ -23,10 +23,7 @@ class ProfileStatsWidget extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: Column(
         children: [
           _buildRow(

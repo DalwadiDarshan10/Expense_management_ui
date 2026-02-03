@@ -20,7 +20,7 @@ class ThemeController extends GetxController {
   bool _loadThemeFromBox() => _box.read(_key) ?? false;
 
   /// Save the theme status to local storage
-  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
+  Future<void> _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
 
   /// Switch the theme and save the preference
   void toggleTheme() {

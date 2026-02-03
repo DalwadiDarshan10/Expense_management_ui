@@ -5,6 +5,8 @@ import 'package:expense/features/profile/controllers/setting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:expense/features/profile/pages/change_password_page.dart';
+import 'package:expense/features/profile/pages/face_id_page.dart';
+import 'package:expense/features/profile/pages/application_info_page.dart';
 import 'package:get/get.dart';
 
 class SettingPage extends StatelessWidget {
@@ -46,7 +48,9 @@ class SettingPage extends StatelessWidget {
               child: _buildSettingItem(
                 context,
                 title: AppStrings.changeFaceId,
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => const FaceIdPage());
+                },
               ),
             ),
             SizedBox(height: 8.h),
@@ -119,7 +123,9 @@ class SettingPage extends StatelessWidget {
                   _buildSettingItem(
                     context,
                     title: AppStrings.applicationInformation,
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => const ApplicationInfoPage());
+                    },
                   ),
                 ],
               ),

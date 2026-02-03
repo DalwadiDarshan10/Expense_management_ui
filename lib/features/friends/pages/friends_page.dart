@@ -43,13 +43,15 @@ class FriendsPage extends GetView<FriendsController> {
                       size: 24.r,
                     ),
                   )
-                : AppImageViewer(
-                    height: 24.r,
-                    width: 24.r,
-                    imagePath: AppImages.deleteIcon,
+                : IconButton(
+                    onPressed: () => controller.toggleDeleteMode(),
+                    icon: AppImageViewer(
+                      height: 24.r,
+                      width: 24.r,
+                      imagePath: AppImages.deleteIcon,
+                    ),
                   ),
           ),
-          SizedBox(width: 24.w),
         ],
       ),
       body: SingleChildScrollView(
@@ -68,7 +70,7 @@ class FriendsPage extends GetView<FriendsController> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(

@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDPG552LyKfqt3Y88gS_QzLgUN-8SCekt4',
-    appId: '1:206260112219:android:70d5870819b40cdee3687e',
+    appId: '1:206260112219:android:70d5870819b40cdee3z687e',
     messagingSenderId: '206260112219',
     projectId: 'expense-management-63b7f',
     storageBucket: 'expense-management-63b7f.firebasestorage.app',
@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '206260112219',
     projectId: 'expense-management-63b7f',
     storageBucket: 'expense-management-63b7f.firebasestorage.app',
-    iosClientId: '206260112219-skm8iaae8tvmsuiccp7b4vhcu6psb1ng.apps.googleusercontent.com',
+    iosClientId:
+        '206260112219-skm8iaae8tvmsuiccp7b4vhcu6psb1ng.apps.googleusercontent.com',
     iosBundleId: 'com.example.expense',
   );
 }

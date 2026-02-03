@@ -16,13 +16,13 @@ class ChangePasswordPage extends StatelessWidget {
     final controller = Get.put(ChangePasswordController());
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primary,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
@@ -31,7 +31,7 @@ class ChangePasswordPage extends StatelessWidget {
         title: Text(
           AppStrings.changePassword,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ),
@@ -41,7 +41,7 @@ class ChangePasswordPage extends StatelessWidget {
             SizedBox(height: 8.h),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -125,7 +125,9 @@ class ChangePasswordPage extends StatelessWidget {
                           Text(
                             AppStrings.signOutOfAllDevices,
                             style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.primaryText,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodySmall?.color,
                             ),
                           ),
                         ],

@@ -40,7 +40,7 @@ class LabeledInputTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,7 +52,7 @@ class LabeledInputTile extends StatelessWidget {
                 style: AppTextStyles.bodyMedium.copyWith(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
-                  color: AppColors.onSurface,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
               SizedBox(width: 6),
@@ -72,11 +72,13 @@ class LabeledInputTile extends StatelessWidget {
             maxLength: maxLength,
 
             onChanged: onChanged,
-            style: AppTextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: Theme.of(context).textTheme.bodyMedium?.color,
+            ),
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: AppTextStyles.bodyLarge.copyWith(
-                color: AppColors.secondaryText,
+                color: Theme.of(context).hintColor,
               ),
               prefix: prefix,
               counterText: "",
@@ -84,8 +86,8 @@ class LabeledInputTile extends StatelessWidget {
               isDense: true,
               contentPadding: EdgeInsets.zero,
               border: const UnderlineInputBorder(borderSide: BorderSide.none),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.dividerColor),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).dividerColor),
               ),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.primary, width: 1.5),

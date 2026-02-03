@@ -241,4 +241,20 @@ class AppStrings {
 
   // Share Analysis Page
   static const String shareAnalysisTitle = "Share Analysis";
+
+  // Face ID Page
+  static const String faceIdTitle = "Face ID";
+  static const String faceRecognition = "Face Recognition";
+  static const String faceRecognitionMessage =
+      "Please look into the camera and look still";
+  static const String scanMyFace = "Scan my face";
+  static const String skip = "Skip";
+  static const String images = "Images";
+
+  // Application Info Page
+  static const String version = "Version";
+  static const String developer = "Developer";
+  static const String privacyPolicy = "Privacy Policy";
+  static const String termsOfService = "Terms of Service";
+  static const String contact = "Contact";
 }

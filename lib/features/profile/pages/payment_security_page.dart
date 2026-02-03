@@ -21,6 +21,9 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
   String selectedTimeLabel = '2 min';
   Timer? _lockTimer;
 
+  String transactionLimitValue = '\$ 200';
+  String transferLimitTillValue = 'End of Day';
+
   void startLockTimer() {
     if (!appLocks) return;
 
@@ -36,9 +39,77 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
       AppStrings.sessionExpiredMessage,
       snackPosition: SnackPosition.BOTTOM,
     );
+  }
 
-    // Later replace with:
-    // Get.toNamed('/lockScreen');
+  void _showTransactionLimitPicker() {
+    Get.bottomSheet(
+      Container(
+        color: Theme.of(context).cardColor,
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _limitOption('\$ 200'),
+            _limitOption('\$ 500'),
+            _limitOption('\$ 1000'),
+            _limitOption('\$ 2000'),
+            _limitOption('\$ 5000'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showTransferLimitTillPicker() {
+    Get.bottomSheet(
+      Container(
+        color: Theme.of(context).cardColor,
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _limitTillOption('End of Day'),
+            _limitTillOption('1 Week'),
+            _limitTillOption('1 Month'),
+            _limitTillOption('Forever'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _limitOption(String label) {
+    return ListTile(
+      title: Text(
+        label,
+        style: AppTextStyles.bodyLarge.copyWith(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          transactionLimitValue = label;
+        });
+        Get.back();
+      },
+    );
+  }
+
+  Widget _limitTillOption(String label) {
+    return ListTile(
+      title: Text(
+        label,
+        style: AppTextStyles.bodyLarge.copyWith(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          transferLimitTillValue = label;
+        });
+        Get.back();
+      },
+    );
   }
 
   @override
@@ -87,8 +158,17 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                     ),
                     _buildDropdownTile(
                       title: AppStrings.transactionLimit,
-                      value: '\$ 200',
-                      onTap: () {},
+                      value: transactionLimitValue,
+                      onTap: _showTransactionLimitPicker,
+                    ),
+                    Divider(
+                      color: Theme.of(context).dividerColor,
+                      height: 24.h,
+                    ),
+                    _buildDropdownTile(
+                      title: 'Transfer Limit Till',
+                      value: transferLimitTillValue,
+                      onTap: _showTransferLimitTillPicker,
                     ),
                   ],
                 ),
@@ -207,7 +287,12 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
 
   Widget _timeOption(String label, int seconds) {
     return ListTile(
-      title: Text(label, style: AppTextStyles.bodyLarge),
+      title: Text(
+        label,
+        style: AppTextStyles.bodyLarge.copyWith(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
+        ),
+      ),
       onTap: () {
         setState(() {
           selectedTimeLabel = label;

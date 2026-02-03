@@ -15,8 +15,6 @@ class FriendsController extends GetxController {
       }
       isDeleteMode.value = false;
     } else {
-      // Enter delete mode
-      // Clear any previous selection
       for (var f in friends) {
         f.isSelected.value = false;
       }

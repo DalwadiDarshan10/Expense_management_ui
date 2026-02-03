@@ -7,18 +7,20 @@ class ActionTile extends StatelessWidget {
   final String title;
   final String icon; // Or use SVG path if designs require SVGs
   final VoidCallback onTap;
+  final Color? iconColor;
 
   const ActionTile({
     super.key,
     required this.title,
     required this.icon,
     required this.onTap,
+    this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColors.white),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(
@@ -27,16 +29,18 @@ class ActionTile extends StatelessWidget {
         ),
         leading: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface, // Light background for icon
+            color: Theme.of(
+              context,
+            ).scaffoldBackgroundColor, // Light background for icon
             shape: BoxShape.circle,
           ),
-          child: AppImageViewer(imagePath: icon),
+          child: AppImageViewer(imagePath: icon, color: iconColor),
         ),
         title: Text(
           title,
           style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.w400,
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         trailing: const Icon(
@@ -64,7 +68,7 @@ class SectionTitle extends StatelessWidget {
           // Assuming H3 or similar exists
           fontSize: 18,
           fontWeight: FontWeight.w500,
-          color: AppColors.primaryText,
+          color: Theme.of(context).textTheme.headlineSmall?.color,
         ),
       ),
     );
@@ -88,7 +92,7 @@ class ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColors.white),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -101,11 +105,11 @@ class ContactTile extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             child: CircleAvatar(
               radius: 24,
-              backgroundColor: AppColors.bgSeparator,
+              backgroundColor: Theme.of(context).dividerColor.withOpacity(0.2),
               child: Text(
                 name[0].toUpperCase(),
-                style: const TextStyle(
-                  color: AppColors.primaryText,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -117,7 +121,7 @@ class ContactTile extends StatelessWidget {
           name,
           style: AppTextStyles.bodyLarge.copyWith(
             fontWeight: FontWeight.w400,
-            color: AppColors.primaryText,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         subtitle: Text(

@@ -38,7 +38,7 @@ class SelectedUserTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 24.w),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,7 +70,7 @@ class SelectedUserTile extends StatelessWidget {
                     name,
                     style: AppTextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.w400,
-                      color: AppColors.onSurface,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   SizedBox(height: 4.h),

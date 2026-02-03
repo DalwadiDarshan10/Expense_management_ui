@@ -102,14 +102,23 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
           firstDate: DateTime(2020),
           lastDate: DateTime.now(),
           builder: (context, child) {
+            final isDarkMode = Theme.of(context).brightness == Brightness.dark;
             return Theme(
               data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
-                  primary: AppColors.primary,
-                  onPrimary: AppColors.white,
-                  surface: AppColors.white,
-                  onSurface: AppColors.primaryText,
-                ),
+                colorScheme: isDarkMode
+                    ? ColorScheme.dark(
+                        primary: AppColors.primary,
+                        onPrimary: Colors.white,
+                        surface: context.theme.cardColor,
+                        onSurface: Colors.white,
+                      )
+                    : ColorScheme.light(
+                        primary: AppColors.primary,
+                        onPrimary: Colors.white,
+                        surface: Colors.white,
+                        onSurface: AppColors.primaryText,
+                      ),
+                dialogBackgroundColor: context.theme.scaffoldBackgroundColor,
               ),
               child: child!,
             );

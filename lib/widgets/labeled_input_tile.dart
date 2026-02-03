@@ -49,13 +49,12 @@ class LabeledInputTile extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
+                style: AppTextStyles.labelLarge.copyWith(
+                  fontSize: 16.sp,
                   color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
-              SizedBox(width: 6),
+              SizedBox(width: 6.w),
 
               // const Spacer(),
               if (trailingWidget != null) trailingWidget!,

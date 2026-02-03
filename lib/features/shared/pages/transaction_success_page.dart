@@ -39,13 +39,21 @@ class TransactionSuccessPage extends StatelessWidget {
             recipientInfo: "Unknown",
           );
 
+    final isDarkMode = context.isDarkMode;
+
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: isDarkMode
+          ? context.theme.scaffoldBackgroundColor
+          : AppColors.primary,
       body: Stack(
         children: [
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(color: AppColors.primary),
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? context.theme.scaffoldBackgroundColor
+                    : AppColors.primary,
+              ),
               child: const AppImageViewer(
                 imagePath: AppImages.sucessPageBgImage,
                 fit: BoxFit.cover,
@@ -153,7 +161,7 @@ class TransactionSuccessPage extends StatelessWidget {
                             ),
 
                             // Divider Area
-                            _buildDashedLine(),
+                            _buildDashedLine(context),
 
                             // Bottom Section (Below Cutout)
                             Expanded(
@@ -165,7 +173,7 @@ class TransactionSuccessPage extends StatelessWidget {
                                   Container(
                                     padding: EdgeInsets.all(16.w),
                                     decoration: BoxDecoration(
-                                      color: AppColors.inputBackground,
+                                      color: context.theme.cardColor,
                                       borderRadius: BorderRadius.circular(12.r),
                                     ),
                                     child: Row(
@@ -331,7 +339,7 @@ class TransactionSuccessPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDashedLine() {
+  Widget _buildDashedLine(BuildContext context) {
     return Row(
       children: List.generate(
         30,
@@ -340,7 +348,7 @@ class TransactionSuccessPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 2.0),
             child: Container(
               height: 1,
-              color: AppColors.borderNor, // Lighter dash color
+              color: context.theme.dividerColor, // Use theme divider color
             ),
           ),
         ),

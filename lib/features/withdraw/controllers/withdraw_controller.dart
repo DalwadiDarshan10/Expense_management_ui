@@ -16,7 +16,7 @@ class WithdrawController extends GetxController {
 
   WalletController get _walletController => Get.find<WalletController>();
 
-  RxInt get walletBalance => _walletController.walletBalance;
+  RxDouble get walletBalance => _walletController.walletBalance;
 
   // Helper to get bank details
   // Returns a map with 'name' and 'number'

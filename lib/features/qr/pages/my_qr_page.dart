@@ -19,26 +19,28 @@ class MyQrPage extends StatelessWidget {
     final controller = Get.put(MyQrController());
 
     return Scaffold(
-      backgroundColor: AppColors.background, // Light grey background
+      backgroundColor: Theme.of(
+        context,
+      ).scaffoldBackgroundColor, // Light grey background
       body: SafeArea(
         child: Column(
           children: [
-            _buildTopBar(),
+            _buildTopBar(context),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
-                      color: AppColors.white,
+                      color: Theme.of(context).cardColor,
                       child: Padding(
                         padding: EdgeInsets.all(16.h.w),
-                        child: _buildTicketCard(),
+                        child: _buildTicketCard(context),
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    _buildCouponSection(controller),
+                    _buildCouponSection(context, controller),
                     SizedBox(height: 8.h),
-                    _buildPointsSection(), // Spacing for bottom tabs
+                    _buildPointsSection(context), // Spacing for bottom tabs
                   ],
                 ),
               ),
@@ -49,7 +51,7 @@ class MyQrPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBar() {
+  Widget _buildTopBar(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Stack(
@@ -62,7 +64,7 @@ class MyQrPage extends StatelessWidget {
                 onTap: () => Get.back(),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.black,
+                  color: Theme.of(context).iconTheme.color,
                   size: 24.sp,
                 ),
               ),
@@ -79,16 +81,16 @@ class MyQrPage extends StatelessWidget {
           ),
           Text(
             AppStrings.myQr,
-            style: AppTextStyles.titleLarge.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTicketCard() {
+  Widget _buildTicketCard(BuildContext context) {
     return Stack(
       children: [
         CustomPaint(
@@ -107,7 +109,7 @@ class MyQrPage extends StatelessWidget {
             child: Container(
               width: double.infinity,
               height: 450.h,
-              // color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
                 children: [
                   // QR Code Section
@@ -117,9 +119,16 @@ class MyQrPage extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          QrImageView(
-                            data: 'https://avipay.com/user/123456',
-                            size: 200.w,
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                            child: QrImageView(
+                              data: 'https://avipay.com/user/123456',
+                              size: 180.w,
+                            ),
                           ),
                         ],
                       ),
@@ -136,13 +145,17 @@ class MyQrPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(height: 10.h),
-                          BarcodeWidget(
-                            barcode: Barcode.code128(),
-                            data: '2837389129sadh37',
-                            drawText: false,
-                            color: Colors.black,
-                            height: 60.h,
-                            width: double.infinity,
+                          Container(
+                            padding: EdgeInsets.all(5),
+                            color: Colors.white,
+                            child: BarcodeWidget(
+                              barcode: Barcode.code128(),
+                              data: '2837389129sadh37',
+                              drawText: false,
+                              color: Colors.black,
+                              height: 50.h,
+                              width: double.infinity,
+                            ),
                           ),
                           SizedBox(height: 20.h),
                           // Download Button
@@ -153,6 +166,7 @@ class MyQrPage extends StatelessWidget {
                               imagePath: AppImages.downloadIcon,
                               height: 20.h,
                               width: 20.w,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -186,11 +200,11 @@ class MyQrPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCouponSection(MyQrController controller) {
+  Widget _buildCouponSection(BuildContext context, MyQrController controller) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
@@ -199,14 +213,14 @@ class MyQrPage extends StatelessWidget {
             imagePath: AppImages.couponIcon,
             height: 24.h,
             width: 24.w,
-            color: AppColors.primaryText,
+            color: Theme.of(context).iconTheme.color,
           ),
           SizedBox(width: 12.w),
           Text(
             AppStrings.couponLabel,
             style: AppTextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.primaryText,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
           SizedBox(width: 16.w),
@@ -215,7 +229,7 @@ class MyQrPage extends StatelessWidget {
               height: 40.h,
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: TextField(
@@ -229,7 +243,7 @@ class MyQrPage extends StatelessWidget {
                   contentPadding: EdgeInsets.only(bottom: 8.h),
                 ),
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.primaryText,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             ),
@@ -248,11 +262,11 @@ class MyQrPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPointsSection() {
+  Widget _buildPointsSection(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
@@ -261,7 +275,7 @@ class MyQrPage extends StatelessWidget {
             imagePath: AppImages.starIcon,
             height: 24.h,
             width: 24.w,
-            color: AppColors.primaryText,
+            color: Theme.of(context).iconTheme.color,
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -269,7 +283,7 @@ class MyQrPage extends StatelessWidget {
               AppStrings.usePointsLabel,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
-                color: AppColors.primaryText,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
           ),

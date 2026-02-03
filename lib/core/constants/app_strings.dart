@@ -59,7 +59,7 @@ class AppStrings {
   static const String signUp = "Sign Up";
 
   // Transfer By Wallet
-  static const String transferByWalletTitle = "Transfer By Wallet";
+  static const String transferByWalletTitle = "Transfer by Avipay wallet";
   static const String cashLabel = "Cash";
   static const String cashHintWallet = "\$ 12,000.00";
   static const String transferContentLabel = "Transfer Content";
@@ -194,7 +194,6 @@ class AppStrings {
   // Profile Page
   static const String profileTitle = "Profile";
   static const String cardsBankAccounts = "Cards/Bank Accounts";
-  static const String affiliateService = "Affiliate Service";
   static const String manageGroupFriends = "Manage group of friend";
   static const String paymentSecurity = "Payment Security";
   static const String settingTitle = "Setting";

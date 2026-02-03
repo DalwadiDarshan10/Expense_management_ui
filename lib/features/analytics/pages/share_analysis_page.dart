@@ -22,24 +22,23 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
     final phoneController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: AppColors.primaryText,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           AppStrings.shareAnalysisTitle,
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryText,
-            fontWeight: FontWeight.w500,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -48,7 +47,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
         child: Container(
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: Column(
@@ -60,6 +59,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                 style: AppTextStyles.titleMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 18.sp,
+                  color: Theme.of(context).textTheme.titleMedium?.color,
                 ),
               ),
 
@@ -72,7 +72,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                       hint: AppStrings.phoneNumberHint,
                       controller: phoneController,
                       onChanged: controller.updateSearchQuery,
-                      fillColor: AppColors.inputBackground,
+                      fillColor: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: 30,
                     ),
                   ),
@@ -116,7 +116,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
               ),
 
               SizedBox(height: 18.h),
-              Divider(color: AppColors.dividerColor),
+              Divider(color: Theme.of(context).dividerColor),
 
               // Contact List
               Obx(() {
@@ -134,10 +134,10 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                           ),
                         ),
                       ),
-                      Divider(color: AppColors.dividerColor),
+                      Divider(color: Theme.of(context).dividerColor),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
-                        child: _buildFooter(),
+                        child: _buildFooter(context),
                       ),
                     ],
                   );
@@ -148,12 +148,12 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.filteredContacts.length + 1,
                   separatorBuilder: (_, _) =>
-                      Divider(color: AppColors.dividerColor),
+                      Divider(color: Theme.of(context).dividerColor),
                   itemBuilder: (context, index) {
                     if (index == controller.filteredContacts.length) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
-                        child: _buildFooter(),
+                        child: _buildFooter(context),
                       );
                     }
 
@@ -175,7 +175,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
   }
 
   /// Footer like Figma
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
     return Row(
       children: [
         Icon(Icons.error_outline, color: AppColors.secondaryText, size: 24.r),
@@ -206,7 +206,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: AppColors.dividerColor),
             ),
@@ -214,6 +214,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
               AppStrings.copyLinkBtn,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
           ),

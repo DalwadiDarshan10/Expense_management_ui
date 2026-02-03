@@ -15,17 +15,22 @@ class WithdrawPage extends GetView<WithdrawController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           AppStrings.withdrawTitle,
-          style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -35,14 +40,14 @@ class WithdrawPage extends GetView<WithdrawController> {
           children: [
             SizedBox(height: 8.h),
             // Withdraw To Section
-            _buildWithdrawToSection(),
+            _buildWithdrawToSection(context),
 
             SizedBox(height: 8.h),
 
             // Denominations Section
             Container(
-              color: AppColors.white,
-              child: _buildDenominationsSection(),
+              color: Theme.of(context).cardColor,
+              child: _buildDenominationsSection(context),
             ),
 
             SizedBox(height: 8.h),
@@ -68,9 +73,9 @@ class WithdrawPage extends GetView<WithdrawController> {
     );
   }
 
-  Widget _buildWithdrawToSection() {
+  Widget _buildWithdrawToSection(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: AppColors.white),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Obx(() {
@@ -80,6 +85,7 @@ class WithdrawPage extends GetView<WithdrawController> {
               details['name']!,
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.w500,
+                color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
             subtitle: Text(
@@ -98,7 +104,7 @@ class WithdrawPage extends GetView<WithdrawController> {
     );
   }
 
-  Widget _buildDenominationsSection() {
+  Widget _buildDenominationsSection(BuildContext context) {
     final List<int> denominations = [50, 100, 200, 500, 1000, 2000];
 
     return Padding(
@@ -111,6 +117,7 @@ class WithdrawPage extends GetView<WithdrawController> {
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
               fontSize: 16.sp,
+              color: Theme.of(context).textTheme.titleMedium?.color,
             ),
           ),
           SizedBox(height: 12.h),
@@ -147,7 +154,7 @@ class WithdrawPage extends GetView<WithdrawController> {
                     child: Text(
                       '\$$amount',
                       style: AppTextStyles.titleMedium.copyWith(
-                        color: AppColors.primaryText,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w600,
                         fontSize: 18.sp,
                       ),

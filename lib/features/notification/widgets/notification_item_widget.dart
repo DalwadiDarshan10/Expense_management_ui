@@ -44,7 +44,7 @@ class NotificationItemWidget extends StatelessWidget {
                     title,
                     style: AppTextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.primaryText,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   SizedBox(height: 2.h),

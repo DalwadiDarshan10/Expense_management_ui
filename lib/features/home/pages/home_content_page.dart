@@ -519,7 +519,7 @@ class HomePage extends StatelessWidget {
       Container(
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         child: Column(
@@ -539,7 +539,8 @@ class HomePage extends StatelessWidget {
                 () => ListView.separated(
                   shrinkWrap: true,
                   itemCount: controller.savedBankAccounts.length,
-                  separatorBuilder: (context, index) => Divider(),
+                  separatorBuilder: (context, index) =>
+                      Divider(color: Theme.of(context).dividerColor),
                   itemBuilder: (context, index) {
                     final bank = controller.savedBankAccounts[index];
                     final bankName = bank['bankName'] ?? 'Bank Account';
@@ -575,7 +576,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(thickness: 1.5),
+            Divider(thickness: 1.5, color: Theme.of(context).dividerColor),
             SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

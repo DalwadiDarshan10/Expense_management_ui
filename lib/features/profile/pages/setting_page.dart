@@ -4,6 +4,7 @@ import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/profile/controllers/setting_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:expense/features/profile/widgets/animated_theme_switch.dart';
 import 'package:expense/features/profile/pages/change_password_page.dart';
 import 'package:expense/features/profile/pages/face_id_page.dart';
 import 'package:expense/features/profile/pages/application_info_page.dart';
@@ -130,6 +131,18 @@ class SettingPage extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 8.h),
+            Container(
+              color: Theme.of(context).cardColor,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+              child: _buildSettingItem(
+                context,
+                title: 'Theme Mode',
+                onTap: () {},
+                showChevron: false,
+                trailing: const AnimatedThemeSwitch(),
+              ),
+            ),
           ],
         ),
       ),
@@ -253,11 +266,14 @@ class SettingPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: AppTextStyles.bodyLarge.copyWith(
-                color: Theme.of(context).textTheme.bodyLarge?.color,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                title,
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Row(

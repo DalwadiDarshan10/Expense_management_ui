@@ -1,21 +1,22 @@
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/routes/app_named.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/transfer/models/contact_model.dart';
 import 'package:expense/core/constants/app_images.dart';
-import 'package:flutter/material.dart'; // For Colors, SnackPosition
+import 'package:flutter/material.dart';
 
 class TransferByWalletController extends GetxController {
   final WalletController walletController = Get.find<WalletController>();
 
   final amountController = TextEditingController();
   final contentController = TextEditingController();
+  final recipientController = TextEditingController(); // Manual recipient input
 
   final selectedContact = Rxn<ContactModel>();
   final isValid = false.obs;
   final amountError = RxnString();
+  final recipientError = RxnString();
 
   // Use WalletController balance
   double get balance => walletController.walletBalance.value.toDouble();
@@ -26,36 +27,19 @@ class TransferByWalletController extends GetxController {
     final args = Get.arguments;
     if (args is ContactModel) {
       selectedContact.value = args;
+      recipientController.text = args.phone; // Pre-fill with phone/name
     }
 
     // Listen to amount changes
     amountController.addListener(_validate);
-  }
-
-  // Keypad Logic
-  void onNumberPress(String value) {
-    if (amountController.text.contains('.') && value == '.') return;
-    if (amountController.text.length > 8) return; // Prevent too long numbers
-
-    // If text is "0" and we press a number (not .), replace 0
-    if (amountController.text == "0" && value != ".") {
-      amountController.text = value;
-    } else {
-      amountController.text += value;
-    }
-  }
-
-  void onBackspace() {
-    final text = amountController.text;
-    if (text.isNotEmpty) {
-      amountController.text = text.substring(0, text.length - 1);
-    }
+    recipientController.addListener(_validate);
   }
 
   @override
   void onClose() {
     amountController.dispose();
     contentController.dispose();
+    recipientController.dispose();
     super.onClose();
   }
 
@@ -77,17 +61,27 @@ class TransferByWalletController extends GetxController {
       }
     }
 
-    isValid.value = amountValid;
+    bool recipientValid = recipientController.text.isNotEmpty;
+    // Simple validation for recipient
+
+    isValid.value = amountValid && recipientValid;
   }
 
   Future<void> onTransfer() async {
     // Reset error
     amountError.value = null;
+    recipientError.value = null;
 
     final amountText = amountController.text;
+    final recipientText = recipientController.text;
 
     if (amountText.isEmpty) {
       amountError.value = "Amount required";
+      return;
+    }
+
+    if (recipientText.isEmpty) {
+      Get.snackbar("Error", "Recipient required");
       return;
     }
 
@@ -105,12 +99,8 @@ class TransferByWalletController extends GetxController {
     try {
       await walletController.transferFromWallet(
         amount: amount,
-        // recipientName is not stored in Firestore schema anymore (optional parameter)
-        // We pass it if we want, but schema doesn't require it.
-        // We'll pass it as optional to verify interface consistency or omit it.
-        // Based on signature: transferFromWallet({amount, recipientInfo, recipientName})
-        recipientName: selectedContact.value?.name ?? "Direct Debit",
-        recipientInfo: selectedContact.value?.phone ?? "Wallet Transfer",
+        recipientInfo: recipientText,
+        recipientName: selectedContact.value?.name ?? "Unknown",
       );
 
       Get.toNamed(
@@ -118,8 +108,8 @@ class TransferByWalletController extends GetxController {
         arguments: TransactionSuccessArgs(
           type: TransactionType.transfer,
           amount: amountController.text,
-          recipientName: selectedContact.value?.name ?? "My Wallet",
-          recipientInfo: selectedContact.value?.phone ?? "Debit",
+          recipientName: selectedContact.value?.name ?? "Recipient",
+          recipientInfo: recipientText,
         ),
       );
     } catch (e) {

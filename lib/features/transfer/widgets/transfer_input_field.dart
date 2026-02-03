@@ -27,6 +27,7 @@ class TransferInputField extends StatelessWidget {
           label,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.secondaryText,
+            fontWeight: FontWeight.w900,
           ),
         ),
         const SizedBox(height: 8),

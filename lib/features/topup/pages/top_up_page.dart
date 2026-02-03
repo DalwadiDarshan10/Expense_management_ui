@@ -16,17 +16,22 @@ class TopUpPage extends GetView<TopUpController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           AppStrings.topUpTitle,
-          style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -35,7 +40,7 @@ class TopUpPage extends GetView<TopUpController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Denominations Section
-            _buildDenominationsSection(),
+            _buildDenominationsSection(context),
 
             SizedBox(height: 8.h),
 
@@ -45,7 +50,7 @@ class TopUpPage extends GetView<TopUpController> {
             SizedBox(height: 8.h),
 
             // Selected Bank Card Section
-            _buildBankCardSection(),
+            _buildBankCardSection(context),
 
             SizedBox(height: 40.h),
 
@@ -63,11 +68,11 @@ class TopUpPage extends GetView<TopUpController> {
     );
   }
 
-  Widget _buildDenominationsSection() {
+  Widget _buildDenominationsSection(BuildContext context) {
     final List<int> denominations = [50, 100, 200, 500, 1000, 2000];
 
     return Container(
-      color: AppColors.white,
+      color: Theme.of(context).cardColor,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +82,7 @@ class TopUpPage extends GetView<TopUpController> {
             style: AppTextStyles.titleMedium.copyWith(
               fontWeight: FontWeight.w500,
               fontSize: 18.sp,
+              color: Theme.of(context).textTheme.titleMedium?.color,
             ),
           ),
           SizedBox(height: 16.h),
@@ -100,7 +106,7 @@ class TopUpPage extends GetView<TopUpController> {
                   onTap: () => controller.selectDenomination(amount),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.background,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
                         color: isSelected
@@ -112,7 +118,7 @@ class TopUpPage extends GetView<TopUpController> {
                     child: Text(
                       '\$$amount',
                       style: AppTextStyles.titleMedium.copyWith(
-                        color: AppColors.primaryText,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w500,
                         fontSize: 18.sp,
                       ),
@@ -161,14 +167,14 @@ class TopUpPage extends GetView<TopUpController> {
     );
   }
 
-  Widget _buildBankCardSection() {
+  Widget _buildBankCardSection(BuildContext context) {
     return Obx(() {
       // Use the first saved card if available, else show a placeholder
       if (controller.savedCards.isEmpty) {
         return Container(
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: AppColors.borderNor),
           ),
@@ -200,9 +206,8 @@ class TopUpPage extends GetView<TopUpController> {
       return Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: AppColors.borderNor),
         ),
         child: Row(
           children: [
@@ -222,6 +227,7 @@ class TopUpPage extends GetView<TopUpController> {
                     selectedCard.bankName,
                     style: AppTextStyles.titleSmall.copyWith(
                       fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
                   SizedBox(height: 4.h),

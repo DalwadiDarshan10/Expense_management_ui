@@ -7,7 +7,7 @@ import 'package:expense/features/profile/widgets/profile_header_widget.dart';
 import 'package:expense/features/profile/widgets/profile_menu_item_widget.dart';
 import 'package:expense/features/profile/widgets/profile_stats_widget.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
-import 'package:expense/features/profile/pages/affiliate_service_page.dart';
+
 import 'package:expense/routes/app_named.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,22 +84,6 @@ class ProfilePage extends GetView<ProfileController> {
                       ),
                       onTap: () {
                         Get.toNamed(AppNamed.walletsDashboard);
-                      },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(color: context.theme.dividerColor),
-                    ),
-
-                    ProfileMenuItemWidget(
-                      title: AppStrings.affiliateService,
-                      icon: AppImageViewer(
-                        imagePath: AppImages.discountInactive,
-                        height: 22.h,
-                        color: context.theme.iconTheme.color,
-                      ),
-                      onTap: () {
-                        Get.to(() => const AffiliateServicePage());
                       },
                     ),
                     Padding(

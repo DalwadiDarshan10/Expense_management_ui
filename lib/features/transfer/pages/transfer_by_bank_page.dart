@@ -1,15 +1,17 @@
-import 'package:expense/core/constants/app_strings.dart';
-import 'package:expense/core/constants/app_images.dart';
+import 'dart:ui';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/transfer/controllers/transfer_by_bank_controller.dart';
-import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
-import 'package:expense/widgets/labeled_input_tile.dart';
-import 'package:expense/widgets/users_componant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:expense/core/constants/app_strings.dart';
+import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/widgets/app_image_viewer.dart';
+import 'package:expense/widgets/labeled_input_tile.dart';
+import 'package:expense/widgets/users_componant.dart';
 
 class TransferByBankPage extends GetView<TransferByBankController> {
   const TransferByBankPage({super.key});
@@ -17,12 +19,14 @@ class TransferByBankPage extends GetView<TransferByBankController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors
-          .surface, // Matches the grey/white bg from design context usually
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           AppStrings.transferByBankTitle,
-          style: AppTextStyles.titleLarge,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            fontSize: 20.sp,
+          ),
         ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
@@ -30,7 +34,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
           icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
-            color: AppColors.primaryText,
+            color: AppColors.primary,
           ),
           onPressed: () => Get.back(),
         ),
@@ -65,7 +69,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                           // Show Bottom Sheet to select Source Bank
                           Get.bottomSheet(
                             Container(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               padding: EdgeInsets.all(16.w),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -134,7 +138,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                     // Bank Selection (Recipient Bank)
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      decoration: const BoxDecoration(color: Colors.white),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -143,7 +149,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                             style: AppTextStyles.bodyMedium.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.onSurface,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color, // Fixed
                             ),
                           ),
                           SizedBox(height: 8.h),
@@ -156,6 +164,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                                   Icons.keyboard_arrow_down,
                                   color: AppColors.secondaryText,
                                 ),
+                                dropdownColor: Theme.of(
+                                  context,
+                                ).cardColor, // Ensure popup matches
                                 hint: Text(
                                   AppStrings.selectBank,
                                   style: AppTextStyles.bodyLarge.copyWith(
@@ -169,7 +180,12 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                                     value: bank,
                                     child: Text(
                                       bank,
-                                      style: AppTextStyles.bodyMedium,
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        // Inherit color
+                                        color: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
+                                      ),
                                     ),
                                   );
                                 }).toList(),
@@ -177,8 +193,9 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                               ),
                             ),
                           ),
-                          const Divider(
-                            color: AppColors.dividerColor,
+                          // Add a divider line to match LabeledInputTile look
+                          Divider(
+                            color: Theme.of(context).dividerColor,
                             height: 1,
                           ),
                           SizedBox(height: 20.h),
@@ -200,11 +217,32 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                           decimal: true,
                         ),
                         errorText: controller.amountError.value,
-                        trailingWidget: Text(
-                          '(balance \$${balance.toString()})',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: const Color(0xFF6B7280),
-                            fontSize: 12.sp,
+                        trailingWidget: RichText(
+                          text: TextSpan(
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium, // base style
+                            children: [
+                              const TextSpan(text: '(balance '),
+
+                              TextSpan(
+                                text: '\$ ',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+
+                              TextSpan(
+                                text: balance.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+
+                              const TextSpan(text: ')'),
+                            ],
                           ),
                         ),
                       );

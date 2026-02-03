@@ -78,11 +78,6 @@ class ApplicationInfoPage extends StatelessWidget {
                 "darshan@example.com",
               ),
               _buildInfoTile(context, "Flutter SDK", "3.38.3"),
-              // _buildInfoTile(
-              //   context,
-              //   AppStrings.termsOfService,
-              //   "https://expense-manager.com/terms",
-              // ),
             ],
           ),
         ),

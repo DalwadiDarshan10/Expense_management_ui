@@ -25,12 +25,15 @@ class AddNewCardPage extends GetView<WalletController> {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Obx(
@@ -38,8 +41,9 @@ class AddNewCardPage extends GetView<WalletController> {
             controller.editingCardId.value != null
                 ? 'Edit Card'
                 : AppStrings.addNewCardTitle,
-            style: AppTextStyles.titleLarge.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w600,
+              fontSize: 20.sp,
             ),
           ),
         ),
@@ -53,6 +57,7 @@ class AddNewCardPage extends GetView<WalletController> {
             // Form Fields
             Obx(
               () => _buildTextField(
+                context,
                 label: AppStrings.cardNumberLabel,
                 hint: AppStrings.cardNumberHint,
                 controller: controller.cardNumberController,
@@ -68,10 +73,14 @@ class AddNewCardPage extends GetView<WalletController> {
                 ],
               ),
             ),
-            Container(color: AppColors.background, height: 8.h),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 8.h,
+            ),
 
             Obx(
               () => _buildTextField(
+                context,
                 label: AppStrings.expiredLabel,
                 hint: AppStrings.expiredHint,
                 controller: controller.expiryDateController,
@@ -84,7 +93,10 @@ class AddNewCardPage extends GetView<WalletController> {
                 ],
               ),
             ),
-            Container(color: AppColors.background, height: 8.h),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 8.h,
+            ),
             // Bank Dropdown
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
@@ -96,14 +108,15 @@ class AddNewCardPage extends GetView<WalletController> {
                     AppStrings.bankLabel,
                     style: AppTextStyles.bodyMedium.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.secondaryText,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   Obx(
                     () => DropdownButtonFormField<String>(
+                      dropdownColor: Theme.of(context).cardColor,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: AppColors.white,
+                        fillColor: Theme.of(context).cardColor,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 0,
                           vertical: 12.h,
@@ -141,7 +154,14 @@ class AddNewCardPage extends GetView<WalletController> {
                       items: bankNames.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color,
+                            ),
+                          ),
                         );
                       }).toList(),
                       onChanged: controller.editingCardId.value != null
@@ -165,16 +185,23 @@ class AddNewCardPage extends GetView<WalletController> {
               ),
             ),
 
-            Container(color: AppColors.background, height: 8.h),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 8.h,
+            ),
             Obx(
               () => _buildTextField(
+                context,
                 label: AppStrings.cardHolderNameLabel,
                 hint: AppStrings.cardHolderNameHint,
                 controller: controller.cardHolderNameController,
                 errorText: controller.cardHolderNameError.value,
               ),
             ),
-            Container(color: AppColors.background, height: 8.h),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 8.h,
+            ),
             // Result (Live Preview)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
@@ -184,7 +211,7 @@ class AddNewCardPage extends GetView<WalletController> {
                 children: [
                   Text(
                     AppStrings.resultLabel,
-                    style: AppTextStyles.titleMedium.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -196,11 +223,14 @@ class AddNewCardPage extends GetView<WalletController> {
               ),
             ),
 
-            Container(color: AppColors.background, height: 24.h),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 24.h,
+            ),
 
             // Add Card Button
             Container(
-              color: AppColors.background,
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
 
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -214,15 +244,22 @@ class AddNewCardPage extends GetView<WalletController> {
                 ),
               ),
             ),
-            Container(color: AppColors.background, height: 24.h),
-            Container(color: AppColors.background, child: Spacer()),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              height: 24.h,
+            ),
+            Container(
+              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              child: Spacer(),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required String label,
     required String hint,
     required TextEditingController controller,
@@ -241,7 +278,7 @@ class AddNewCardPage extends GetView<WalletController> {
             label,
             style: AppTextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.secondaryText,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
 
@@ -252,7 +289,9 @@ class AddNewCardPage extends GetView<WalletController> {
             inputFormatters: inputFormatters,
             readOnly: readOnly,
             style: AppTextStyles.titleMedium.copyWith(
-              color: readOnly ? Colors.grey : AppColors.primaryText,
+              color: readOnly
+                  ? Theme.of(context).textTheme.bodyLarge?.color
+                  : Theme.of(context).textTheme.bodyLarge?.color,
             ),
             decoration: InputDecoration(
               hintText: hint,
@@ -262,7 +301,9 @@ class AddNewCardPage extends GetView<WalletController> {
               errorText: errorText,
               errorStyle: AppTextStyles.bodySmall.copyWith(color: Colors.red),
               filled: true,
-              fillColor: readOnly ? Colors.grey.shade200 : AppColors.white,
+              fillColor: readOnly
+                  ? Theme.of(context).cardColor
+                  : Theme.of(context).cardColor,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 0,
                 vertical: 12.h,

@@ -18,12 +18,12 @@ class WalletsDashboardPage extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Top Blue Header Section with Background Image (Matches HomePage)
-            _buildHeaderSection(),
+            _buildHeaderSection(context),
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -58,7 +58,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                             extentRatio: 0.30, // width of action
                             children: [
                               CustomSlidableAction(
-                                backgroundColor: AppColors.bgSeparator,
+                                backgroundColor: context.theme.cardColor,
                                 borderRadius: BorderRadius.circular(12.r),
                                 onPressed: (context) {
                                   final card = controller.savedCards[index];
@@ -90,10 +90,13 @@ class WalletsDashboardPage extends GetView<WalletController> {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              controller.populateForEdit(
-                                controller.savedCards[index],
-                              );
-                              Get.toNamed(AppNamed.addNewCard);
+                              if (controller.savedCards.isNotEmpty &&
+                                  index < controller.savedCards.length) {
+                                controller.populateForEdit(
+                                  controller.savedCards[index],
+                                );
+                                Get.toNamed(AppNamed.addNewCard);
+                              }
                             },
                             child: CreditCardWidget(
                               card: controller.savedCards[index],
@@ -112,7 +115,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
     );
   }
 
-  Widget _buildHeaderSection() {
+  Widget _buildHeaderSection(BuildContext context) {
     return Stack(
       children: [
         // Blue curved background using SVG image/Asset
@@ -201,7 +204,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.r),
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -212,6 +215,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                       children: [
                         Expanded(
                           child: _buildHeaderAction(
+                            context,
                             icon: AppImages.topupIcon,
                             label: AppStrings.topUp,
                             onTap: () => Get.toNamed(AppNamed.topUpPage),
@@ -219,6 +223,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         ),
                         Expanded(
                           child: _buildHeaderAction(
+                            context,
                             icon: AppImages.walletIcon,
                             label: AppStrings.transferTitle,
                             color: AppColors.primary,
@@ -227,6 +232,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         ),
                         Expanded(
                           child: _buildHeaderAction(
+                            context,
                             icon: AppImages.scanIcon,
                             label: AppStrings.withdraw,
                             color: AppColors.primary,
@@ -235,6 +241,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         ),
                         Expanded(
                           child: _buildHeaderAction(
+                            context,
                             icon: AppImages.notificationIcon,
                             label: AppStrings.history,
                             color: AppColors.primary,
@@ -253,7 +260,8 @@ class WalletsDashboardPage extends GetView<WalletController> {
     );
   }
 
-  Widget _buildHeaderAction({
+  Widget _buildHeaderAction(
+    BuildContext context, {
     required String icon,
     required String label,
     Color? color,
@@ -273,7 +281,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
           Text(
             label,
             style: AppTextStyles.labelMedium.copyWith(
-              color: AppColors.primaryText,
+              color: Theme.of(context).textTheme.labelMedium?.color,
               fontWeight: FontWeight.w500,
             ),
           ),

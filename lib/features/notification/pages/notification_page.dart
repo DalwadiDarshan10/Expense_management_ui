@@ -19,9 +19,9 @@ class NotificationPage extends StatelessWidget {
     final controller = Get.put(NotificationController());
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).cardColor,
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -29,14 +29,16 @@ class NotificationPage extends StatelessWidget {
           onTap: () {
             Get.back();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_new,
-            color: AppColors.primaryText,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
         title: Text(
           AppStrings.notificationTitle,
-          style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         actions: [
           Padding(
@@ -71,6 +73,7 @@ class NotificationPage extends StatelessWidget {
                 height: 24.r,
                 width: 24.r,
                 imagePath: AppImages.deleteIcon,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
           ),
@@ -84,7 +87,7 @@ class NotificationPage extends StatelessWidget {
             return Center(
               child: Text(
                 AppStrings.noNotifications,
-                style: AppTextStyles.bodyLarge,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             );
           }
@@ -93,7 +96,7 @@ class NotificationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (controller.todayNotifications.isNotEmpty) ...[
-                _buildSectionHeader(AppStrings.today),
+                _buildSectionHeader(context, AppStrings.today),
                 SizedBox(height: 16.h),
                 ...controller.todayNotifications.map(
                   (item) => _buildNotificationItem(item),
@@ -103,7 +106,7 @@ class NotificationPage extends StatelessWidget {
                   controller.yesterdayNotifications.isNotEmpty)
                 SizedBox(height: 24.h),
               if (controller.yesterdayNotifications.isNotEmpty) ...[
-                _buildSectionHeader(AppStrings.yesterday),
+                _buildSectionHeader(context, AppStrings.yesterday),
                 SizedBox(height: 16.h),
                 ...controller.yesterdayNotifications.map(
                   (item) => _buildNotificationItem(item),
@@ -116,12 +119,14 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Text(
       title,
       style: AppTextStyles.titleMedium.copyWith(
         fontWeight: FontWeight.w600,
-        color: AppColors.secondaryText,
+        color: Theme.of(
+          context,
+        ).textTheme.titleMedium?.color, // Use theme color or fallback
       ),
     );
   }

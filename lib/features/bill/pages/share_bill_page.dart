@@ -22,24 +22,23 @@ class ShareBillPage extends GetView<ShareBillController> {
     final phoneController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).cardColor,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: AppColors.primaryText,
+            color: Theme.of(context).iconTheme.color,
             size: 20.r,
           ),
           onPressed: () => Get.back(),
         ),
         title: Text(
           AppStrings.shareBillTitle,
-          style: AppTextStyles.headlineSmall.copyWith(
-            color: AppColors.primaryText,
-            fontWeight: FontWeight.w500,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -48,7 +47,7 @@ class ShareBillPage extends GetView<ShareBillController> {
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(color: AppColors.white),
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -58,6 +57,7 @@ class ShareBillPage extends GetView<ShareBillController> {
                 style: AppTextStyles.titleMedium.copyWith(
                   fontWeight: FontWeight.w500,
                   fontSize: 18.sp,
+                  color: Theme.of(context).textTheme.titleMedium?.color,
                 ),
               ),
 
@@ -70,7 +70,7 @@ class ShareBillPage extends GetView<ShareBillController> {
                       hint: AppStrings.phoneNumberHint,
                       controller: phoneController,
                       onChanged: controller.updateSearchQuery,
-                      fillColor: AppColors.inputBackground,
+                      fillColor: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: 30,
                     ),
                   ),
@@ -113,7 +113,7 @@ class ShareBillPage extends GetView<ShareBillController> {
               ),
 
               SizedBox(height: 18.h),
-              Divider(color: AppColors.dividerColor),
+              Divider(color: Theme.of(context).dividerColor),
 
               // Contact List
               Obx(() {
@@ -131,10 +131,10 @@ class ShareBillPage extends GetView<ShareBillController> {
                           ),
                         ),
                       ),
-                      Divider(color: AppColors.dividerColor),
+                      Divider(color: Theme.of(context).dividerColor),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
-                        child: _buildFooter(),
+                        child: _buildFooter(context),
                       ),
                     ],
                   );
@@ -145,12 +145,12 @@ class ShareBillPage extends GetView<ShareBillController> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.filteredContacts.length + 1,
                   separatorBuilder: (_, _) =>
-                      Divider(color: AppColors.dividerColor),
+                      Divider(color: Theme.of(context).dividerColor),
                   itemBuilder: (context, index) {
                     if (index == controller.filteredContacts.length) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
-                        child: _buildFooter(),
+                        child: _buildFooter(context),
                       );
                     }
 
@@ -172,7 +172,7 @@ class ShareBillPage extends GetView<ShareBillController> {
   }
 
   /// Footer like Figma
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
     return Row(
       children: [
         Icon(Icons.error_outline, color: AppColors.secondaryText, size: 24.r),
@@ -203,7 +203,7 @@ class ShareBillPage extends GetView<ShareBillController> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: AppColors.dividerColor),
             ),
@@ -211,6 +211,7 @@ class ShareBillPage extends GetView<ShareBillController> {
               AppStrings.copyLinkBtn,
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w500,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
           ),

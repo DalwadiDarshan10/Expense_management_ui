@@ -8,9 +8,18 @@ class ThemeController extends GetxController {
   final _box = GetStorage();
   final _key = 'isDarkMode';
 
+  final _isDarkMode = false.obs;
+  bool get isDarkMode => _isDarkMode.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _isDarkMode.value = _loadThemeFromBox();
+  }
+
   /// Get the current theme mode from storage
   ThemeMode get themeMode {
-    if (_loadThemeFromBox()) {
+    if (isDarkMode) {
       return ThemeMode.dark;
     }
     return ThemeMode.light;
@@ -26,9 +35,11 @@ class ThemeController extends GetxController {
   void toggleTheme() {
     if (Get.isDarkMode) {
       Get.changeThemeMode(ThemeMode.light);
+      _isDarkMode.value = false;
       _saveThemeToBox(false);
     } else {
       Get.changeThemeMode(ThemeMode.dark);
+      _isDarkMode.value = true;
       _saveThemeToBox(true);
     }
   }

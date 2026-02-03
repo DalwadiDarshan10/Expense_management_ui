@@ -10,7 +10,7 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.background,
-    cardColor: AppColors.surface,
+    cardColor: AppColors.white,
     dividerColor: AppColors.dividerColor,
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,

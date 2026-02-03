@@ -47,7 +47,7 @@ class WalletController extends GetxController {
   final _uuid = const Uuid();
 
   // Wallet Balance
-  final RxInt walletBalance = 0.obs;
+  final RxDouble walletBalance = 0.0.obs;
 
   @override
   void onInit() {
@@ -123,7 +123,10 @@ class WalletController extends GetxController {
   /// FETCH WALLET BALANCE (REAL-TIME)
   void fetchWalletBalance() {
     try {
-      AppLogger.info("Listening to wallet balance...");
+      final uid = FirestoreService.uid;
+      final path = 'users/$uid/wallet/main';
+      AppLogger.info("Listening to wallet balance at: $path");
+
       FirestoreService.userDoc()
           .collection('wallet')
           .doc('main')
@@ -131,14 +134,28 @@ class WalletController extends GetxController {
           .listen(
             (snapshot) {
               if (snapshot.exists) {
-                walletBalance.value = snapshot.data()?['balance'] ?? 0;
+                final data = snapshot.data();
+                AppLogger.info("Snapshot found! Data: $data");
+                walletBalance.value = data?['balance'] ?? 0;
                 AppLogger.info(
                   "Wallet balance updated: ${walletBalance.value}",
+                );
+              } else {
+                AppLogger.warning("Snapshot DOES NOT exist at: $path");
+                // Temporary Debug Snackbar
+                Get.snackbar(
+                  "Debug: No Wallet Found",
+                  "Please Top Up to create wallet.\nPath: $path",
+                  snackPosition: SnackPosition.TOP,
+                  duration: const Duration(seconds: 10),
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
                 );
               }
             },
             onError: (e) {
               AppLogger.error("Error in wallet balance stream", e);
+              Get.snackbar("Error", "Stream Error: $e");
             },
           );
     } catch (e, s) {

@@ -1,4 +1,3 @@
-import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/voucher/widgets/deal_card.dart';
 import 'package:flutter/material.dart';
@@ -17,20 +16,23 @@ class VoucherDealsPage extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           title,
           style: AppTextStyles.titleLarge.copyWith(
-            color: AppColors.primaryText,
+            color: context.theme.textTheme.titleLarge?.color,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: context.theme.iconTheme.color,
+          ),
           onPressed: () => Get.back(),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: context.theme.cardColor,
         elevation: 0,
       ),
       body: deals.isEmpty
@@ -38,7 +40,7 @@ class VoucherDealsPage extends StatelessWidget {
               child: Text(
                 'No deals available',
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.secondaryText,
+                  color: context.theme.textTheme.bodyMedium?.color,
                 ),
               ),
             )

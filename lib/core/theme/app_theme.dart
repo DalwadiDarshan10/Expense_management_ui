@@ -10,8 +10,10 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.background,
+    appBarTheme: AppBarTheme(backgroundColor: AppColors.white),
     cardColor: AppColors.white,
     dividerColor: AppColors.dividerColor,
+    shadowColor: AppColors.shadowLight,
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
@@ -44,6 +46,9 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.dark,
     primaryColor: AppColors.primary,
+    appBarTheme: AppBarTheme(backgroundColor: AppColors.black),
+
+    shadowColor: AppColors.shadowDark,
     scaffoldBackgroundColor: AppColors.black, // Dark background
     cardColor: const Color(0xFF1E1E1E), // Dark card
     dividerColor: Colors.grey[800],

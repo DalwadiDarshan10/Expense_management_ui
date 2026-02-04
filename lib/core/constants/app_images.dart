@@ -87,6 +87,10 @@ class AppImages {
       '$_imagePath/yellow_bg_creditcard.svg';
   static const String debitCardGoldenImage =
       '$_imagePath/debitcard_golden_image.svg';
+  static const String transferIcon = '$_iconPath/transfer_icon.svg';
+  static const String withdrawIcon = '$_iconPath/withdraw_icon.svg';
+  static const String historyIcon = '$_iconPath/history_icon.svg';
+  static const String squarePlusIcon = '$_iconPath/squre_plus_icon.svg';
 
   //
   static const String bankIcon = "$_iconPath/bank_icon.svg";

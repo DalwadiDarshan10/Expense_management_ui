@@ -18,7 +18,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).cardColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -58,7 +58,9 @@ class WalletsDashboardPage extends GetView<WalletController> {
                             extentRatio: 0.30, // width of action
                             children: [
                               CustomSlidableAction(
-                                backgroundColor: context.theme.cardColor,
+                                backgroundColor: AppColors.critical.withOpacity(
+                                  0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(12.r),
                                 onPressed: (context) {
                                   final card = controller.savedCards[index];
@@ -205,6 +207,14 @@ class WalletsDashboardPage extends GetView<WalletController> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.r),
                     color: Theme.of(context).cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Theme.of(context).shadowColor,
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -224,27 +234,26 @@ class WalletsDashboardPage extends GetView<WalletController> {
                         Expanded(
                           child: _buildHeaderAction(
                             context,
-                            icon: AppImages.walletIcon,
+                            icon: AppImages.transferIcon,
                             label: AppStrings.transferTitle,
-                            color: AppColors.primary,
+
                             onTap: () => Get.toNamed(AppNamed.transferPage),
                           ),
                         ),
                         Expanded(
                           child: _buildHeaderAction(
                             context,
-                            icon: AppImages.scanIcon,
+                            icon: AppImages.withdrawIcon,
                             label: AppStrings.withdraw,
-                            color: AppColors.primary,
+
                             onTap: () => Get.toNamed(AppNamed.withdrawPage),
                           ),
                         ),
                         Expanded(
                           child: _buildHeaderAction(
                             context,
-                            icon: AppImages.notificationIcon,
+                            icon: AppImages.historyIcon,
                             label: AppStrings.history,
-                            color: AppColors.primary,
                             onTap: () => Get.toNamed(AppNamed.notificationPage),
                           ),
                         ),

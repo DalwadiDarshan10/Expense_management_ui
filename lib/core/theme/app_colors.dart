@@ -59,6 +59,8 @@ class AppColors {
 
   // Alias for error (same as critical)
   static const Color error = Color(0xFFEB5A5A);
+  static const Color shadowLight = Color(0x1A000000);
+  static const Color shadowDark = Color(0x1AFFFFFF);
 
   // Shadow Colors
   static const Color dropShadow = Color(0x1A000000);

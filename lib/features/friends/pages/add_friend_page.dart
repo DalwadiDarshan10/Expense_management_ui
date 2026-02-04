@@ -35,9 +35,6 @@ class AddFriendPage extends GetView<AddFriendController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 8.h),
-            SizedBox(height: 8.h),
-            SizedBox(height: 8.h),
             // Form Fields using LabeledInputTile
             Obx(
               () => LabeledInputTile(

@@ -46,6 +46,30 @@ class CardModel {
     AppImages.yellowBgCreditCard,
   ];
 
+  CardModel copyWith({
+    String? bankName,
+    String? cardNumber,
+    String? expiryDate,
+    String? cardHolderName,
+    String? cardImage,
+    String? cardId,
+    String? cardType,
+    String? last4,
+    DateTime? createdAt,
+  }) {
+    return CardModel(
+      bankName: bankName ?? this.bankName,
+      cardNumber: cardNumber ?? this.cardNumber,
+      expiryDate: expiryDate ?? this.expiryDate,
+      cardHolderName: cardHolderName ?? this.cardHolderName,
+      cardImage: cardImage ?? this.cardImage,
+      cardId: cardId ?? this.cardId,
+      cardType: cardType ?? this.cardType,
+      last4: last4 ?? this.last4,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     final cleanNumber = cardNumber.replaceAll(RegExp(r'\D'), '');
     return {

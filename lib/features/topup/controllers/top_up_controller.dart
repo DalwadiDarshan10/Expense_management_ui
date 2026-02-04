@@ -1,3 +1,4 @@
+import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/wallet/models/card_model.dart';
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
@@ -126,7 +127,7 @@ class TopUpController extends GetxController {
 
     Get.bottomSheet(
       Container(
-        color: Colors.white,
+        color: Theme.of(Get.context!).cardColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -144,8 +145,20 @@ class TopUpController extends GetxController {
                   final card = savedCards[index];
                   return ListTile(
                     leading: const Icon(Icons.credit_card),
-                    title: Text(card.bankName),
-                    subtitle: Text('**** ${card.last4}'),
+                    title: Text(
+                      card.bankName,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '**** ${card.last4}',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                    ),
                     onTap: () {
                       selectedCardIndex.value = index;
                       Get.back();

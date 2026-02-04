@@ -96,7 +96,7 @@ class WithdrawPage extends GetView<WithdrawController> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              Get.toNamed(AppNamed.walletsDashboard);
+              controller.changeBank();
             },
           );
         }),

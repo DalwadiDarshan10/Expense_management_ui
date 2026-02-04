@@ -136,7 +136,8 @@ class WalletController extends GetxController {
               if (snapshot.exists) {
                 final data = snapshot.data();
                 AppLogger.info("Snapshot found! Data: $data");
-                walletBalance.value = data?['balance'] ?? 0.0;
+                walletBalance.value =
+                    (data?['balance'] as num?)?.toDouble() ?? 0.0;
                 AppLogger.info(
                   "Wallet balance updated: ${walletBalance.value}",
                 );
@@ -509,20 +510,24 @@ class WalletController extends GetxController {
   }
 
   void populateForEdit(CardModel card) {
-    editingCardId.value = card.cardId;
+    // Fill controllers
     bankNameController.text = card.bankName;
-    cardNumberController.text = card.cardNumber; // Populate with masked number
+    cardNumberController.text = card.cardNumber;
     expiryDateController.text = card.expiryDate;
     cardHolderNameController.text = card.cardHolderName;
 
-    // For visual consistency
-    currentCard.value = card;
+    // Use a copy to avoid mutating the original object in the list
+    currentCard.value = card.copyWith();
+    editingCardId.value = card.cardId;
 
     // Clear errors
     bankNameError.value = null;
     cardNumberError.value = null;
     expiryDateError.value = null;
     cardHolderNameError.value = null;
+
+    // Explicitly refresh since we updated multiple values
+    currentCard.refresh();
   }
 
   Future<void> updateCard({

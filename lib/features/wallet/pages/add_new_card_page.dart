@@ -27,8 +27,8 @@ class AddNewCardPage extends GetView<WalletController> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Theme.of(context).cardColor,
+
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -53,10 +53,9 @@ class AddNewCardPage extends GetView<WalletController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SizedBox(height: 24.h),
-            // Form Fields
-            Obx(
-              () => _buildTextField(
+            Obx(() {
+              controller.currentCard.value; // Observation trigger
+              return _buildTextField(
                 context,
                 label: AppStrings.cardNumberLabel,
                 hint: AppStrings.cardNumberHint,
@@ -71,15 +70,16 @@ class AddNewCardPage extends GetView<WalletController> {
                   LengthLimitingTextInputFormatter(16),
                   _CardNumberFormatter(),
                 ],
-              ),
-            ),
+              );
+            }),
             Container(
               color: Theme.of(context).dividerColor.withOpacity(0.1),
               height: 8.h,
             ),
 
-            Obx(
-              () => _buildTextField(
+            Obx(() {
+              controller.currentCard.value; // Observation trigger
+              return _buildTextField(
                 context,
                 label: AppStrings.expiredLabel,
                 hint: AppStrings.expiredHint,
@@ -91,15 +91,17 @@ class AddNewCardPage extends GetView<WalletController> {
                   LengthLimitingTextInputFormatter(4),
                   _ExpiryDateFormatter(),
                 ],
-              ),
-            ),
+              );
+            }),
             Container(
               color: Theme.of(context).dividerColor.withOpacity(0.1),
               height: 8.h,
             ),
+
             // Bank Dropdown
-            Padding(
+            Container(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              color: Theme.of(context).cardColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -111,8 +113,9 @@ class AddNewCardPage extends GetView<WalletController> {
                       color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
-                  Obx(
-                    () => DropdownButtonFormField<String>(
+                  Obx(() {
+                    controller.currentCard.value; // Observation trigger
+                    return DropdownButtonFormField<String>(
                       dropdownColor: Theme.of(context).cardColor,
                       decoration: InputDecoration(
                         filled: true,
@@ -179,8 +182,8 @@ class AddNewCardPage extends GetView<WalletController> {
                                 }
                               }
                             },
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -189,37 +192,42 @@ class AddNewCardPage extends GetView<WalletController> {
               color: Theme.of(context).dividerColor.withOpacity(0.1),
               height: 8.h,
             ),
-            Obx(
-              () => _buildTextField(
+            Obx(() {
+              controller.currentCard.value; // Observation trigger
+              return _buildTextField(
                 context,
                 label: AppStrings.cardHolderNameLabel,
                 hint: AppStrings.cardHolderNameHint,
                 controller: controller.cardHolderNameController,
                 errorText: controller.cardHolderNameError.value,
-              ),
-            ),
+              );
+            }),
             Container(
               color: Theme.of(context).dividerColor.withOpacity(0.1),
               height: 8.h,
             ),
             // Result (Live Preview)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.resultLabel,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+            Container(
+              color: Theme.of(context).cardColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.resultLabel,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                  Obx(
-                    () => CreditCardWidget(card: controller.currentCard.value),
-                  ),
-                ],
+                    SizedBox(height: 16.h),
+                    Obx(
+                      () =>
+                          CreditCardWidget(card: controller.currentCard.value),
+                    ),
+                  ],
+                ),
               ),
             ),
 
@@ -248,10 +256,6 @@ class AddNewCardPage extends GetView<WalletController> {
               color: Theme.of(context).dividerColor.withOpacity(0.1),
               height: 24.h,
             ),
-            Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
-              child: Spacer(),
-            ),
           ],
         ),
       ),
@@ -269,8 +273,9 @@ class AddNewCardPage extends GetView<WalletController> {
     String? errorText,
     bool readOnly = false,
   }) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+      color: Theme.of(context).cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

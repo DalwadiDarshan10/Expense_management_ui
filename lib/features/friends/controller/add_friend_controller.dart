@@ -1,6 +1,8 @@
 import 'package:expense/features/friends/controller/friends_controller.dart';
+import 'package:expense/features/friends/models/friend_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class AddFriendController extends GetxController {
   final nameController = TextEditingController();
@@ -8,6 +10,7 @@ class AddFriendController extends GetxController {
   final emailController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+  final _uuid = const Uuid();
 
   @override
   void onClose() {
@@ -29,29 +32,7 @@ class AddFriendController extends GetxController {
     }
   }
 
-  void validatePhone(String value) {
-    final phoneFn = value.trim();
-    if (phoneFn.isEmpty) {
-      phoneError.value = "Phone number is required";
-    } else if (phoneFn.length != 10) {
-      phoneError.value =
-          null; // Don't show error while typing unless needed, but requirement implies strict 10
-      // Actually, for better UX let's show error if length > 0 and != 10 on submit, or live if requested.
-      // User asked for live error.
-      phoneError.value = "Phone number must be exactly 10 digits";
-    } else {
-      phoneError.value = null;
-    }
-  }
-
   void validatePhoneLive(String value) {
-    // Only show error if length is 10 and then user deletes, or if completely empty?
-    // User asked for "live error text".
-    // Usually we don't show "must be 10 digits" while they are typing digit 1.
-    // But let's stick to simple logic: if it's not empty and not 10 digits, it's an error?
-    // Or maybe only validate strictly on submit, but clear error on change?
-    // Let's implement immediate feedback but maybe check if length > 0.
-
     if (value.isEmpty) {
       phoneError.value = "Phone number is required";
     } else if (value.length != 10) {
@@ -83,22 +64,36 @@ class AddFriendController extends GetxController {
         emailError.value == null;
   }
 
-  void addFriend() {
+  Future<void> addFriend() async {
     if (validate()) {
-      final friendsCtrl = Get.find<FriendsController>();
-      friendsCtrl.addFriend(
-        FriendModel(
+      try {
+        final friendsCtrl = Get.find<FriendsController>();
+        final newFriend = FriendModel(
+          id: _uuid.v4(),
           name: nameController.text.trim(),
           phone: phoneController.text.trim(),
-        ),
-      );
+          email: emailController.text.trim(),
+        );
 
-      Get.back();
-      Get.snackbar(
-        'Success',
-        'Friend added successfully',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+        await friendsCtrl.addFriendToFirestore(newFriend);
+
+        Get.back();
+        Get.snackbar(
+          'Success',
+          'Friend added successfully',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } catch (e) {
+        Get.snackbar(
+          'Error',
+          'Failed to add friend: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     }
   }
 }

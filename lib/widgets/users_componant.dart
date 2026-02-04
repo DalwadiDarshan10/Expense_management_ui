@@ -50,12 +50,26 @@ class SelectedUserTile extends StatelessWidget {
                   height: avatarSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: isBorder
-                        ? Border.all(color: AppColors.primary, width: 1.5)
-                        : null,
+                    border: Border.all(color: AppColors.primary, width: 1.5.w),
                   ),
-                  padding: EdgeInsets.all(3.w),
-                  child: CircleAvatar(backgroundColor: AppColors.bgSeparator),
+                  child: Padding(
+                    padding: EdgeInsets.all(3.w),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          name.isNotEmpty ? name[0].toUpperCase() : '?',
+                          style: AppTextStyles.titleMedium.copyWith(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
 
             SizedBox(width: 12.w),

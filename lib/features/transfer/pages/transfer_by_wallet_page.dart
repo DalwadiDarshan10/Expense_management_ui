@@ -3,6 +3,7 @@ import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/transfer/controllers/transfer_by_wallet_controller.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
+import 'package:expense/widgets/users_componant.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
 import 'package:expense/widgets/labeled_input_tile.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,13 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
             fontSize: 20.sp,
           ),
         ),
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
-            color: Theme.of(context).iconTheme.color,
+            color: AppColors.primary,
           ),
           onPressed: () => Get.back(),
         ),
@@ -44,6 +45,92 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 10.h),
+
+                    // Recipient info
+                    Obx(() {
+                      final contact = controller.selectedContact.value;
+                      if (contact == null) {
+                        return GestureDetector(
+                          onTap: () => controller.pickContact(),
+                          child: Container(
+                            width: double.infinity,
+
+                            padding: EdgeInsets.symmetric(
+                              vertical: 16.h,
+                              horizontal: 16.w,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(16.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.03),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 44.w,
+                                  height: 44.w,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary.withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.person_add_rounded,
+                                    color: AppColors.primary,
+                                    size: 24.r,
+                                  ),
+                                ),
+                                SizedBox(width: 16.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Select Recipient",
+                                        style: AppTextStyles.bodyLarge.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge?.color,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Please select who you want to transfer money to",
+                                        style: AppTextStyles.bodySmall.copyWith(
+                                          color: AppColors.secondaryText,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 14.r,
+                                  color: AppColors.secondaryText,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return SelectedUserTile(
+                        name: contact.name,
+                        subtitle: contact.phone,
+                        isArrowRight: true,
+                        isBig: true,
+                        isBorder: false,
+                        onTap: () => controller.pickContact(),
+                      );
+                    }),
+
                     SizedBox(height: 8.h),
 
                     // Amount Input
@@ -52,15 +139,6 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                         title: AppStrings.cashLabel,
                         controller: controller.amountController,
                         hintText: AppStrings.cashHintWallet,
-                        prefix: Text(
-                          "",
-                          style: AppTextStyles.labelLarge.copyWith(
-                            fontSize: 16.sp,
-                            color: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.color,
-                          ),
-                        ),
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
@@ -97,7 +175,6 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                     ),
 
                     SizedBox(height: 8.h),
-
                     // Note / Content
                     LabeledInputTile(
                       title: AppStrings.transferContentLabel,
@@ -106,6 +183,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                     ),
 
                     SizedBox(height: 8.h),
+
                     Container(
                       color: Theme.of(context).cardColor,
                       padding: EdgeInsets.only(
@@ -126,7 +204,7 @@ class TransferByWalletPage extends GetView<TransferByWalletController> {
                               ).textTheme.bodyMedium?.color, // Fixed
                             ),
                           ),
-                          SizedBox(height: 12.h),
+                          SizedBox(height: 8.h),
                           SizedBox(
                             height: 80.h,
                             child: ListView.separated(

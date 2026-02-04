@@ -68,17 +68,12 @@ class FriendsPage extends GetView<FriendsController> {
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
                 child: Row(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.primary,
-                        size: 20.r,
-                      ),
+                    Icon(
+                      Icons.add_circle_outline_outlined,
+                      color: AppColors.primary,
+                      size: 24.r,
                     ),
+
                     SizedBox(width: 16.w),
                     Text(
                       'Add New Friend',
@@ -137,7 +132,7 @@ class FriendsPage extends GetView<FriendsController> {
                                   alignment: Alignment.center,
                                   child: Text(
                                     letter,
-                                    style: AppTextStyles.bodyLarge.copyWith(
+                                    style: AppTextStyles.bodyMedium.copyWith(
                                       color: AppColors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -174,6 +169,13 @@ class FriendsPage extends GetView<FriendsController> {
                           itemBuilder: (context, index) {
                             final friend = friends[index];
                             return ListTile(
+                              onTap: () {
+                                final isSelectionMode =
+                                    Get.arguments?['isSelectionMode'] ?? false;
+                                if (isSelectionMode) {
+                                  Get.back(result: friend);
+                                }
+                              },
                               contentPadding: EdgeInsets.symmetric(
                                 vertical: 8.h,
                                 horizontal: 16.w,
@@ -227,19 +229,19 @@ class FriendsPage extends GetView<FriendsController> {
                                     width: 44.w,
                                     height: 44.w,
                                     decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
                                       border: Border.all(
                                         color: AppColors.primary,
+                                        width: 1.5.w,
                                       ),
-                                      borderRadius: BorderRadius.circular(
-                                        100.r,
-                                      ),
-                                      color: Colors.transparent,
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
+                                      padding: EdgeInsets.all(3.w),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor,
+                                          color: AppColors.primary.withValues(
+                                            alpha: 0.2,
+                                          ),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Center(

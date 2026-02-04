@@ -55,21 +55,38 @@ class ActionTile extends StatelessWidget {
 
 class SectionTitle extends StatelessWidget {
   final String title;
+  final VoidCallback? onViewAll;
 
-  const SectionTitle({super.key, required this.title});
+  const SectionTitle({super.key, required this.title, this.onViewAll});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Text(
-        title,
-        style: AppTextStyles.headlineSmall.copyWith(
-          // Assuming H3 or similar exists
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-          color: Theme.of(context).textTheme.headlineSmall?.color,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: AppTextStyles.headlineSmall.copyWith(
+              // Assuming H3 or similar exists
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).textTheme.headlineSmall?.color,
+            ),
+          ),
+          if (onViewAll != null)
+            InkWell(
+              onTap: onViewAll,
+              child: Text(
+                'View All',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

@@ -38,6 +38,7 @@ import 'package:expense/features/friends/bindings/friends_binding.dart';
 import 'package:expense/features/friends/pages/friends_page.dart';
 import 'package:expense/features/friends/bindings/add_friend_binding.dart';
 import 'package:expense/features/friends/pages/add_friend_page.dart';
+import 'package:expense/features/transfer/pages/recent_transfers_page.dart';
 import 'package:expense/features/voucher/pages/voucher_deals_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
@@ -163,5 +164,10 @@ class AppRoutes {
       page: () => const TransactionSuccessPage(),
     ),
     GetPage(name: AppNamed.voucherDeals, page: () => const VoucherDealsPage()),
+    GetPage(
+      name: AppNamed.recentTransfers,
+      page: () => const RecentTransfersPage(),
+      binding: TransferBinding(),
+    ),
   ];
 }

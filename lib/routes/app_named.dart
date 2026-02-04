@@ -32,4 +32,5 @@ class AppNamed {
   static const String addNewFriend = '/add-new-friend';
   static const String transactionSuccess = '/transaction-success';
   static const String voucherDeals = '/voucher-deals';
+  static const String recentTransfers = '/recent-transfers';
 }

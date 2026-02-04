@@ -2,8 +2,10 @@ import 'package:expense/features/shared/pages/transaction_success_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
-import 'package:expense/features/transfer/models/contact_model.dart';
+import 'package:expense/features/friends/models/friend_model.dart';
+import 'package:expense/features/wallet/models/transaction_model.dart';
 import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/features/transfer/controllers/transfer_controller.dart';
 import 'package:flutter/material.dart';
 
 class TransferByWalletController extends GetxController {
@@ -13,7 +15,7 @@ class TransferByWalletController extends GetxController {
   final contentController = TextEditingController();
   final recipientController = TextEditingController(); // Manual recipient input
 
-  final selectedContact = Rxn<ContactModel>();
+  final selectedContact = Rxn<FriendModel>();
   final isValid = false.obs;
   final amountError = RxnString();
   final recipientError = RxnString();
@@ -25,9 +27,26 @@ class TransferByWalletController extends GetxController {
   void onInit() {
     super.onInit();
     final args = Get.arguments;
-    if (args is ContactModel) {
+    if (args is FriendModel) {
       selectedContact.value = args;
-      recipientController.text = args.phone; // Pre-fill with phone/name
+      recipientController.text = args.phone;
+    } else if (args is TransactionModel) {
+      // Try to find matching friend in TransferController
+      final transferController = Get.find<TransferController>();
+      final friend = transferController.friends.firstWhereOrNull(
+        (f) =>
+            f.phone == args.recipientInfo ||
+            f.phone == args.recipientAccount ||
+            f.name == args.recipientName,
+      );
+
+      if (friend != null) {
+        selectedContact.value = friend;
+        recipientController.text = friend.phone;
+      } else {
+        recipientController.text =
+            args.recipientInfo ?? args.recipientAccount ?? "";
+      }
     }
 
     // Listen to amount changes
@@ -61,10 +80,24 @@ class TransferByWalletController extends GetxController {
       }
     }
 
-    bool recipientValid = recipientController.text.isNotEmpty;
+    bool recipientValid =
+        recipientController.text.isNotEmpty || selectedContact.value != null;
     // Simple validation for recipient
 
     isValid.value = amountValid && recipientValid;
+  }
+
+  Future<void> pickContact() async {
+    final result = await Get.toNamed(
+      AppNamed.friends,
+      arguments: {'isSelectionMode': true},
+    );
+
+    if (result is FriendModel) {
+      selectedContact.value = result;
+      recipientController.text = result.phone;
+      _validate();
+    }
   }
 
   Future<void> onTransfer() async {
@@ -73,7 +106,9 @@ class TransferByWalletController extends GetxController {
     recipientError.value = null;
 
     final amountText = amountController.text;
-    final recipientText = recipientController.text;
+    final recipientText = selectedContact.value != null
+        ? selectedContact.value!.phone
+        : recipientController.text.trim();
 
     if (amountText.isEmpty) {
       amountError.value = "Amount required";

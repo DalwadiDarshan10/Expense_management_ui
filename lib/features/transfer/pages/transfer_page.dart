@@ -5,8 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:expense/core/theme/app_colors.dart';
 // import 'package:expense/core/theme/app_text_styles.dart'; // Unused
+import 'package:expense/features/analytics/widgets/trading_history_item_widget.dart';
 import 'package:expense/features/transfer/controllers/transfer_controller.dart';
 import 'package:expense/features/transfer/widgets/transfer_widgets.dart';
+import 'package:expense/routes/app_named.dart';
+import 'package:intl/intl.dart';
 
 class TransferPage extends GetView<TransferController> {
   const TransferPage({super.key});
@@ -64,26 +67,39 @@ class TransferPage extends GetView<TransferController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.w),
-                    child: SectionTitle(title: AppStrings.recentTransfer),
+                    child: SectionTitle(
+                      title: AppStrings.recentTransfer,
+                      onViewAll: () => Get.toNamed(AppNamed.recentTransfers),
+                    ),
                   ),
                   Obx(
                     () => ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.recentContacts.length,
+                      itemCount: controller.transactions.length > 4
+                          ? 4
+                          : controller.transactions.length,
                       itemBuilder: (context, index) {
-                        final contact = controller.recentContacts[index];
-                        return ContactTile(
-                          name: contact.name,
-                          phone: contact.phone,
-                          avatarUrl: contact.avatarUrl,
-                          onTap: () => controller.onContactSelected(contact),
+                        final tx = controller.transactions[index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: TradingHistoryItemWidget(
+                            icon: '', // Fallback to initial logic in widget
+                            title: tx.title,
+                            status: tx.displayStatus,
+                            amount: tx.amount,
+                            date: DateFormat(
+                              'MMM d, h:mm a',
+                            ).format(tx.createdAt),
+                            isExpense: tx.isExpense,
+                            onTap: () => controller.onContactSelected(tx),
+                          ),
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) {
                         return Divider(
-                          color: AppColors.dropSection,
-                          thickness: 2,
+                          color: AppColors.dropSection.withOpacity(0.1),
+                          thickness: 1,
                           indent: 16.w,
                           endIndent: 16.w,
                         );
@@ -102,20 +118,24 @@ class TransferPage extends GetView<TransferController> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.w),
-                    child: SectionTitle(title: AppStrings.friends),
+                    child: SectionTitle(
+                      title: AppStrings.friends,
+                      onViewAll: () => Get.toNamed(AppNamed.friends),
+                    ),
                   ),
 
-                  Obx(
-                    () => ListView.separated(
+                  Obx(() {
+                    final displayFriends = controller.randomFriends;
+                    return ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.friends.length,
+                      itemCount: displayFriends.length,
                       itemBuilder: (context, index) {
-                        final contact = controller.friends[index];
+                        final contact = displayFriends[index];
                         return ContactTile(
                           name: contact.name,
                           phone: contact.phone,
-                          avatarUrl: contact.avatarUrl,
+                          avatarUrl: contact.imageUrl,
                           onTap: () => controller.onContactSelected(contact),
                         );
                       },
@@ -127,8 +147,8 @@ class TransferPage extends GetView<TransferController> {
                           endIndent: 16.w,
                         );
                       },
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             ),

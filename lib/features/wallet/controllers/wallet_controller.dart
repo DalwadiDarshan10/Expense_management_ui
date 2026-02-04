@@ -360,8 +360,8 @@ class WalletController extends GetxController {
         "amount": amount,
         "from": "bank",
         "sourceBankId": bankId,
-        "recipientAccount":
-            recipientAccount, // Removed recipientName from storage
+        "recipientAccount": recipientAccount,
+        "recipientName": recipientName,
         "recipientBankName": recipientBankName,
         "status": "success",
         "createdAt": Timestamp.now(),
@@ -397,7 +397,8 @@ class WalletController extends GetxController {
         "type": "transfer",
         "amount": amount,
         "from": "wallet",
-        "recipientInfo": recipientInfo, // Removed recipientName from storage
+        "recipientInfo": recipientInfo,
+        "recipientName": recipientName,
         "status": "success",
         "createdAt": Timestamp.now(),
       });

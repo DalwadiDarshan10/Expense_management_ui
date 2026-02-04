@@ -1,29 +1,75 @@
+import 'package:expense/core/services/firestore_service.dart';
+import 'package:expense/core/utils/app_logger.dart';
+import 'package:expense/features/friends/models/friend_model.dart';
+import 'package:expense/features/wallet/models/transaction_model.dart';
 import 'package:get/get.dart';
-import 'package:expense/features/transfer/models/contact_model.dart';
 import 'package:expense/routes/app_named.dart';
 
 class TransferController extends GetxController {
-  final recentContacts = <ContactModel>[].obs;
-  final friends = <ContactModel>[].obs;
+  final transactions = <TransactionModel>[].obs;
+  final friends = <FriendModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadDummyData();
+    _listenToTransactions();
+    _listenToFriends();
   }
 
-  void _loadDummyData() {
-    recentContacts.addAll([
-      ContactModel(name: 'Irene Perry', phone: '505-287-8051'),
-      ContactModel(name: 'Casey Bourn', phone: '518-778-0800'),
-      ContactModel(name: 'Jane Holden', phone: '414-586-7314'),
-      ContactModel(name: 'Conrad Ford', phone: '+0123456789'),
-    ]);
+  void _listenToTransactions() {
+    try {
+      AppLogger.info("Listening to transactions for transfer page...");
+      FirestoreService.userDoc()
+          .collection('transactions')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .listen(
+            (snapshot) {
+              final allTxs = snapshot.docs
+                  .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
+                  .toList();
 
-    friends.addAll([
-      ContactModel(name: 'Jackson Soto', phone: '505-287-8051'),
-      ContactModel(name: 'Alfred Neal', phone: '505-287-8051'),
-    ]);
+              // Filter for transfers only in-memory
+              final transferTxs = allTxs
+                  .where((tx) => tx.type == 'transfer')
+                  .toList();
+
+              transactions.assignAll(transferTxs);
+              AppLogger.info(
+                "Fetched ${allTxs.length} total, filtered ${transactions.length} transfers.",
+              );
+            },
+            onError: (error) {
+              AppLogger.error("Error listening to transactions: $error");
+            },
+          );
+    } catch (e) {
+      AppLogger.error("Failed to setup transactions sync: $e");
+    }
+  }
+
+  void _listenToFriends() {
+    try {
+      AppLogger.info("Listening to friends for transfer page...");
+      FirestoreService.userDoc()
+          .collection('friends')
+          .snapshots()
+          .listen(
+            (snapshot) {
+              friends.assignAll(
+                snapshot.docs
+                    .map((doc) => FriendModel.fromMap(doc.data()))
+                    .toList(),
+              );
+              AppLogger.info("Fetched ${friends.length} friends.");
+            },
+            onError: (error) {
+              AppLogger.error("Error listening to friends: $error");
+            },
+          );
+    } catch (e) {
+      AppLogger.error("Failed to setup friends sync: $e");
+    }
   }
 
   void onTransferByWallet() {
@@ -34,7 +80,24 @@ class TransferController extends GetxController {
     Get.toNamed(AppNamed.transferByBankPage);
   }
 
-  void onContactSelected(ContactModel contact) {
+  void onContactSelected(dynamic contact) {
     Get.toNamed(AppNamed.transferByWalletPage, arguments: contact);
+  }
+
+  List<FriendModel> get randomFriends {
+    final list = List<FriendModel>.from(friends);
+    list.shuffle();
+    return list.take(3).toList();
+  }
+
+  List<TransactionModel> get recentRecipients {
+    final Map<String, TransactionModel> uniqueRecipients = {};
+    for (var tx in transactions) {
+      final key = tx.recipientInfo ?? tx.recipientAccount ?? tx.id;
+      if (!uniqueRecipients.containsKey(key)) {
+        uniqueRecipients[key] = tx;
+      }
+    }
+    return uniqueRecipients.values.take(2).toList();
   }
 }

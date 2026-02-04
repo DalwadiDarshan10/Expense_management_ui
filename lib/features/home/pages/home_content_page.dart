@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
+import 'package:expense/features/transfer/controllers/transfer_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -215,13 +216,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildSendAgainSection(BuildContext context) {
-    final contacts = [
-      {'name': 'John', 'color': const Color(0xFFFFB74D)},
-      {'name': 'Lovi ', 'color': const Color(0xFF4FC3F7)},
-      {'name': 'Hametrius', 'color': const Color(0xFFE57373)},
-      {'name': 'Leshaad', 'color': const Color(0xFF81C784)},
-      {'name': 'Lane R.', 'color': const Color(0xFFBA68C8)},
-    ];
+    final controller = Get.put(TransferController());
 
     return Container(
       color: Theme.of(context).cardColor,
@@ -240,23 +235,52 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 16.h),
             SizedBox(
               height: 100.h,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: contacts.length,
-                separatorBuilder: (context, index) => SizedBox(width: 16.w),
-                itemBuilder: (context, index) {
-                  final contact = contacts[index];
-                  return _buildContactAvatar(
-                    name: contact['name'] as String,
-                    color: contact['color'] as Color,
+              child: Obx(() {
+                final recipients = controller.recentRecipients;
+
+                if (recipients.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No recent transfers",
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.secondaryText,
+                      ),
+                    ),
                   );
-                },
-              ),
+                }
+
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recipients.length,
+                  separatorBuilder: (context, index) => SizedBox(width: 16.w),
+                  itemBuilder: (context, index) {
+                    final tx = recipients[index];
+                    return GestureDetector(
+                      onTap: () => controller.onContactSelected(tx),
+                      child: _buildContactAvatar(
+                        name: tx.recipientName ?? tx.recipientInfo ?? '?',
+                        color: _getContactColor(index),
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Color _getContactColor(int index) {
+    final colors = [
+      const Color(0xFFFFB74D),
+      const Color(0xFF4FC3F7),
+      const Color(0xFFE57373),
+      const Color(0xFF81C784),
+      const Color(0xFFBA68C8),
+    ];
+    return colors[index % colors.length];
   }
 
   Widget _buildContactAvatar({required String name, required Color color}) {

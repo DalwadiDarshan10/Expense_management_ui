@@ -2,7 +2,6 @@ import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/withdraw/controllers/withdraw_controller.dart';
-import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
 import 'package:expense/widgets/labeled_input_tile.dart';
 import 'package:flutter/material.dart';

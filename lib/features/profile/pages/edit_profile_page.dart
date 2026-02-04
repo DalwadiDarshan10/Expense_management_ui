@@ -115,7 +115,7 @@ class EditProfilePage extends GetView<EditProfileController> {
 
             // Form Fields
             LabeledInputTile(
-              title: AppStrings.fullNameLabel,
+              title: AppStrings.usernameLabel,
               controller: controller.nameController,
             ),
             SizedBox(height: 8.h),
@@ -124,12 +124,14 @@ class EditProfilePage extends GetView<EditProfileController> {
               controller: controller.phoneController,
               keyboardType: TextInputType.phone,
               maxLength: 10,
+              readOnly: true,
             ),
             SizedBox(height: 8.h),
             LabeledInputTile(
               title: AppStrings.emailLabel,
               controller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
+              readOnly: true,
             ),
             SizedBox(height: 40.h),
 

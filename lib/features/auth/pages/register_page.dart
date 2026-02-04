@@ -42,6 +42,11 @@ class RegisterPage extends StatelessWidget {
 
                 20.verticalSpace,
 
+                // Phone field
+                _buildPhoneField(controller),
+
+                20.verticalSpace,
+
                 // Password field
                 _buildPasswordField(controller),
 
@@ -149,6 +154,42 @@ class RegisterPage extends StatelessWidget {
             ? controller.emailErrorText.value
             : null,
         suffixIcon: controller.isEmailValid.value
+            ? AppImageViewer(
+                imagePath: AppImages.greentick,
+                height: 22.sp,
+                width: 22.sp,
+              )
+            : null,
+      ),
+    );
+  }
+
+  /// Build phone input field
+  Widget _buildPhoneField(RegisterController controller) {
+    return Obx(
+      () => AppTextField(
+        label: AppStrings.phoneNumberLabel,
+        hint: AppStrings.enterPhoneNumberHint,
+        keyboardType: TextInputType.phone,
+        maxLength: 10,
+        isPassword: false,
+        prefixIcon: Container(
+          width: 50.w,
+          alignment: Alignment.center,
+          child: Text(
+            "+91",
+            style: AppTextStyles.bodyLarge.copyWith(
+              color: Get.theme.textTheme.bodyLarge?.color,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        isValid: controller.isPhoneValid.value,
+        onChanged: controller.validatePhone,
+        errorText: controller.phoneErrorText.value.isNotEmpty
+            ? controller.phoneErrorText.value
+            : null,
+        suffixIcon: controller.isPhoneValid.value
             ? AppImageViewer(
                 imagePath: AppImages.greentick,
                 height: 22.sp,

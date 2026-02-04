@@ -17,18 +17,17 @@ class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Put the controller if not already present
-    final controller = Get.put(ForgotPasswordController());
+    final controller = Get.find<ForgotPasswordController>();
 
     return Scaffold(
       backgroundColor: context.isDarkMode ? AppColors.black : AppColors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: 0,
         title: Text(
           AppStrings.forgotPasswordTitle,
           style: AppTextStyles.titleLarge.copyWith(
             color: context.theme.textTheme.titleLarge?.color,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
         ),
         centerTitle: true,

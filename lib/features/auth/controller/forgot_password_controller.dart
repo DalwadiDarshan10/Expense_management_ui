@@ -32,14 +32,18 @@ class ForgotPasswordController extends GetxController {
       Get.snackbar(
         'Success',
         'Password reset link sent to your email',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
 
       // Navigate back to login or stay here?
       // Usually good to go back or let user know check email
       Get.offAllNamed(AppNamed.login);
     } catch (e) {
-      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Error',
+        "Please Enter Valid Email",
+        snackPosition: SnackPosition.TOP,
+      );
     } finally {
       isLoading.value = false;
     }

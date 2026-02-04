@@ -132,7 +132,7 @@ class EditProfileController extends GetxController {
 
         // Also update in Firestore
         await FirestoreService.userDoc().set({
-          'name': nameController.text,
+          'username': nameController.text,
         }, SetOptions(merge: true));
 
         profileController.userName.value = nameController.text;
@@ -142,7 +142,7 @@ class EditProfileController extends GetxController {
       // Update phone number in Firestore
       if (phoneController.text != profileController.userPhone.value) {
         await FirestoreService.userDoc().set({
-          'phoneNumber': phoneController.text,
+          'phone': phoneController.text,
         }, SetOptions(merge: true));
 
         profileController.userPhone.value = phoneController.text;

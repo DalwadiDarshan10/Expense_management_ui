@@ -33,8 +33,8 @@ class ProfileController extends GetxController {
         final doc = await FirestoreService.userDoc().get();
         if (doc.exists) {
           final data = doc.data() as Map<String, dynamic>;
-          userPhone.value = data['phoneNumber'] ?? '';
-          userName.value = data['name'] ?? userName.value;
+          userPhone.value = data['phone'] ?? '';
+          userName.value = data['username'] ?? userName.value;
           // Note: We prioritize Firestore name if available, else Auth name
         } else {
           // Fallback to local storage or auth if no firestore doc

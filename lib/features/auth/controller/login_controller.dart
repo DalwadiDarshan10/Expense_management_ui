@@ -17,7 +17,6 @@ class LoginController extends GetxController {
 
   // Password field
   final passwordController = ''.obs;
-  final isPasswordVisible = false.obs;
   final passwordErrorText = ''.obs;
 
   // Save password checkbox
@@ -46,7 +45,7 @@ class LoginController extends GetxController {
     passwordController.value = value;
     if (value.isEmpty) {
       passwordErrorText.value = 'Password is required';
-    } else if (value.length < 6) {
+    } else if (value.length < 8) {
       passwordErrorText.value = 'Password must be at least 8 characters';
     } else {
       passwordErrorText.value = '';
@@ -55,11 +54,6 @@ class LoginController extends GetxController {
 
   /// Validates password (minimum 6 characters for Firebase)
   bool get isPasswordValid => passwordController.value.length >= 6;
-
-  /// Toggle password visibility
-  void togglePasswordVisibility() {
-    isPasswordVisible.value = !isPasswordVisible.value;
-  }
 
   /// Toggle save password checkbox
   void toggleSavePassword() {
@@ -99,7 +93,7 @@ class LoginController extends GetxController {
       Get.snackbar('Success', 'Logged in successfully');
       Get.offAllNamed(AppNamed.menuPage);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', "Please enter valid email and password");
     } finally {
       isLoading.value = false;
     }

@@ -53,7 +53,7 @@ class OnboardingPage extends StatelessWidget {
                       AppStrings.appName,
                       style: AppTextStyles.headlineSmall.copyWith(
                         color: context.theme.textTheme.headlineSmall?.color,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
 
@@ -64,7 +64,6 @@ class OnboardingPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: context.theme.textTheme.bodyMedium?.color,
-                        height: 1.5,
                       ),
                     ),
                   ],

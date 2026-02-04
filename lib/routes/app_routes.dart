@@ -1,3 +1,4 @@
+import 'package:expense/features/auth/bindings/forget_password_bindings.dart';
 import 'package:expense/features/auth/bindings/login_binding.dart';
 import 'package:expense/features/auth/bindings/register_binding.dart';
 import 'package:expense/features/auth/pages/forget_password.dart';
@@ -63,6 +64,7 @@ class AppRoutes {
     GetPage(
       name: AppNamed.forgotPassword,
       page: () => const ForgotPasswordPage(),
+      binding: ForgotPasswordBinding(),
     ),
     // GetPage(
     //   name: AppNamed.resetPassword,

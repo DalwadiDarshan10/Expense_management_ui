@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
 import 'package:expense/routes/app_named.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -17,6 +18,11 @@ class RegisterController extends GetxController {
   final emailController = ''.obs;
   final isEmailValid = false.obs;
   final emailErrorText = ''.obs;
+
+  // Phone field
+  final phoneController = ''.obs;
+  final isPhoneValid = false.obs;
+  final phoneErrorText = ''.obs;
 
   // Password field
   final passwordController = ''.obs;
@@ -58,6 +64,21 @@ class RegisterController extends GetxController {
     } else {
       isEmailValid.value = true;
       emailErrorText.value = '';
+    }
+  }
+
+  /// Validates phone number
+  void validatePhone(String value) {
+    phoneController.value = value;
+    if (value.isEmpty) {
+      isPhoneValid.value = false;
+      phoneErrorText.value = 'Phone number is required';
+    } else if (value.length < 10) {
+      isPhoneValid.value = false;
+      phoneErrorText.value = 'Please enter a valid phone number';
+    } else {
+      isPhoneValid.value = true;
+      phoneErrorText.value = '';
     }
   }
 
@@ -116,6 +137,7 @@ class RegisterController extends GetxController {
   bool get isFormValid =>
       isUsernameValid.value &&
       isEmailValid.value &&
+      isPhoneValid.value &&
       isPasswordValid &&
       doPasswordsMatch &&
       agreeToTerms.value;
@@ -124,6 +146,7 @@ class RegisterController extends GetxController {
   void validateAllFields() {
     validateUsername(usernameController.value);
     validateEmail(emailController.value);
+    validatePhone(phoneController.value);
     validatePassword(passwordController.value);
     validateConfirmPassword(confirmPasswordController.value);
   }
@@ -139,7 +162,6 @@ class RegisterController extends GetxController {
 
     try {
       FocusManager.instance.primaryFocus?.unfocus();
-
       final credential = await _authService.signUpWithEmail(
         email: emailController.value.trim(),
         password: passwordController.value,
@@ -148,6 +170,17 @@ class RegisterController extends GetxController {
       // Update display name
       await credential.user?.updateDisplayName(usernameController.value);
 
+      // Store phone number in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(credential.user?.uid)
+          .set({
+            'phone': "+91 ${phoneController.value.trim()}",
+            'username': usernameController.value.trim(),
+            'email': emailController.value.trim(),
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+
       // Save login state
       _storage.write('isLoggedIn', true);
       _storage.write('userEmail', emailController.value.trim());
@@ -155,7 +188,7 @@ class RegisterController extends GetxController {
 
       Get.offNamed(AppNamed.signupSuccess);
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      Get.snackbar('Error', "Registration failed");
     } finally {
       isLoading.value = false;
     }

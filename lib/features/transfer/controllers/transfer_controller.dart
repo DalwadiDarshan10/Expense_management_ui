@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:expense/routes/app_named.dart';
 
 class TransferController extends GetxController {
-  final transactions = <TransactionModel>[].obs;
+  final transactions = <TransactionModel>[].obs; // Transfers only
+  final allTransactions = <TransactionModel>[].obs; // All transaction types
   final friends = <FriendModel>[].obs;
 
   @override
@@ -28,6 +29,8 @@ class TransferController extends GetxController {
               final allTxs = snapshot.docs
                   .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
                   .toList();
+
+              allTransactions.assignAll(allTxs);
 
               // Filter for transfers only in-memory
               final transferTxs = allTxs
@@ -92,12 +95,15 @@ class TransferController extends GetxController {
 
   List<TransactionModel> get recentRecipients {
     final Map<String, TransactionModel> uniqueRecipients = {};
-    for (var tx in transactions) {
-      final key = tx.recipientInfo ?? tx.recipientAccount ?? tx.id;
+    // Only include transfers from wallet (friend transfers)
+    final walletTransfers = transactions.where((tx) => tx.from == 'wallet');
+
+    for (var tx in walletTransfers) {
+      final key = tx.recipientInfo ?? tx.recipientName ?? tx.id;
       if (!uniqueRecipients.containsKey(key)) {
         uniqueRecipients[key] = tx;
       }
     }
-    return uniqueRecipients.values.take(2).toList();
+    return uniqueRecipients.values.take(10).toList();
   }
 }

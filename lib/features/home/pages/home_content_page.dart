@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/transfer/controllers/transfer_controller.dart';
+import 'package:expense/features/bill/controller/utility_bill_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -402,10 +403,17 @@ class HomePage extends StatelessWidget {
               itemCount: paymentItems.length,
               itemBuilder: (context, index) {
                 final item = paymentItems[index];
-                return _buildPaymentItem(
-                  icon: item['icon'] as String,
-                  label: item['label'] as String,
-                  context: context,
+                return GestureDetector(
+                  onTap: () {
+                    final billController = Get.put(UtilityBillController());
+                    billController.setCategory(item['label'] as String);
+                    Get.toNamed(AppNamed.utilityBills);
+                  },
+                  child: _buildPaymentItem(
+                    icon: item['icon'] as String,
+                    label: item['label'] as String,
+                    context: context,
+                  ),
                 );
               },
             ),
@@ -438,6 +446,8 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildTradingHistorySection(BuildContext context) {
+    final controller = Get.find<TransferController>();
+
     return Container(
       color: Theme.of(context).cardColor,
       child: Padding(
@@ -453,31 +463,101 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            _buildTransactionItem(
-              icon: AppImages.electricBillBadge,
-              title: AppStrings.electricBillTitle,
-              subtitle: AppStrings.sent,
-              amount: '-\$420',
-              isNegative: true,
-              date: "Today - 3.14",
-              onTap: () => Get.toNamed(AppNamed.shareBill),
-              context: context,
-            ),
-            SizedBox(height: 20.h),
-            _buildTransactionItem(
-              icon: AppImages.televisionBadge,
-              title: AppStrings.televisionBillTitle,
-              subtitle: AppStrings.sent,
-              amount: '\$420',
-              isNegative: true,
-              date: "22 jan- 3.14",
-              onTap: () => Get.toNamed(AppNamed.shareBill),
-              context: context,
-            ),
+            Obx(() {
+              if (controller.allTransactions.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: Text(
+                      "No transactions yet",
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.secondaryText,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              // Show only top 5 recent transactions on home
+              final recentTxs = controller.allTransactions.take(5).toList();
+
+              return ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: recentTxs.length,
+                separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                itemBuilder: (context, index) {
+                  final tx = recentTxs[index];
+                  return _buildTransactionItem(
+                    icon: _getTransactionIcon(tx),
+                    title: tx.title,
+                    subtitle: tx.type == 'bill'
+                        ? tx.recipientInfo ?? 'Bill'
+                        : AppStrings.sent,
+                    amount:
+                        '${tx.isExpense ? "-" : "+"}\$${tx.amount.toStringAsFixed(0)}',
+                    isNegative: !tx.isExpense,
+                    date: _formatDate(tx.createdAt),
+                    onTap: () => Get.toNamed(AppNamed.shareBill),
+                    context: context,
+                  );
+                },
+              );
+            }),
           ],
         ),
       ),
     );
+  }
+
+  String _getTransactionIcon(dynamic tx) {
+    if (tx.type == 'bill') {
+      final category = tx.recipientInfo;
+      if (category == AppStrings.categoryElectricity)
+        return AppImages.electricityBadge;
+      if (category == AppStrings.categoryInternet)
+        return AppImages.internetBadge;
+      if (category == AppStrings.insurance) return AppImages.insuranceBadge;
+      if (category == AppStrings.categoryMedical) return AppImages.medicalBadge;
+      if (category == AppStrings.categoryMarket) return AppImages.marketBadge;
+      if (category == AppStrings.electricBill)
+        return AppImages.electricBillBadge;
+      if (category == AppStrings.television) return AppImages.televisionBadge;
+      if (category == AppStrings.waterBill) return AppImages.waterbillBadge;
+      return AppImages.electricBillBadge;
+    }
+    if (tx.type == 'topup')
+      return AppImages.topupIcon; // Need to ensure this exists or use fallback
+    if (tx.type == 'withdraw') return AppImages.walletIcon;
+    return AppImages.electricBillBadge;
+  }
+
+  String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date).inDays;
+    if (difference == 0)
+      return "Today - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+    if (difference == 1)
+      return "Yesterday - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+    return "${date.day} ${_getMonthName(date.month)} - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months[month - 1];
   }
 
   Widget _buildTransactionItem({

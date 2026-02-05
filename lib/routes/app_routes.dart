@@ -40,6 +40,9 @@ import 'package:expense/features/friends/bindings/add_friend_binding.dart';
 import 'package:expense/features/friends/pages/add_friend_page.dart';
 import 'package:expense/features/transfer/pages/recent_transfers_page.dart';
 import 'package:expense/features/voucher/pages/voucher_deals_page.dart';
+import 'package:expense/features/bill/bindings/utility_bill_binding.dart';
+import 'package:expense/features/bill/pages/service_provider_selection_page.dart';
+import 'package:expense/features/bill/pages/bill_details_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
@@ -168,6 +171,16 @@ class AppRoutes {
       name: AppNamed.recentTransfers,
       page: () => const RecentTransfersPage(),
       binding: TransferBinding(),
+    ),
+    GetPage(
+      name: AppNamed.utilityBills,
+      page: () => const ServiceProviderSelectionPage(),
+      binding: UtilityBillBinding(),
+    ),
+    GetPage(
+      name: AppNamed.billDetails,
+      page: () => const BillDetailsPage(),
+      binding: UtilityBillBinding(),
     ),
   ];
 }

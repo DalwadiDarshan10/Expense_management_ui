@@ -4,9 +4,11 @@ import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_button.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
+import 'package:expense/core/services/share_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:screenshot/screenshot.dart';
 
 enum TransactionType { topUp, transfer, withdraw }
 
@@ -24,8 +26,15 @@ class TransactionSuccessArgs {
   });
 }
 
-class TransactionSuccessPage extends StatelessWidget {
+class TransactionSuccessPage extends StatefulWidget {
   const TransactionSuccessPage({super.key});
+
+  @override
+  State<TransactionSuccessPage> createState() => _TransactionSuccessPageState();
+}
+
+class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
+  final ScreenshotController screenshotController = ScreenshotController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,296 +54,322 @@ class TransactionSuccessPage extends StatelessWidget {
       backgroundColor: isDarkMode
           ? context.theme.scaffoldBackgroundColor
           : AppColors.primary,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                color: isDarkMode
-                    ? context.theme.scaffoldBackgroundColor
-                    : AppColors.primary,
-              ),
-              child: const AppImageViewer(
-                imagePath: AppImages.sucessPageBgImage,
-                fit: BoxFit.cover,
+      body: Screenshot(
+        controller: screenshotController,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? context.theme.scaffoldBackgroundColor
+                      : AppColors.primary,
+                ),
+                child: const AppImageViewer(
+                  imagePath: AppImages.sucessPageBgImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: 50.h,
-            right: 20.w,
-            child: AppImageViewer(imagePath: AppImages.shareIcon),
-          ),
+            Positioned(
+              top: 50.h,
+              right: 20.w,
+              child: GestureDetector(
+                onTap: () async {
+                  try {
+                    await ShareService.captureAndShare(
+                      screenshotController: screenshotController,
+                    );
+                  } catch (e) {
+                    Get.snackbar(
+                      "Error",
+                      "Failed to share receipt: $e",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red.withOpacity(0.8),
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+                child: AppImageViewer(imagePath: AppImages.shareIcon),
+              ),
+            ),
 
-          Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  // The Main Ticket Card
-                  CustomPaint(
-                    painter: TicketBorderPainter(
-                      borderColor: Colors
-                          .transparent, // No border visible in image for this card, or maybe white? Using transparent as it looks like just a shape.
-                      borderRadius: 20.r,
-                      cutoutRadius: 15.r,
-                      yOffsetPercentage: 0.55, // Adjusted for visual balance
-                    ),
-                    child: ClipPath(
-                      clipper: TicketClipper(
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    // The Main Ticket Card
+                    CustomPaint(
+                      painter: TicketBorderPainter(
+                        borderColor: Colors
+                            .transparent, // No border visible in image for this card, or maybe white? Using transparent as it looks like just a shape.
                         borderRadius: 20.r,
                         cutoutRadius: 15.r,
-                        yOffsetPercentage: 0.55,
+                        yOffsetPercentage: 0.55, // Adjusted for visual balance
                       ),
-                      child: Container(
-                        width: double.infinity,
-                        // Height needs to be constrained or calculated.
-                        // Using constrained box or fixed height for now to match approx image proportion.
-                        height: 480.h,
-                        color: context.theme.cardColor,
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        child: Column(
-                          children: [
-                            // Top Section (Above Cutout)
-                            Expanded(
-                              flex: 55,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 40.h,
-                                  ), // Offset for top overlap
-                                  Text(
-                                    _getTitle(args.type),
-                                    style: AppTextStyles.headlineSmall.copyWith(
-                                      color: context
-                                          .theme
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.color,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 14.h),
-                                  Text(
-                                    _getSubtitle(args.type),
-                                    maxLines: 1,
-                                    style: AppTextStyles.bodyLarge.copyWith(
-                                      color: context
-                                          .theme
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.color,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 24.h),
-                                  Text(
-                                    _getAmountLabel(args.type),
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: context
-                                          .theme
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.color,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    "\$ ${args.amount}",
-                                    style: AppTextStyles.headlineSmall.copyWith(
-                                      color: context
-                                          .theme
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.color,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // Divider Area
-                            _buildDashedLine(context),
-
-                            // Bottom Section (Below Cutout)
-                            Expanded(
-                              flex: 45,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Recipient Info Section
-                                  Container(
-                                    padding: EdgeInsets.all(16.w),
-                                    decoration: BoxDecoration(
-                                      color: context.theme.cardColor,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        AppImageViewer(
-                                          imagePath: AppImages.appLogoSquare,
-
-                                          height: 48.h,
-                                          width: 48.w,
-                                        ),
-                                        SizedBox(width: 12.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              FittedBox(
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      args.recipientName ??
-                                                          "AVI BANK",
-                                                      style: AppTextStyles
-                                                          .bodyLarge
-                                                          .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: context
-                                                                .theme
-                                                                .textTheme
-                                                                .bodyLarge
-                                                                ?.color,
-                                                          ),
-                                                    ),
-                                                    SizedBox(width: 10.w),
-                                                    Text(
-                                                      "\$ ${args.amount}", // Showing amount again in the row? Image shows "$ 12,769.00" next to AVI BANK.
-                                                      style: AppTextStyles
-                                                          .bodyMedium
-                                                          .copyWith(
-                                                            fontWeight: FontWeight
-                                                                .bold, // Regular weight? Image looks boldish.
-                                                            color: context
-                                                                .theme
-                                                                .textTheme
-                                                                .bodyMedium
-                                                                ?.color,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: 4.h),
-                                              Text(
-                                                args.recipientInfo ?? "",
-                                                style: AppTextStyles.bodyMedium
-                                                    .copyWith(
-                                                      color: context
-                                                          .theme
-                                                          .textTheme
-                                                          .bodyMedium
-                                                          ?.color,
-                                                    ),
-                                              ),
-                                            ],
+                      child: ClipPath(
+                        clipper: TicketClipper(
+                          borderRadius: 20.r,
+                          cutoutRadius: 15.r,
+                          yOffsetPercentage: 0.55,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          // Height needs to be constrained or calculated.
+                          // Using constrained box or fixed height for now to match approx image proportion.
+                          height: 480.h,
+                          color: context.theme.cardColor,
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            children: [
+                              // Top Section (Above Cutout)
+                              Expanded(
+                                flex: 55,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 40.h,
+                                    ), // Offset for top overlap
+                                    Text(
+                                      _getTitle(args.type),
+                                      style: AppTextStyles.headlineSmall
+                                          .copyWith(
+                                            color: context
+                                                .theme
+                                                .textTheme
+                                                .headlineSmall
+                                                ?.color,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                        ),
-                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 30.h),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: AppButton(
-                                      text: "Done",
-                                      onPressed: () {
-                                        Get.offAllNamed(AppNamed.menuPage);
-                                      },
+                                    SizedBox(height: 14.h),
+                                    Text(
+                                      _getSubtitle(args.type),
+                                      maxLines: 1,
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        color: context
+                                            .theme
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(height: 24.h),
+                                    Text(
+                                      _getAmountLabel(args.type),
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        color: context
+                                            .theme
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.color,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      "\$ ${args.amount}",
+                                      style: AppTextStyles.headlineSmall
+                                          .copyWith(
+                                            color: context
+                                                .theme
+                                                .textTheme
+                                                .headlineSmall
+                                                ?.color,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+
+                              // Divider Area
+                              _buildDashedLine(context),
+
+                              // Bottom Section (Below Cutout)
+                              Expanded(
+                                flex: 45,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Recipient Info Section
+                                    Container(
+                                      padding: EdgeInsets.all(16.w),
+                                      decoration: BoxDecoration(
+                                        color: context.theme.cardColor,
+                                        borderRadius: BorderRadius.circular(
+                                          12.r,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          AppImageViewer(
+                                            imagePath: AppImages.appLogoSquare,
+
+                                            height: 48.h,
+                                            width: 48.w,
+                                          ),
+                                          SizedBox(width: 12.w),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                FittedBox(
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        args.recipientName ??
+                                                            "AVI BANK",
+                                                        style: AppTextStyles
+                                                            .bodyLarge
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: context
+                                                                  .theme
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
+                                                            ),
+                                                      ),
+                                                      SizedBox(width: 10.w),
+                                                      Text(
+                                                        "\$ ${args.amount}", // Showing amount again in the row? Image shows "$ 12,769.00" next to AVI BANK.
+                                                        style: AppTextStyles
+                                                            .bodyMedium
+                                                            .copyWith(
+                                                              fontWeight: FontWeight
+                                                                  .bold, // Regular weight? Image looks boldish.
+                                                              color: context
+                                                                  .theme
+                                                                  .textTheme
+                                                                  .bodyMedium
+                                                                  ?.color,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Text(
+                                                  args.recipientInfo ?? "",
+                                                  style: AppTextStyles
+                                                      .bodyMedium
+                                                      .copyWith(
+                                                        color: context
+                                                            .theme
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.color,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 30.h),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: AppButton(
+                                        text: "Done",
+                                        onPressed: () {
+                                          Get.offAllNamed(AppNamed.menuPage);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  //
-                  // The Overlapping Green Tick
-                  Positioned(
-                    top: -40.h,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      clipBehavior: Clip.none,
-                      children: [
-                        // White border effect
-                        Container(
-                          height: 70.h,
-                          width: 70.w,
-                          decoration: BoxDecoration(
-                            color:
-                                context.theme.cardColor, // Matches card color
-                            shape: BoxShape.circle,
+                    //
+                    // The Overlapping Green Tick
+                    Positioned(
+                      top: -40.h,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        clipBehavior: Clip.none,
+                        children: [
+                          // White border effect
+                          Container(
+                            height: 70.h,
+                            width: 70.w,
+                            decoration: BoxDecoration(
+                              color:
+                                  context.theme.cardColor, // Matches card color
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                        // Green Icon
-                        Container(
-                          height: 56.h,
-                          width: 56.w,
-                          decoration: const BoxDecoration(
-                            color: AppColors.success,
-                            shape: BoxShape.circle,
+                          // Green Icon
+                          Container(
+                            height: 56.h,
+                            width: 56.w,
+                            decoration: const BoxDecoration(
+                              color: AppColors.success,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 32.sp,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 32.sp,
-                          ),
-                        ),
 
-                        // Left Dot
-                        Positioned(
-                          left: -30.w,
-                          top: 50.h,
-                          child: _buildDot(
-                            size: 22,
-                            borderWidth: 4,
-                            context: context,
+                          // Left Dot
+                          Positioned(
+                            left: -30.w,
+                            top: 50.h,
+                            child: _buildDot(
+                              size: 22,
+                              borderWidth: 4,
+                              context: context,
+                            ),
                           ),
-                        ),
 
-                        // Right Dot (Medium)
-                        Positioned(
-                          right: -20.w,
-                          top: 32.h,
-                          child: _buildDot(
-                            size: 18,
-                            borderWidth: 4,
-                            context: context,
+                          // Right Dot (Medium)
+                          Positioned(
+                            right: -20.w,
+                            top: 32.h,
+                            child: _buildDot(
+                              size: 18,
+                              borderWidth: 4,
+                              context: context,
+                            ),
                           ),
-                        ),
 
-                        // Right Dot (Small)
-                        Positioned(
-                          right: -35.w,
-                          top: 50.h,
-                          child: _buildDot(
-                            size: 8,
-                            borderWidth: 0,
-                            context: context,
+                          // Right Dot (Small)
+                          Positioned(
+                            right: -35.w,
+                            top: 50.h,
+                            child: _buildDot(
+                              size: 8,
+                              borderWidth: 0,
+                              context: context,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

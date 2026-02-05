@@ -33,4 +33,6 @@ class AppNamed {
   static const String transactionSuccess = '/transaction-success';
   static const String voucherDeals = '/voucher-deals';
   static const String recentTransfers = '/recent-transfers';
+  static const String utilityBills = '/utility-bills';
+  static const String billDetails = '/bill-details';
 }

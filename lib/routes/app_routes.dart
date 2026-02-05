@@ -43,6 +43,7 @@ import 'package:expense/features/voucher/pages/voucher_deals_page.dart';
 import 'package:expense/features/bill/bindings/utility_bill_binding.dart';
 import 'package:expense/features/bill/pages/service_provider_selection_page.dart';
 import 'package:expense/features/bill/pages/bill_details_page.dart';
+import 'package:expense/features/analytics/pages/all_transactions_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
@@ -181,6 +182,10 @@ class AppRoutes {
       name: AppNamed.billDetails,
       page: () => const BillDetailsPage(),
       binding: UtilityBillBinding(),
+    ),
+    GetPage(
+      name: AppNamed.allTransactions,
+      page: () => const AllTransactionsPage(),
     ),
   ];
 }

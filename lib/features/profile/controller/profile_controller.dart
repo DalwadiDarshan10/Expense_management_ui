@@ -1,4 +1,5 @@
 import 'package:expense/core/services/firestore_service.dart';
+import 'package:expense/core/utils/app_logger.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,12 +14,13 @@ class ProfileController extends GetxController {
   final RxString userEmail = ''.obs;
   final RxString userAvatar = ''.obs;
   final RxInt points = 4000.obs;
-  final RxDouble balance = 12769.00.obs;
+  final RxDouble walletBalance = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
     _loadUserProfile();
+    fetchWalletBalance();
   }
 
   void _loadUserProfile() async {
@@ -42,7 +44,7 @@ class ProfileController extends GetxController {
               user.phoneNumber ?? _storage.read('userPhone') ?? 'No Phone';
         }
       } catch (e) {
-        debugPrint('Error fetching user profile from Firestore: $e');
+        AppLogger.error('Error fetching user profile from Firestore: $e');
         // Fallback on error
         userPhone.value =
             user.phoneNumber ?? _storage.read('userPhone') ?? 'No Phone';
@@ -52,9 +54,52 @@ class ProfileController extends GetxController {
 
       // Load additional data from storage if available
       points.value = _storage.read('userPoints') ?? 4000;
-      balance.value = _storage.read('userBalance') ?? 12769.00;
     } else {
-      debugPrint('No user logged in');
+      AppLogger.warning('No user logged in');
+    }
+  }
+
+  /// FETCH WALLET BALANCE (REAL-TIME)
+  void fetchWalletBalance() {
+    try {
+      final uid = FirestoreService.uid;
+      final path = 'users/$uid/wallet/main';
+      AppLogger.info("Listening to wallet balance at: $path");
+
+      FirestoreService.userDoc()
+          .collection('wallet')
+          .doc('main')
+          .snapshots()
+          .listen(
+            (snapshot) {
+              if (snapshot.exists) {
+                final data = snapshot.data();
+                AppLogger.info("Snapshot found! Data: $data");
+                walletBalance.value =
+                    (data?['balance'] as num?)?.toDouble() ?? 0.0;
+                AppLogger.info(
+                  "Wallet balance updated: ${walletBalance.value}",
+                );
+              } else {
+                AppLogger.warning("Snapshot DOES NOT exist at: $path");
+                // Temporary Debug Snackbar
+                Get.snackbar(
+                  "Debug: No Wallet Found",
+                  "Please Top Up to create wallet.\nPath: $path",
+                  snackPosition: SnackPosition.TOP,
+                  duration: const Duration(seconds: 10),
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                );
+              }
+            },
+            onError: (e) {
+              AppLogger.error("Error in wallet balance stream", e);
+              Get.snackbar("Error", "Stream Error: $e");
+            },
+          );
+    } catch (e, s) {
+      AppLogger.error("Error setting up wallet balance fetch", e, s);
     }
   }
 
@@ -73,7 +118,7 @@ class ProfileController extends GetxController {
 
       Get.offAllNamed('/login');
     } catch (e) {
-      debugPrint('Logout error: $e');
+      AppLogger.error('Logout error: $e');
       Get.snackbar('Error', 'Failed to logout');
     }
   }

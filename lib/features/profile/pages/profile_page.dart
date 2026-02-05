@@ -29,10 +29,7 @@ class ProfilePage extends GetView<ProfileController> {
             size: 20.r,
           ),
           onPressed: () {
-            // Check if we can pop, otherwise do nothing or go to home
-            // if (Get.navigator?.canPop() ?? false) {
-            //   Get.back();
-            // }
+            Get.toNamed(AppNamed.menuPage);
           },
         ),
         centerTitle: true,
@@ -62,7 +59,7 @@ class ProfilePage extends GetView<ProfileController> {
             Obx(
               () => ProfileStatsWidget(
                 points: controller.points.value,
-                balance: controller.balance.value,
+                balance: controller.walletBalance.value,
               ),
             ),
             SizedBox(height: 8.h),

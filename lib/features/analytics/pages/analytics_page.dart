@@ -22,7 +22,6 @@ class AnalyticsPage extends GetView<AnalyticsController> {
       backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: context.theme.scaffoldBackgroundColor,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -46,6 +45,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
             },
             child: AppImageViewer(imagePath: AppImages.shareIcon),
           ),
+          SizedBox(width: 20.w),
         ],
       ),
       body: SingleChildScrollView(
@@ -88,7 +88,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
             Expanded(
               child: SummaryCardWidget(
                 label: AppStrings.incomeLabel,
-                amount: '\$${controller.totalIncome.toStringAsFixed(2)}',
+                amount: '\$${controller.totalIncome.value.toStringAsFixed(2)}',
                 isIncome: true,
               ),
             ),
@@ -96,7 +96,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
             Expanded(
               child: SummaryCardWidget(
                 label: AppStrings.outcomeLabel,
-                amount: '\$${controller.totalOutcome.toStringAsFixed(2)}',
+                amount: '\$${controller.totalOutcome.value.toStringAsFixed(2)}',
                 isIncome: false,
               ),
             ),
@@ -112,21 +112,47 @@ class AnalyticsPage extends GetView<AnalyticsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppStrings.tradingHistory,
-            style: AppTextStyles.titleMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: context.theme.textTheme.bodyLarge?.color,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppStrings.tradingHistory,
+                style: AppTextStyles.titleMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: context.theme.textTheme.bodyLarge?.color,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.toNamed(AppNamed.allTransactions);
+                },
+                child: Text(
+                  "View All",
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: context.theme.primaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 12.h),
-          Obx(
-            () => ListView.builder(
+          Obx(() {
+            final transactions = controller.transactions;
+            if (transactions.isEmpty) {
+              return const Center(child: Text("No transactions yet"));
+            }
+
+            // Show top 5
+            final top5 = transactions.take(5).toList();
+
+            return ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.transactions.length,
+              itemCount: top5.length,
+              separatorBuilder: (context, index) => SizedBox(height: 16.h),
               itemBuilder: (context, index) {
-                final transaction = controller.transactions[index];
+                final transaction = top5[index];
                 return TradingHistoryItemWidget(
                   icon: transaction.icon,
                   title: transaction.title,
@@ -139,8 +165,8 @@ class AnalyticsPage extends GetView<AnalyticsController> {
                   },
                 );
               },
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );

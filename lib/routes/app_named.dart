@@ -35,4 +35,5 @@ class AppNamed {
   static const String recentTransfers = '/recent-transfers';
   static const String utilityBills = '/utility-bills';
   static const String billDetails = '/bill-details';
+  static const String allTransactions = '/all-transactions';
 }

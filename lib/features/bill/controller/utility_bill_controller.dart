@@ -97,7 +97,6 @@ class UtilityBillController extends GetxController {
     } catch (e) {
       // Fallback on permission denied or other errors
       _loadFallbackProviders(category);
-      print("Firestore error: $e. Using fallback data.");
     } finally {
       isLoading.value = false;
     }

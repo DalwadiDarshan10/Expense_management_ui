@@ -28,57 +28,58 @@ class TradingHistoryItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: Row(
-          children: [
-            // Icon
-            Center(child: _buildIcon()),
-            SizedBox(width: 12.w),
-            // Title and status
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    status,
-                    style: AppTextStyles.labelMedium.copyWith(
-                      color: AppColors.success,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Amount and date
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+      child: Row(
+        children: [
+          _buildIcon(),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${isExpense ? '-' : '+'}\$${amount.toStringAsFixed(0)}',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isExpense ? AppColors.critical : AppColors.success,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                      ),
+                    ),
+                    Text(
+                      '${isExpense ? '-' : '+'}\$${amount.toStringAsFixed(0)}',
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: !isExpense
+                            ? AppColors.success
+                            : Theme.of(context).textTheme.bodyLarge?.color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  date,
-                  style: AppTextStyles.labelMedium.copyWith(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      status,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: AppColors.success,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      date,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: AppColors.secondaryText,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -90,15 +91,16 @@ class TradingHistoryItemWidget extends StatelessWidget {
     } else {
       // Use a colored circle with first letter as fallback
       return Container(
+        width: 56.w,
+        height: 56.w,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: AppColors.primary, width: 2),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(6.0),
+        child: Center(
           child: Container(
-            width: 40.w,
-            height: 40.w,
+            width: 44.w,
+            height: 44.w,
             decoration: BoxDecoration(
               color: isExpense
                   ? AppColors.critical.withValues(alpha: 0.2)

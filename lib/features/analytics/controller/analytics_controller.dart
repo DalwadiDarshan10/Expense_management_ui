@@ -1,5 +1,10 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/core/services/firestore_service.dart';
+import 'package:expense/core/utils/app_logger.dart';
+import 'package:expense/features/wallet/models/transaction_model.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 enum TimeFilter { last7Days, thirtyDays, custom }
 
@@ -40,104 +45,171 @@ class AnalyticsController extends GetxController {
   // Chart data
   final RxList<ChartData> chartData = <ChartData>[].obs;
 
-  // Transaction history
+  // Transaction history from Firestore
+  final RxList<TransactionModel> _allTransactions = <TransactionModel>[].obs;
+
+  // Transaction history for UI
   final RxList<TransactionItem> transactions = <TransactionItem>[].obs;
 
   // Calculated totals
-  double get totalIncome => chartData.fold(0, (sum, item) => sum + item.income);
-  double get totalOutcome =>
-      chartData.fold(0, (sum, item) => sum + item.expense);
+  final RxDouble totalIncome = 0.0.obs;
+  final RxDouble totalOutcome = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadData();
+    _listenToTransactions();
+  }
+
+  void _listenToTransactions() {
+    try {
+      FirestoreService.userDoc()
+          .collection('transactions')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .listen(
+            (snapshot) {
+              _allTransactions.value = snapshot.docs
+                  .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
+                  .toList();
+              _processData();
+            },
+            onError: (e) {
+              AppLogger.error("Error listening to transactions: $e");
+            },
+          );
+    } catch (e) {
+      AppLogger.error("Error setting up transaction listener: $e");
+    }
   }
 
   void setTimeFilter(TimeFilter filter) {
     selectedFilter.value = filter;
-    _loadData();
+    _processData();
   }
 
   void setCustomDateRange(DateTime start, DateTime end) {
     customStartDate.value = start;
     customEndDate.value = end;
     selectedFilter.value = TimeFilter.custom;
-    _loadData();
+    _processData();
   }
 
-  void _loadData() {
-    // Mock data based on selected filter
+  void _processData() {
+    final now = DateTime.now();
+    DateTime rangeStart;
+
     switch (selectedFilter.value) {
       case TimeFilter.last7Days:
-        _loadLast7DaysData();
+        rangeStart = now.subtract(const Duration(days: 7));
         break;
       case TimeFilter.thirtyDays:
-        _load30DaysData();
+        rangeStart = now.subtract(const Duration(days: 30));
         break;
       case TimeFilter.custom:
-        _loadCustomRangeData();
+        rangeStart =
+            customStartDate.value ?? now.subtract(const Duration(days: 7));
         break;
     }
-    _loadTransactions();
+
+    final rangeEnd = selectedFilter.value == TimeFilter.custom
+        ? (customEndDate.value ?? now)
+        : now;
+
+    // Filter transactions by range
+    final filteredTxns = _allTransactions.where((txn) {
+      return txn.createdAt.isAfter(rangeStart) &&
+          txn.createdAt.isBefore(rangeEnd.add(const Duration(days: 1)));
+    }).toList();
+
+    // Map to TransactionItem for history list
+    transactions.value = filteredTxns.map((txn) {
+      String icon = _getTransactionIcon(txn);
+
+      return TransactionItem(
+        icon: icon,
+        title: txn.title,
+        status: txn.displayStatus,
+        amount: txn.amount,
+        date: DateFormat('MMM dd - h:mm a').format(txn.createdAt),
+        isExpense: txn.isExpense,
+      );
+    }).toList();
+
+    // Calculate totals
+    totalIncome.value = filteredTxns
+        .where((txn) => !txn.isExpense)
+        .fold(0.0, (sum, txn) => sum + txn.amount);
+    totalOutcome.value = filteredTxns
+        .where((txn) => txn.isExpense)
+        .fold(0.0, (sum, txn) => sum + txn.amount);
+
+    // Group by date for chart
+    _updateChartData(filteredTxns, rangeStart, rangeEnd);
   }
 
-  void _loadLast7DaysData() {
-    chartData.value = [
-      ChartData(date: '21-06', income: 150, expense: 280),
-      ChartData(date: '22-06', income: 380, expense: 320),
-      ChartData(date: '23-06', income: 120, expense: 450),
-      ChartData(date: '24-06', income: 280, expense: 200),
-      ChartData(date: '25-06', income: 420, expense: 180),
-      ChartData(date: '26-06', income: 200, expense: 350),
-      ChartData(date: '05-07', income: 300, expense: 420),
-    ];
+  void _updateChartData(
+    List<TransactionModel> txns,
+    DateTime start,
+    DateTime end,
+  ) {
+    final Map<String, ChartData> groupedData = {};
+
+    // Determine grouping format based on range
+    final daysCount = end.difference(start).inDays;
+    final DateFormat formatter = daysCount > 31
+        ? DateFormat('MMM yy')
+        : DateFormat('dd-MM');
+
+    // Initialize all days/periods with zero
+    for (int i = 0; i <= daysCount; i++) {
+      final date = start.add(Duration(days: i));
+      final label = formatter.format(date);
+      groupedData[label] = ChartData(date: label, income: 0, expense: 0);
+    }
+
+    // Aggregate transactions
+    for (var txn in txns) {
+      final label = formatter.format(txn.createdAt);
+      if (groupedData.containsKey(label)) {
+        final current = groupedData[label]!;
+        groupedData[label] = ChartData(
+          date: label,
+          income: current.income + (!txn.isExpense ? txn.amount : 0),
+          expense: current.expense + (txn.isExpense ? txn.amount : 0),
+        );
+      }
+    }
+
+    // Sort by date (already sorted by order of insertion in initialization loop if map respects insertion order,
+    // but better to be explicit if needed. Luckily LinkedHashMap preserves order)
+    chartData.value = groupedData.values.toList();
   }
 
-  void _load30DaysData() {
-    chartData.value = [
-      ChartData(date: 'W1', income: 850, expense: 720),
-      ChartData(date: 'W2', income: 1200, expense: 980),
-      ChartData(date: 'W3', income: 650, expense: 1100),
-      ChartData(date: 'W4', income: 1500, expense: 850),
-    ];
-  }
+  String _getTransactionIcon(TransactionModel tx) {
+    if (tx.type == 'bill') {
+      final category = tx.recipientInfo;
+      if (category == AppStrings.categoryElectricity) {
+        return AppImages.electricityBadge;
+      }
+      if (category == AppStrings.categoryInternet) {
+        return AppImages.internetBadge;
+      }
+      if (category == AppStrings.insurance) return AppImages.insuranceBadge;
+      if (category == AppStrings.categoryMedical) return AppImages.medicalBadge;
+      if (category == AppStrings.categoryMarket) return AppImages.marketBadge;
+      if (category == AppStrings.electricBill) {
+        return AppImages.electricBillBadge;
+      }
+      if (category == AppStrings.television) return AppImages.televisionBadge;
+      if (category == AppStrings.waterBill) return AppImages.waterbillBadge;
+      return AppImages.electricBillBadge;
+    }
+    if (tx.type == 'topup') return AppImages.topupIcon;
+    if (tx.type == 'withdraw') return AppImages.withdrawIcon;
+    if (tx.type == 'transfer') return '';
 
-  void _loadCustomRangeData() {
-    // Mock data for custom range
-    chartData.value = [
-      ChartData(date: '07/07/2021', income: 400, expense: 350),
-      ChartData(date: '19/07/2021', income: 250, expense: 480),
-    ];
-  }
-
-  void _loadTransactions() {
-    transactions.value = [
-      TransactionItem(
-        icon: AppImages.electricityBadge,
-        title: 'Electric bill',
-        status: 'Sent',
-        amount: 420,
-        date: 'Today - 11:00 AM',
-        isExpense: true,
-      ),
-      TransactionItem(
-        icon: AppImages.waterbillBadge,
-        title: 'Water bill',
-        status: 'Sent',
-        amount: 27,
-        date: 'Today - 2:30 PM',
-        isExpense: true,
-      ),
-      TransactionItem(
-        icon: "j",
-        title: 'Johnsmith',
-        status: 'Sent',
-        amount: 1600,
-        date: 'July 13 - 2:25 PM',
-        isExpense: true,
-      ),
-    ];
+    return AppImages.appLogoSquare; // Fallback
   }
 
   String get formattedStartDate {

@@ -7,6 +7,7 @@ import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:expense/features/analytics/widgets/trading_history_item_widget.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/transfer/controllers/transfer_controller.dart';
 import 'package:expense/features/bill/controller/utility_bill_controller.dart';
@@ -430,11 +431,11 @@ class HomePage extends StatelessWidget {
   }) {
     return Column(
       children: [
-        AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
+        AppImageViewer(imagePath: icon, height: 53.h, width: 53.w),
         SizedBox(height: 8.h),
         Text(
           label,
-          style: AppTextStyles.titleSmall.copyWith(
+          style: AppTextStyles.bodyMedium.copyWith(
             color: Theme.of(context).textTheme.bodySmall?.color,
           ),
           textAlign: TextAlign.center,
@@ -451,18 +452,29 @@ class HomePage extends StatelessWidget {
     return Container(
       color: Theme.of(context).cardColor,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppStrings.tradingHistory,
-              style: AppTextStyles.titleMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).textTheme.titleMedium?.color,
-              ),
+            Row(
+              children: [
+                Text(
+                  AppStrings.tradingHistory,
+                  style: AppTextStyles.titleMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  child: Text("View All"),
+                  onPressed: () {
+                    Get.toNamed(AppNamed.allTransactions);
+                  },
+                ),
+              ],
             ),
-            SizedBox(height: 16.h),
+
             Obx(() {
               if (controller.allTransactions.isEmpty) {
                 return Center(
@@ -488,18 +500,16 @@ class HomePage extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(height: 16.h),
                 itemBuilder: (context, index) {
                   final tx = recentTxs[index];
-                  return _buildTransactionItem(
+                  return TradingHistoryItemWidget(
                     icon: _getTransactionIcon(tx),
                     title: tx.title,
-                    subtitle: tx.type == 'bill'
+                    status: tx.type == 'bill'
                         ? tx.recipientInfo ?? 'Bill'
                         : AppStrings.sent,
-                    amount:
-                        '${tx.isExpense ? "-" : "+"}\$${tx.amount.toStringAsFixed(0)}',
-                    isNegative: !tx.isExpense,
+                    amount: tx.amount,
                     date: _formatDate(tx.createdAt),
+                    isExpense: tx.isExpense,
                     onTap: () => Get.toNamed(AppNamed.shareBill),
-                    context: context,
                   );
                 },
               );
@@ -513,32 +523,38 @@ class HomePage extends StatelessWidget {
   String _getTransactionIcon(dynamic tx) {
     if (tx.type == 'bill') {
       final category = tx.recipientInfo;
-      if (category == AppStrings.categoryElectricity)
+      if (category == AppStrings.categoryElectricity) {
         return AppImages.electricityBadge;
-      if (category == AppStrings.categoryInternet)
+      }
+      if (category == AppStrings.categoryInternet) {
         return AppImages.internetBadge;
+      }
       if (category == AppStrings.insurance) return AppImages.insuranceBadge;
       if (category == AppStrings.categoryMedical) return AppImages.medicalBadge;
       if (category == AppStrings.categoryMarket) return AppImages.marketBadge;
-      if (category == AppStrings.electricBill)
+      if (category == AppStrings.electricBill) {
         return AppImages.electricBillBadge;
+      }
       if (category == AppStrings.television) return AppImages.televisionBadge;
       if (category == AppStrings.waterBill) return AppImages.waterbillBadge;
       return AppImages.electricBillBadge;
     }
     if (tx.type == 'topup')
       return AppImages.topupIcon; // Need to ensure this exists or use fallback
-    if (tx.type == 'withdraw') return AppImages.walletIcon;
+    if (tx.type == 'withdraw') return AppImages.withdrawIcon;
+    if (tx.type == 'transfer') return ''; // Empty to trigger letter-based icon
     return AppImages.electricBillBadge;
   }
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    if (difference == 0)
+    if (difference == 0) {
       return "Today - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
-    if (difference == 1)
+    }
+    if (difference == 1) {
       return "Yesterday - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+    }
     return "${date.day} ${_getMonthName(date.month)} - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
   }
 
@@ -558,76 +574,6 @@ class HomePage extends StatelessWidget {
       'Dec',
     ];
     return months[month - 1];
-  }
-
-  Widget _buildTransactionItem({
-    required String icon,
-    required String title,
-    required String subtitle,
-    required String amount,
-    required bool isNegative,
-    required String date,
-    VoidCallback? onTap,
-    required BuildContext context,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        children: [
-          AppImageViewer(imagePath: icon, height: 56.h, width: 56.w),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                      ),
-                    ),
-                    Text(
-                      amount,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: isNegative
-                            ? AppColors.success
-                            : Theme.of(context).textTheme.bodyLarge?.color,
-
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      subtitle,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: AppColors.success,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      date,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: AppColors.secondary,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   void _showBalanceDetails(BuildContext context, WalletController controller) {

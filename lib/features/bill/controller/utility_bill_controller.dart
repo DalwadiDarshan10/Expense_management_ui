@@ -160,6 +160,14 @@ class UtilityBillController extends GetxController {
       amount.value = 0.0;
       description.value = '';
 
+      Get.snackbar(
+        "Success",
+        "Bill Payment Successful",
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
       // Success Navigation
       Get.offNamed(
         AppNamed.transactionSuccess,

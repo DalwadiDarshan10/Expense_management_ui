@@ -279,6 +279,14 @@ class WalletController extends GetxController {
         "createdAt": Timestamp.now(),
       });
     });
+
+    Get.snackbar(
+      "Success",
+      "Top-up Successful",
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   /// WITHDRAW: Wallet ➜ Bank
@@ -327,6 +335,14 @@ class WalletController extends GetxController {
         "createdAt": Timestamp.now(),
       });
     });
+
+    Get.snackbar(
+      "Success",
+      "Withdrawal Successful",
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   /// TRANSFER FROM BANK (P2P): My Bank ➜ Recipient
@@ -367,6 +383,14 @@ class WalletController extends GetxController {
         "createdAt": Timestamp.now(),
       });
     });
+
+    Get.snackbar(
+      "Success",
+      "Transfer Successful",
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   /// TRANSFER FROM WALLET (P2P): My Wallet ➜ Recipient
@@ -403,6 +427,14 @@ class WalletController extends GetxController {
         "createdAt": Timestamp.now(),
       });
     });
+
+    Get.snackbar(
+      "Success",
+      "Transfer Successful",
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   /// ADD CARD + CREATE BANK ACCOUNT WITH $1000
@@ -634,14 +666,25 @@ class WalletController extends GetxController {
     // Delete from Firestore if it has an ID
     if (card.cardId != null && card.cardId!.isNotEmpty) {
       try {
-        await FirestoreService.userDoc()
-            .collection('cards')
-            .doc(card.cardId)
-            .delete();
+        final userDoc = FirestoreService.userDoc();
+
+        // 1. Delete the Card
+        await userDoc.collection('cards').doc(card.cardId).delete();
         AppLogger.info("Card deleted: ${card.cardId}");
+
+        // 2. Delete the Linked Bank Account
+        final bankQuery = await userDoc
+            .collection('bankAccounts')
+            .where('linkedCardId', isEqualTo: card.cardId)
+            .get();
+
+        for (var doc in bankQuery.docs) {
+          await doc.reference.delete();
+          AppLogger.info("Linked Bank Account deleted: ${doc.id}");
+        }
       } catch (e, s) {
-        AppLogger.error("Error deleting card", e, s);
-        Get.snackbar("Error", "Could not delete card");
+        AppLogger.error("Error deleting card or bank account", e, s);
+        Get.snackbar("Error", "Could not delete card data");
       }
     }
     // No need to remove from savedCards manually as the stream will update

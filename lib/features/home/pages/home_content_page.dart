@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        onTap: () => Get.toNamed(AppNamed.notificationPage),
+                        onTap: () => Get.toNamed(AppNamed.allTransactions),
                         child: Container(
                           padding: EdgeInsets.all(8.r),
                           child: Stack(

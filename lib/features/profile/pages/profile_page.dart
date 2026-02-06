@@ -6,6 +6,7 @@ import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:expense/features/profile/widgets/profile_header_widget.dart';
 import 'package:expense/features/profile/widgets/profile_menu_item_widget.dart';
 import 'package:expense/features/profile/widgets/profile_stats_widget.dart';
+import 'package:expense/widgets/app_button.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 
 import 'package:expense/routes/app_named.dart';
@@ -140,22 +141,15 @@ class ProfilePage extends GetView<ProfileController> {
             // Log out button
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40),
-              child: ElevatedButton(
+              child: AppButton(
+                text: AppStrings.logoutBtn,
                 onPressed: controller.logout,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: context.theme.primaryColor,
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  AppStrings.logoutBtn,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: context.theme.colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                borderRadius: 12,
+                backgroundColor: context.theme.primaryColor,
+                textStyle: AppTextStyles.bodyLarge.copyWith(
+                  color: context.theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

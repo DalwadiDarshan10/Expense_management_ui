@@ -34,7 +34,7 @@ class MyQrPage extends StatelessWidget {
                       color: Theme.of(context).cardColor,
                       child: Padding(
                         padding: EdgeInsets.all(16.h.w),
-                        child: _buildTicketCard(context),
+                        child: _buildTicketCard(context, controller),
                       ),
                     ),
                     SizedBox(height: 8.h),
@@ -90,7 +90,7 @@ class MyQrPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTicketCard(BuildContext context) {
+  Widget _buildTicketCard(BuildContext context, MyQrController controller) {
     return Stack(
       children: [
         CustomPaint(
@@ -126,7 +126,7 @@ class MyQrPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: QrImageView(
-                              data: 'https://avipay.com/user/123456',
+                              data: controller.currentUserUid,
                               size: 180.w,
                             ),
                           ),
@@ -150,7 +150,7 @@ class MyQrPage extends StatelessWidget {
                             color: Colors.white,
                             child: BarcodeWidget(
                               barcode: Barcode.code128(),
-                              data: '2837389129sadh37',
+                              data: controller.currentUserUid,
                               drawText: false,
                               color: Colors.black,
                               height: 50.h,

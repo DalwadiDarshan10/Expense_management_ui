@@ -1,31 +1,35 @@
+import 'package:expense/core/localization/language_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingController extends GetxController {
-  final selectedLanguage = 'English'.obs;
-  final selectedFlag = '🇬🇧'.obs;
+  final LanguageController _languageController = Get.find<LanguageController>();
 
-  final List<Map<String, String>> languages = [
-    {'name': 'English', 'flag': '🇬🇧'},
-    {'name': 'Indonesia', 'flag': '🇮🇩'},
-    {'name': 'Arabic', 'flag': '🇸🇦'},
-    {'name': 'Chinese', 'flag': '🇨🇳'},
-    {'name': 'Dutch', 'flag': '🇳🇱'},
-    {'name': 'French', 'flag': '🇫🇷'},
-    {'name': 'German', 'flag': '🇩🇪'},
-    {'name': 'Hindi', 'flag': '🇮🇳'},
-    {'name': 'Italian', 'flag': '🇮🇹'},
-    {'name': 'Japanese', 'flag': '🇯🇵'},
-    {'name': 'Korean', 'flag': '🇰🇷'},
-    {'name': 'Portuguese', 'flag': '🇵🇹'},
-    {'name': 'Russian', 'flag': '🇷🇺'},
-    {'name': 'Spanish', 'flag': '🇪🇸'},
-    {'name': 'Turkish', 'flag': '🇹🇷'},
-    {'name': 'Vietnamese', 'flag': '🇻🇳'},
+  final List<Map<String, dynamic>> languages = [
+    {'name': 'English', 'flag': '🇺🇸', 'locale': const Locale('en', 'US')},
+    {'name': 'हिंदी', 'flag': '🇮🇳', 'locale': const Locale('hi', 'IN')},
+    {'name': 'ગુજરાતી', 'flag': '🇮🇳', 'locale': const Locale('gu', 'IN')},
   ];
 
-  void changeLanguage(String language, String flag) {
-    selectedLanguage.value = language;
+  late RxString selectedLanguage;
+  late RxString selectedFlag;
+
+  @override
+  void onInit() {
+    super.onInit();
+    final currentLocale = _languageController.locale;
+    final currentLang = languages.firstWhere(
+      (element) => element['locale'] == currentLocale,
+      orElse: () => languages.first,
+    );
+    selectedLanguage = (currentLang['name'] as String).obs;
+    selectedFlag = (currentLang['flag'] as String).obs;
+  }
+
+  void changeLanguage(String name, String flag, Locale locale) {
+    selectedLanguage.value = name;
     selectedFlag.value = flag;
+    _languageController.changeLanguage(locale);
     Get.back(); // Close the bottom sheet
   }
 }

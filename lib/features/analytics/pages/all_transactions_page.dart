@@ -36,7 +36,7 @@ class AllTransactionsPage extends GetView<AnalyticsController> {
       body: Obx(() {
         final transactions = controller.transactions;
         if (transactions.isEmpty) {
-          return const Center(child: Text("No transactions yet"));
+          return Center(child: Text(AppStrings.noTransactions));
         }
 
         // Group transactions by date
@@ -116,9 +116,9 @@ class AllTransactionsPage extends GetView<AnalyticsController> {
         ).parse('$datePart $currentYear');
 
         if (_isSameDay(parsedDate, now)) {
-          dateLabel = "Today";
+          dateLabel = AppStrings.today;
         } else if (_isSameDay(parsedDate, yesterday)) {
-          dateLabel = "Yesterday";
+          dateLabel = AppStrings.yesterday;
         } else {
           dateLabel = datePart;
         }

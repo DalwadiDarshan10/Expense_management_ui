@@ -7,5 +7,8 @@ class FirestoreService {
 
   static String get uid => _auth.currentUser!.uid;
 
-  static DocumentReference userDoc() => _db.collection('users').doc(uid);
+  static DocumentReference userDoc() => userDocById(uid);
+
+  static DocumentReference userDocById(String id) =>
+      _db.collection('users').doc(id);
 }

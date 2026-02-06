@@ -124,19 +124,19 @@ class VoucherPage extends StatelessWidget {
                         // Navigate to View All Page
                         final topTrendingDeals = [
                           {
-                            'title': 'Chillox Burger',
-                            'description': 'Burgers • Fastfood',
-                            'badgeText': 'Freeship',
+                            'title': AppStrings.burgerTitle,
+                            'description': AppStrings.burgerDesc,
+                            'badgeText': AppStrings.freeship,
                             'rating': 4.8,
                           },
                           {
-                            'title': 'Sandwich',
-                            'description': 'Sandwich • Fastfood',
+                            'title': AppStrings.sandwichTitle,
+                            'description': AppStrings.sandwichDesc,
                             'rating': 4.5,
                           },
                           {
-                            'title': 'Pizza Hut',
-                            'description': 'Pizza',
+                            'title': AppStrings.pizzaHutTitle,
+                            'description': AppStrings.pizzaDesc,
                             'rating': 4.9,
                           },
                         ];
@@ -165,21 +165,21 @@ class VoucherPage extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
-                children: const [
+                children: [
                   DealCard(
-                    title: 'Chillox Burger',
-                    description: 'Burgers • Fastfood',
-                    badgeText: 'Freeship',
+                    title: AppStrings.burgerTitle,
+                    description: AppStrings.burgerDesc,
+                    badgeText: AppStrings.freeship,
                     rating: 4.8,
                   ),
                   DealCard(
-                    title: 'Sandwich',
-                    description: 'Sandwich • Fastfood',
+                    title: AppStrings.sandwichTitle,
+                    description: AppStrings.sandwichDesc,
                     rating: 4.5,
                   ),
                   DealCard(
-                    title: 'Pizza Hut',
-                    description: 'Pizza',
+                    title: AppStrings.pizzaHutTitle,
+                    description: AppStrings.pizzaDesc,
                     rating: 4.9,
                   ),
                 ],
@@ -209,14 +209,14 @@ class VoucherPage extends StatelessWidget {
                           onTap: () {
                             final saleOffDeals = [
                               {
-                                'title': 'KFC Chicken',
-                                'description': 'Fried Chicken',
-                                'badgeText': '50% OFF',
+                                'title': AppStrings.kfcTitle,
+                                'description': AppStrings.kfcDesc,
+                                'badgeText': AppStrings.halfOffBadge,
                                 'rating': 4.7,
                               },
                               {
-                                'title': 'Starbucks',
-                                'description': 'Coffee',
+                                'title': AppStrings.starbucksTitle,
+                                'description': AppStrings.coffeeDesc,
                                 'rating': 4.6,
                               },
                             ];
@@ -244,16 +244,16 @@ class VoucherPage extends StatelessWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      children: const [
+                      children: [
                         DealCard(
-                          title: 'KFC Chicken',
-                          description: 'Fried Chicken',
-                          badgeText: '50% OFF',
+                          title: AppStrings.kfcTitle,
+                          description: AppStrings.kfcDesc,
+                          badgeText: AppStrings.halfOffBadge,
                           rating: 4.7,
                         ),
                         DealCard(
-                          title: 'Starbucks',
-                          description: 'Coffee',
+                          title: AppStrings.starbucksTitle,
+                          description: AppStrings.coffeeDesc,
                           rating: 4.6,
                         ),
                       ],

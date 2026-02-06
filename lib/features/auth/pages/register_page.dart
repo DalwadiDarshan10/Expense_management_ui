@@ -271,7 +271,7 @@ class RegisterPage extends StatelessWidget {
                     color: context.theme.textTheme.bodySmall?.color,
                   ),
                   children: [
-                    const TextSpan(text: AppStrings.termsPart1),
+                    TextSpan(text: AppStrings.termsPart1),
                     TextSpan(
                       text: AppStrings.termsPart2,
                       style: AppTextStyles.bodySmall.copyWith(
@@ -279,7 +279,7 @@ class RegisterPage extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const TextSpan(text: '.'),
+                    TextSpan(text: '.'),
                   ],
                 ),
               ),

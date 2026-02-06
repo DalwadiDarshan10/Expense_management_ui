@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyQrController extends GetxController {
   final couponController = TextEditingController();
+
+  String get currentUserUid => FirebaseAuth.instance.currentUser?.uid ?? '';
 
   void applyCoupon() {
     if (Get.isSnackbarOpen) {

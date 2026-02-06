@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/routes/app_named.dart';
@@ -23,6 +25,9 @@ class TransferByWalletController extends GetxController {
   // Use WalletController balance
   double get balance => walletController.walletBalance.value.toDouble();
 
+  final RxnString receiverUid = RxnString();
+  final RxBool isFetchingRecipient = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -31,27 +36,65 @@ class TransferByWalletController extends GetxController {
       selectedContact.value = args;
       recipientController.text = args.phone;
     } else if (args is TransactionModel) {
-      // Try to find matching friend in TransferController
-      final transferController = Get.find<TransferController>();
-      final friend = transferController.friends.firstWhereOrNull(
-        (f) =>
-            f.phone == args.recipientInfo ||
-            f.phone == args.recipientAccount ||
-            f.name == args.recipientName,
-      );
-
-      if (friend != null) {
-        selectedContact.value = friend;
-        recipientController.text = friend.phone;
-      } else {
-        recipientController.text =
-            args.recipientInfo ?? args.recipientAccount ?? "";
-      }
+      // ... existing logic ...
+      _handleTransactionModelArgs(args);
+    } else if (args is Map && args.containsKey('receiverUid')) {
+      receiverUid.value = args['receiverUid'];
+      _fetchRecipientDetails(receiverUid.value!);
     }
 
     // Listen to amount changes
     amountController.addListener(_validate);
     recipientController.addListener(_validate);
+  }
+
+  void _handleTransactionModelArgs(TransactionModel args) {
+    final transferController = Get.find<TransferController>();
+    final friend = transferController.friends.firstWhereOrNull(
+      (f) =>
+          f.phone == args.recipientInfo ||
+          f.phone == args.recipientAccount ||
+          f.name == args.recipientName,
+    );
+
+    if (friend != null) {
+      selectedContact.value = friend;
+      recipientController.text = friend.phone;
+    } else {
+      recipientController.text =
+          args.recipientInfo ?? args.recipientAccount ?? "";
+    }
+  }
+
+  Future<void> _fetchRecipientDetails(String uid) async {
+    isFetchingRecipient.value = true;
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+      if (doc.exists) {
+        final data = doc.data()!;
+        selectedContact.value = FriendModel(
+          id: uid,
+          name: data['username'] ?? 'Unknown User',
+          phone: data['phone'] ?? '',
+          email: data['email'] ?? '',
+        );
+        recipientController.text = selectedContact.value!.phone;
+      } else {
+        Get.snackbar("Error", "User not found for UID: $uid");
+      }
+    } on FirebaseException catch (e) {
+      debugPrint("Firebase Error [${e.code}]: ${e.message}");
+      Get.snackbar("Firebase Error", "[${e.code}]: ${e.message}");
+    } catch (e) {
+      debugPrint("Error fetching recipient details for UID $uid: $e");
+      Get.snackbar("Error", "Failed to fetch user details: $e");
+    } finally {
+      isFetchingRecipient.value = false;
+      _validate();
+    }
   }
 
   @override
@@ -66,13 +109,15 @@ class TransferByWalletController extends GetxController {
     final amountText = amountController.text;
     bool amountValid = amountController.text.isNotEmpty;
 
-    if (!amountValid && amountText.isNotEmpty) {
-      amountError.value = null;
-    } else {
+    if (amountValid) {
       final amount = double.tryParse(amountText.replaceAll(',', ''));
-      if (amount == null && amountText.isNotEmpty) {
+      if (amount == null) {
         amountError.value = "Invalid number";
-      } else if (amount != null && amount > balance) {
+        amountValid = false;
+      } else if (amount <= 0) {
+        amountError.value = "Amount must be greater than 0";
+        amountValid = false;
+      } else if (amount > balance) {
         amountError.value = "Insufficient funds";
         amountValid = false;
       } else {
@@ -82,7 +127,6 @@ class TransferByWalletController extends GetxController {
 
     bool recipientValid =
         recipientController.text.isNotEmpty || selectedContact.value != null;
-    // Simple validation for recipient
 
     isValid.value = amountValid && recipientValid;
   }
@@ -96,6 +140,7 @@ class TransferByWalletController extends GetxController {
     if (result is FriendModel) {
       selectedContact.value = result;
       recipientController.text = result.phone;
+      receiverUid.value = null; // Clear if manual contact picked
       _validate();
     }
   }
@@ -106,23 +151,10 @@ class TransferByWalletController extends GetxController {
     recipientError.value = null;
 
     final amountText = amountController.text;
-    final recipientText = selectedContact.value != null
-        ? selectedContact.value!.phone
-        : recipientController.text.trim();
-
-    if (amountText.isEmpty) {
-      amountError.value = "Amount required";
-      return;
-    }
-
-    if (recipientText.isEmpty) {
-      Get.snackbar("Error", "Recipient required");
-      return;
-    }
-
     final amount = double.tryParse(amountText.replaceAll(',', ''));
-    if (amount == null) {
-      amountError.value = "Invalid number";
+
+    if (amount == null || amount <= 0) {
+      amountError.value = "Invalid amount";
       return;
     }
 
@@ -131,36 +163,88 @@ class TransferByWalletController extends GetxController {
       return;
     }
 
+    final recipient = selectedContact.value;
+    if (recipient == null) {
+      Get.snackbar("Error", "Recipient required");
+      return;
+    }
+
     try {
-      await walletController.transferFromWallet(
-        amount: amount,
-        recipientInfo: recipientText,
-        recipientName: selectedContact.value?.name ?? "Unknown",
-      );
+      if (receiverUid.value != null) {
+        await _secureTransfer(receiverUid.value!, amount);
+      } else {
+        // Fallback to existing logic if no UID (manual/friend transfer)
+        await walletController.transferFromWallet(
+          amount: amount,
+          recipientInfo: recipient.phone,
+          recipientName: recipient.name,
+        );
+      }
 
       Get.toNamed(
         AppNamed.transactionSuccess,
         arguments: TransactionSuccessArgs(
           type: TransactionType.transfer,
           amount: amountController.text,
-          recipientName: selectedContact.value?.name ?? "Recipient",
-          recipientInfo: recipientText,
+          recipientName: recipient.name,
+          recipientInfo: recipient.phone,
         ),
       );
     } catch (e) {
-      String msg = e.toString().replaceAll("Exception:", "").trim();
-      if (msg.contains("Insufficient")) {
-        amountError.value = msg;
-      } else {
-        Get.snackbar(
-          "Transfer Failed",
-          msg,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
+      Get.snackbar("Transfer Failed", e.toString());
     }
+  }
+
+  Future<void> _secureTransfer(String rUid, double amount) async {
+    final senderUid = FirebaseAuth.instance.currentUser!.uid;
+    final senderWalletRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(senderUid)
+        .collection('wallet')
+        .doc('main');
+    final receiverWalletRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(rUid)
+        .collection('wallet')
+        .doc('main');
+    final receiverDocRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(rUid);
+    final txnRef = FirebaseFirestore.instance.collection('transactions').doc();
+
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final senderWalletSnap = await transaction.get(senderWalletRef);
+      final receiverWalletSnap = await transaction.get(receiverWalletRef);
+      final receiverDocSnap = await transaction.get(receiverDocRef);
+
+      if (!senderWalletSnap.exists) throw Exception("Sender wallet not found");
+      if (!receiverWalletSnap.exists)
+        throw Exception("Receiver wallet not found");
+
+      final double sBalance =
+          (senderWalletSnap.data()?['balance'] as num?)?.toDouble() ?? 0.0;
+      final double rBalance =
+          (receiverWalletSnap.data()?['balance'] as num?)?.toDouble() ?? 0.0;
+
+      if (sBalance < amount) throw Exception("Insufficient balance");
+
+      // Update balances
+      transaction.update(senderWalletRef, {'balance': sBalance - amount});
+      transaction.update(receiverWalletRef, {'balance': rBalance + amount});
+
+      // Create transaction record
+      transaction.set(txnRef, {
+        'senderUid': senderUid,
+        'receiverUid': rUid,
+        'amount': amount,
+        'status': 'success',
+        'type': 'transfer',
+        'from': 'wallet',
+        'recipientInfo': receiverDocSnap.data()?['phone'] ?? '',
+        'recipientName': receiverDocSnap.data()?['username'] ?? 'Unknown',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    });
   }
 
   final RxInt selectedGreetingIndex = (-1).obs;

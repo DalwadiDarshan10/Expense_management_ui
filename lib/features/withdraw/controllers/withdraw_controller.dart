@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
@@ -55,7 +56,7 @@ class WithdrawController extends GetxController {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: const Text('Select Bank'),
+              title: Text(AppStrings.selectBank),
               trailing: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Get.back(),
@@ -120,13 +121,13 @@ class WithdrawController extends GetxController {
   Future<void> performWithdraw() async {
     final amountText = customAmountController.text;
     if (amountText.isEmpty) {
-      Get.snackbar('Error', 'Please enter an amount');
+      Get.snackbar(AppStrings.errorTitle, 'Please enter an amount');
       return;
     }
 
     final amount = int.tryParse(amountText);
     if (amount == null || amount <= 0) {
-      Get.snackbar('Error', 'Please enter a valid amount');
+      Get.snackbar(AppStrings.errorTitle, 'Please enter a valid amount');
       return;
     }
 
@@ -162,7 +163,7 @@ class WithdrawController extends GetxController {
       );
     } catch (e) {
       Get.snackbar(
-        'Error',
+        AppStrings.errorTitle,
         e.toString().replaceAll("Exception: ", ""),
         backgroundColor: Colors.red,
         colorText: Colors.white,

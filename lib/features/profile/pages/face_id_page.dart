@@ -106,10 +106,10 @@ class FaceIdPage extends StatelessWidget {
                                   color: Colors.grey,
                                 ),
                                 const SizedBox(height: 10),
-                                const Text("Camera permission required"),
+                                Text(AppStrings.cameraPermission),
                                 TextButton(
                                   onPressed: () => openAppSettings(),
-                                  child: const Text("Open Settings"),
+                                  child: Text(AppStrings.openSettings),
                                 ),
                               ],
                             ),

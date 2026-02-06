@@ -5,6 +5,7 @@ import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:expense/features/analytics/widgets/trading_history_item_widget.dart';
@@ -51,169 +52,194 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildHeaderSection(BuildContext context) {
-    return Stack(
-      children: [
-        // Blue curved background using SVG image
-        SizedBox(
-          height: 210.h,
-          width: double.infinity,
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(40.r),
-                bottomRight: Radius.circular(40.r),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            bottom: 40.h,
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(40.r),
+                  bottomRight: Radius.circular(40.r),
+                ),
+              ),
+              child: const AppImageViewer(
+                imagePath: AppImages.menuPageBackground,
+                fit: BoxFit.cover,
               ),
             ),
-            child: AppImageViewer(
-              imagePath: AppImages.menuPageBackground,
-              fit: BoxFit.cover,
-            ),
           ),
-        ),
-        // Content on top of the background
-        SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              children: [
-                SizedBox(height: 1.h),
-                // Notification row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppNamed.notificationPage);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8.r),
-                        child: Stack(
-                          children: [
-                            AppImageViewer(
-                              imagePath: AppImages.notificationIcon,
-                              height: 24.h,
-                              width: 24.w,
-                              color: AppColors.white,
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(color: AppColors.primarySup),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                // Balance Section
-                GestureDetector(
-                  onTap: () {
-                    final walletController = Get.find<WalletController>();
-                    _showBalanceDetails(context, walletController);
-                  },
-                  child: Column(
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Notification row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        AppStrings.balance,
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.white,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w500,
+                      GestureDetector(
+                        onTap: () => Get.toNamed(AppNamed.notificationPage),
+                        child: Container(
+                          padding: EdgeInsets.all(8.r),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              AppImageViewer(
+                                imagePath: AppImages.notificationIcon,
+                                height: 24.h,
+                                width: 24.w,
+                                color: AppColors.white,
+                              ),
+                              Positioned(
+                                right: 1.r,
+                                top: -2.r,
+                                child: Container(
+                                  width: 8.r,
+                                  height: 8.r,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primarySup,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8.h),
-                      Obx(() {
-                        final walletController = Get.find<WalletController>();
-                        // Helper to format currency if needed, or just toStringAsFixed
-                        return Text(
-                          '\$${walletController.totalBankBalance.toStringAsFixed(2)}',
-                          style: AppTextStyles.headingLarge.copyWith(
-                            color: AppColors.primarySup,
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      }),
                     ],
                   ),
-                ),
-                SizedBox(height: 18.h),
-                // Action Buttons Row
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
+                  // Balance Section
+                  GestureDetector(
+                    onTap: () {
+                      final walletController = Get.find<WalletController>();
+                      _showBalanceDetails(context, walletController);
+                    },
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppNamed.topUpPage);
-                            },
-                            child: _buildActionButton(
-                              icon: AppImages.topupIcon,
-                              label: AppStrings.topUp,
-                            ),
+                        Text(
+                          AppStrings.balance,
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.white,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppNamed.walletsDashboard);
-                            },
-                            child: _buildActionButton(
-                              icon: AppImages.walletIcon,
-                              label: AppStrings.wallet,
+                        SizedBox(height: 8.h),
+                        Obx(() {
+                          final walletController = Get.find<WalletController>();
+                          return FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '\$${walletController.totalBankBalance.toStringAsFixed(2)}',
+                              style: AppTextStyles.headingLarge.copyWith(
+                                color: AppColors.primarySup,
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppNamed.scannerPage);
-                            },
-                            child: _buildActionButton(
-                              icon: AppImages.scanIcon,
-                              label: AppStrings.qrScan,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppNamed.myQrPage);
-                            },
-                            child: _buildActionButton(
-                              icon: AppImages.myQrcodeIcon,
-                              label: AppStrings.myQr,
-                            ),
-                          ),
-                        ),
+                          );
+                        }),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20.h),
+                  // Action Buttons Row
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).shadowColor,
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16.h,
+                        horizontal: 8.w,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildHeaderActionButton(
+                            onTap: () => Get.toNamed(AppNamed.topUpPage),
+                            icon: AppImages.topupIcon,
+                            label: AppStrings.topUp,
+                            context: context,
+                          ),
+                          _buildHeaderActionButton(
+                            onTap: () => Get.toNamed(AppNamed.walletsDashboard),
+                            icon: AppImages.walletIcon,
+                            label: AppStrings.wallet,
+                            context: context,
+                          ),
+                          _buildHeaderActionButton(
+                            onTap: () => Get.toNamed(AppNamed.scannerPage),
+                            icon: AppImages.scanIcon,
+                            label: AppStrings.qrScan,
+                            context: context,
+                          ),
+                          _buildHeaderActionButton(
+                            onTap: () => Get.toNamed(AppNamed.myQrPage),
+                            icon: AppImages.myQrcodeIcon,
+                            label: AppStrings.myQr,
+                            context: context,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildActionButton({required String icon, required String label}) {
-    return Column(
-      children: [
-        AppImageViewer(imagePath: icon, height: 24.h, width: 24.w),
-        SizedBox(height: 5.h),
-        Text(label),
-      ],
+  Widget _buildHeaderActionButton({
+    required VoidCallback onTap,
+    required String icon,
+    required String label,
+    required BuildContext context,
+  }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppImageViewer(imagePath: icon, height: 24.h, width: 24.w),
+            SizedBox(height: 8.h),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: AppTextStyles.bodySmall.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).textTheme.titleMedium?.color,
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -223,7 +249,7 @@ class HomePage extends StatelessWidget {
     return Container(
       color: Theme.of(context).cardColor,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -234,7 +260,7 @@ class HomePage extends StatelessWidget {
                 color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 12.h),
             SizedBox(
               height: 100.h,
               child: Obx(() {
@@ -243,7 +269,7 @@ class HomePage extends StatelessWidget {
                 if (recipients.isEmpty) {
                   return Center(
                     child: Text(
-                      "No recent transfers",
+                      AppStrings.noRecentTransfers,
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.secondaryText,
                       ),
@@ -392,13 +418,13 @@ class HomePage extends StatelessWidget {
                 color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
+            // SizedBox(height: 16.h),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 mainAxisSpacing: 11.h,
-                // crossAxisSpacing: 1.w,
                 childAspectRatio: 0.85,
               ),
               itemCount: paymentItems.length,
@@ -467,7 +493,7 @@ class HomePage extends StatelessWidget {
                 ),
                 const Spacer(),
                 TextButton(
-                  child: Text("View All"),
+                  child: Text(AppStrings.viewAll),
                   onPressed: () {
                     Get.toNamed(AppNamed.allTransactions);
                   },
@@ -481,7 +507,7 @@ class HomePage extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20.h),
                     child: Text(
-                      "No transactions yet",
+                      AppStrings.noTransactions,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.secondaryText,
                       ),
@@ -550,10 +576,10 @@ class HomePage extends StatelessWidget {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
     if (difference == 0) {
-      return "Today - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+      return "${AppStrings.today} - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
     }
     if (difference == 1) {
-      return "Yesterday - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
+      return "${AppStrings.yesterday} - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
     }
     return "${date.day} ${_getMonthName(date.month)} - ${date.hour}:${date.minute.toString().padLeft(2, '0')}";
   }
@@ -589,7 +615,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "My Accounts",
+              AppStrings.myAccounts,
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).textTheme.titleMedium?.color,
@@ -644,7 +670,7 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total Balance",
+                  AppStrings.totalBalance,
                   style: AppTextStyles.titleMedium.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).textTheme.titleMedium?.color,

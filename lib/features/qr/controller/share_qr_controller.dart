@@ -16,7 +16,6 @@ class ShareQrController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadMockData();
 
     // Listen to search query changes
     debounce(
@@ -24,17 +23,6 @@ class ShareQrController extends GetxController {
       (_) => _filterContacts(),
       time: const Duration(milliseconds: 300),
     );
-  }
-
-  void _loadMockData() {
-    final mockContacts = [
-      ContactItem(name: 'Irene Perry', phoneNumber: '505-267-8051'),
-      ContactItem(name: 'Casey Bourn', phoneNumber: '518-778-0600'),
-      ContactItem(name: 'Jane Holden', phoneNumber: '414-566-7314'),
-      ContactItem(name: 'Conrad Ford', phoneNumber: '+0123456789'),
-    ];
-    _allContacts.assignAll(mockContacts);
-    filteredContacts.assignAll(mockContacts);
   }
 
   void _filterContacts() {

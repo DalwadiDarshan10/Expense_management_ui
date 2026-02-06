@@ -127,7 +127,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
                   Get.toNamed(AppNamed.allTransactions);
                 },
                 child: Text(
-                  "View All",
+                  AppStrings.viewAll,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: context.theme.primaryColor,
                     fontWeight: FontWeight.w600,
@@ -140,7 +140,7 @@ class AnalyticsPage extends GetView<AnalyticsController> {
           Obx(() {
             final transactions = controller.transactions;
             if (transactions.isEmpty) {
-              return const Center(child: Text("No transactions yet"));
+              return Center(child: Text(AppStrings.noTransactions));
             }
 
             // Show top 5

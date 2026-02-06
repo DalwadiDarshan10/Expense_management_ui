@@ -10,7 +10,7 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.background,
-    appBarTheme: AppBarTheme(backgroundColor: AppColors.white),
+    appBarTheme: const AppBarTheme(backgroundColor: AppColors.white),
     cardColor: AppColors.white,
     dividerColor: AppColors.dividerColor,
     shadowColor: AppColors.shadowLight,
@@ -19,9 +19,51 @@ class AppTheme {
       secondary: AppColors.secondary,
       surface: AppColors.surface,
       error: AppColors.error,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
+      onPrimary: AppColors.white,
+      onSecondary: AppColors.white,
       onSurface: AppColors.onSurface,
+    ),
+    textTheme:
+        TextTheme(
+          displayLarge: AppTextStyles.displayLarge,
+          displayMedium: AppTextStyles.displayMedium,
+          displaySmall: AppTextStyles.displaySmall,
+          headlineLarge: AppTextStyles.headlineLarge,
+          headlineMedium: AppTextStyles.headlineMedium,
+          headlineSmall: AppTextStyles.headlineSmall,
+          titleLarge: AppTextStyles.titleLarge,
+          titleMedium: AppTextStyles.titleMedium,
+          titleSmall: AppTextStyles.titleSmall,
+          bodyLarge: AppTextStyles.bodyLarge,
+          bodyMedium: AppTextStyles.bodyMedium,
+          bodySmall: AppTextStyles.bodySmall,
+          labelLarge: AppTextStyles.labelLarge,
+          labelMedium: AppTextStyles.labelMedium,
+          labelSmall: AppTextStyles.labelSmall,
+        ).apply(
+          bodyColor: AppColors.primaryText,
+          displayColor: AppColors.primaryText,
+        ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    primaryColor: AppColors.primary,
+    appBarTheme: const AppBarTheme(backgroundColor: AppColors.black),
+
+    shadowColor: AppColors.shadowDark,
+    scaffoldBackgroundColor: AppColors.black, // Dark background
+    cardColor: AppColors.black1E, // Dark card
+    dividerColor: Colors.grey[800],
+    colorScheme: const ColorScheme.dark(
+      primary: AppColors.primary,
+      secondary: AppColors.secondary,
+      surface: AppColors.black1E,
+      error: AppColors.error,
+      onPrimary: AppColors.white,
+      onSecondary: AppColors.white,
+      onSurface: AppColors.white,
     ),
     textTheme: TextTheme(
       displayLarge: AppTextStyles.displayLarge,
@@ -39,46 +81,6 @@ class AppTheme {
       labelLarge: AppTextStyles.labelLarge,
       labelMedium: AppTextStyles.labelMedium,
       labelSmall: AppTextStyles.labelSmall,
-    ),
-  );
-
-  static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    primaryColor: AppColors.primary,
-    appBarTheme: AppBarTheme(backgroundColor: AppColors.black),
-
-    shadowColor: AppColors.shadowDark,
-    scaffoldBackgroundColor: AppColors.black, // Dark background
-    cardColor: const Color(0xFF1E1E1E), // Dark card
-    dividerColor: Colors.grey[800],
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.primary,
-      secondary: AppColors.secondary,
-      surface: Color(0xFF1E1E1E),
-      error: AppColors.error,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: Colors.white,
-    ),
-    textTheme: TextTheme(
-      displayLarge: AppTextStyles.displayLarge.copyWith(color: Colors.white),
-      displayMedium: AppTextStyles.displayMedium.copyWith(color: Colors.white),
-      displaySmall: AppTextStyles.displaySmall.copyWith(color: Colors.white),
-      headlineLarge: AppTextStyles.headlineLarge.copyWith(color: Colors.white),
-      headlineMedium: AppTextStyles.headlineMedium.copyWith(
-        color: Colors.white,
-      ),
-      headlineSmall: AppTextStyles.headlineSmall.copyWith(color: Colors.white),
-      titleLarge: AppTextStyles.titleLarge.copyWith(color: Colors.white),
-      titleMedium: AppTextStyles.titleMedium.copyWith(color: Colors.white),
-      titleSmall: AppTextStyles.titleSmall.copyWith(color: Colors.white),
-      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
-      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
-      bodySmall: AppTextStyles.bodySmall.copyWith(color: Colors.white),
-      labelLarge: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-      labelMedium: AppTextStyles.labelMedium.copyWith(color: Colors.white),
-      labelSmall: AppTextStyles.labelSmall.copyWith(color: Colors.white),
-    ),
+    ).apply(bodyColor: AppColors.white, displayColor: AppColors.white),
   );
 }

@@ -17,6 +17,7 @@ class AppColors {
   ); // #665AF0 RGB(102, 90, 240)
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
+  static const Color black1E = Color(0xFF1E1E1E);
   // Secondary & Interactive
   static const Color secondary = Color(
     0xFF6E6E82,

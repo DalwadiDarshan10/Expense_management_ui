@@ -1,8 +1,10 @@
+import 'package:expense/routes/app_named.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/material.dart';
 
 class QrScannerController extends GetxController {
   final MobileScannerController scannerController = MobileScannerController();
@@ -25,12 +27,30 @@ class QrScannerController extends GetxController {
     isQrMode.value = !isQrMode.value;
   }
 
-  Future<void> pickImageFromGallery() async {
-    // Check permission (Optional if ImagePicker handles it, but good practice)
-    // For Android 13+, READ_MEDIA_IMAGES is used, for older READ_EXTERNAL_STORAGE
-    // ImagePicker plugin usually handles specific permissions.
-    // We will just use ImagePicker directly.
+  void handleScanResult(String rawCode) {
+    final code = rawCode.trim();
+    if (code.isEmpty) return;
 
+    final currentUserUid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (code == currentUserUid) {
+      Get.snackbar(
+        "Invalid Action",
+        "You cannot scan your own QR code.",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    // Redirect to Transfer By Wallet Screen
+    Get.toNamed(
+      AppNamed.transferByWalletPage,
+      arguments: {'receiverUid': code},
+    );
+  }
+
+  Future<void> pickImageFromGallery() async {
     final ImagePicker picker = ImagePicker();
     try {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);

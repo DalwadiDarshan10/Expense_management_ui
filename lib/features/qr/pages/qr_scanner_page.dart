@@ -24,9 +24,11 @@ class QrScannerPage extends GetView<QrScannerController> {
             controller: controller.scannerController,
             onDetect: (capture) {
               final List<Barcode> barcodes = capture.barcodes;
-              for (final barcode in barcodes) {
-                // Handle success (e.g., show result)
-                debugPrint('Barcode found! ${barcode.rawValue}');
+              if (barcodes.isNotEmpty) {
+                final barcode = barcodes.first;
+                if (barcode.rawValue != null) {
+                  controller.handleScanResult(barcode.rawValue!);
+                }
               }
             },
           ),

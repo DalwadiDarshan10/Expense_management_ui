@@ -69,6 +69,7 @@ class SettingPage extends StatelessWidget {
                         _showLanguageBottomSheet(context, controller);
                       },
                       trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             controller.selectedFlag.value,
@@ -234,6 +235,7 @@ class SettingPage extends StatelessWidget {
                           controller.changeLanguage(
                             language['name']!,
                             language['flag']!,
+                            language['locale']!,
                           );
                         },
                       ),
@@ -277,6 +279,7 @@ class SettingPage extends StatelessWidget {
               ),
             ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (trailing != null) trailing,
                 if (showChevron) ...[

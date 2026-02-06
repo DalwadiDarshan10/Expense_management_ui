@@ -1,259 +1,288 @@
+import 'package:get/get.dart';
+
 class AppStrings {
   AppStrings._();
 
-  // login page
-  static const String login = "Login";
+  // Common
+  static String get login => 'auth.login'.tr;
+  static String get cancel => 'common.cancel'.tr;
+  static String get delete => 'common.delete'.tr;
+  static String get done => 'common.done'.tr;
+  static String get save => 'common.save'.tr;
+  static String get send => 'common.send'.tr;
+  static String get today => 'common.today'.tr;
+  static String get yesterday => 'common.yesterday'.tr;
+  static String get error => 'common.error'.tr;
+  static String get success => 'common.success'.tr;
+  static String get skip => 'common.skip'.tr;
+  static String get viewAll => 'common.view_all'.tr;
+  static String get resultLabel => 'common.result'.tr;
+  static String get copiedTitle => 'common.copied'.tr;
+  static String get copyLinkBtn => 'common.copy_link'.tr;
 
   // Voucher Page
-  static const String voucherTitle = "Voucher";
-  static const String categories = "Categories";
-  static const String categoryAll = "All";
-  static const String categoryInternet = "Internet";
-  static const String categoryElectricity = "Electricity";
-  static const String categoryMarket = "Market";
-  static const String categoryMedical = "Medical";
-  static const String topTrendingDeals = "Top Trending Deals";
-  static const String viewAll = "View all";
-  static const String saleOff50 = "Sale Off 50%";
+  static String get voucherTitle => 'voucher.title'.tr;
+  static String get categories => 'voucher.categories'.tr;
+  static String get categoryAll => 'voucher.category_all'.tr;
+  static String get categoryInternet => 'voucher.category_internet'.tr;
+  static String get categoryElectricity => 'voucher.category_electricity'.tr;
+  static String get categoryMarket => 'voucher.category_market'.tr;
+  static String get categoryMedical => 'voucher.category_medical'.tr;
+  static String get topTrendingDeals => 'voucher.top_trending'.tr;
+  static String get saleOff50 => 'voucher.sale_off_50'.tr;
+
+  // Deal items
+  static String get burgerTitle => 'voucher.burger'.tr;
+  static String get burgerDesc => 'voucher.burger_desc'.tr;
+  static String get freeship => 'voucher.freeship'.tr;
+  static String get sandwichTitle => 'voucher.sandwich'.tr;
+  static String get sandwichDesc => 'voucher.sandwich_desc'.tr;
+  static String get pizzaHutTitle => 'voucher.pizza_hut'.tr;
+  static String get pizzaDesc => 'voucher.pizza_desc'.tr;
+  static String get kfcTitle => 'voucher.kfc'.tr;
+  static String get kfcDesc => 'voucher.kfc_desc'.tr;
+  static String get halfOffBadge => 'voucher.half_off'.tr;
+  static String get starbucksTitle => 'voucher.starbucks'.tr;
+  static String get coffeeDesc => 'voucher.coffee_desc'.tr;
+  static String get noDealsAvailable => 'voucher.no_deals'.tr;
+  static String get dealsTitle => 'voucher.deals_title'.tr;
 
   // Transfer Page
-  static const String transferTitle = "Transfer";
-  static const String transferByWallet = "Transfer by Avipay wallet";
-  static const String transferByBank = "Transfer by Bank";
-  static const String recentTransfer = "Recent Transfer";
-  static const String friends = "Friends";
+  static String get transferTitle => 'transfer.title'.tr;
+  static String get transferByWallet => 'transfer.by_wallet'.tr;
+  static String get transferByBank => 'transfer.by_bank'.tr;
+  static String get recentTransfer => 'transfer.recent'.tr;
+  static String get friends => 'transfer.friends'.tr;
 
   // Notification Page
-  static const String notificationTitle = "Notification";
-  static const String deleteNotificationsTitle = "Delete Notifications";
-  static const String deleteNotificationsMessage =
-      "Are you sure you want to delete all notifications?";
-  static const String delete = "Delete";
-  static const String cancel = "Cancel";
-  static const String noNotifications = "No Notifications";
-  static const String today = "Today";
-  static const String yesterday = "Yesterday";
+  static String get notificationTitle => 'notification.title'.tr;
+  static String get deleteNotificationsTitle =>
+      'notification.delete_all_title'.tr;
+  static String get deleteNotificationsMessage =>
+      'notification.delete_all_msg'.tr;
+  static String get noNotifications => 'notification.empty'.tr;
 
   // Add New Card Page
-  static const String addNewCardTitle = "Add New Card";
-  static const String cardNumberLabel = "Card Number";
+  static String get addNewCardTitle => 'wallet.add_card'.tr;
+  static String get cardNumberLabel => 'wallet.card_number'.tr;
   static const String cardNumberHint = "1234 4567 8901 2345";
-  static const String expiredLabel = "Expired";
+  static String get expiredLabel => 'wallet.expired'.tr;
   static const String expiredHint = "12/24";
-  static const String bankLabel = "Bank";
-  static const String selectBank = "Select Bank";
-  static const String cardHolderNameLabel = "Card Holder Name";
+  static String get bankLabel => 'wallet.bank'.tr;
+  static String get selectBank => 'wallet.select_bank'.tr;
+  static String get cardHolderNameLabel => 'wallet.card_holder'.tr;
   static const String cardHolderNameHint = "Melvin Guerrero";
-  static const String resultLabel = 'Result';
-  static const String btnAddNewCard = 'Add New Card';
+  static String get btnAddNewCard => 'wallet.add_card'.tr;
 
-  // Login Page
-  static const String emailLabel = "Email";
-  static const String emailHint = "example@email.com";
-  static const String passwordLabel = "Password";
-  static const String passwordHint = "At least 8 characters";
-  static const String savePassword = "Save password";
-  static const String forgotPassword = "Forgot password?";
-  static const String loginBtn = "Log in";
-  static const String dontHaveAccount = "Don't have account? ";
-  static const String signUp = "Sign Up";
+  // Login Page (Specific labels)
+  static String get emailLabel => 'auth.email'.tr;
+  static String get emailHint => 'auth.email_hint'.tr;
+  static String get passwordLabel => 'auth.password'.tr;
+  static String get passwordHint => 'auth.password_hint'.tr;
+  static String get savePassword => 'auth.save_password'.tr;
+  static String get forgotPassword => 'auth.forgot_password'.tr;
+  static String get loginBtn => 'auth.login_btn'.tr;
+  static String get dontHaveAccount => 'auth.dont_have_account'.tr;
+  static String get signUp => 'auth.sign_up'.tr;
 
   // Transfer By Wallet
-  static const String transferByWalletTitle = "Transfer by Avipay wallet";
-  static const String cashLabel = "Cash";
+  static String get transferByWalletTitle => 'transfer.by_wallet_title'.tr;
+  static String get cashLabel => 'transfer.cash'.tr;
   static const String cashHintWallet = "\$ 12,000.00";
-  static const String transferContentLabel = "Transfer Content";
-  static const String transferContentHint = "Loan Payment";
-  static const String greetingCards = "Greeting Cards";
-  static const String swipeToTransfer = "SWIPE TO TRANSFER";
+  static String get transferContentLabel => 'transfer.content'.tr;
+  static String get transferContentHint => 'transfer.content_hint'.tr;
+  static String get greetingCards => 'transfer.greeting_cards'.tr;
+  static String get swipeToTransfer => 'transfer.swipe_to_transfer'.tr;
 
   // Transfer By Bank
-  static const String transferByBankTitle = "Transfer By Bank";
-  static const String toTheAccountLabel = "To The Account";
+  static String get transferByBankTitle => 'transfer.by_bank_title'.tr;
+  static String get toTheAccountLabel => 'transfer.to_account'.tr;
   static const String toTheAccountHint = "122 456 141 250";
   static const String cashHintBank = "\$ 12.00.00";
 
   // Register Page
-  static const String registerTitle = "Register";
-  static const String usernameLabel = "Username";
-  static const String usernameHint =
-      "Melvin Guerrero"; // Reuse if generic, but kept specific here
-  static const String passwordHintShort = "At least 6 characters";
-  static const String confirmPasswordLabel = "Confirm password";
-  static const String termsPart1 =
-      "By creating your account you have to agree\nwith our ";
-  static const String termsPart2 = "Terms and Conditions";
-  static const String alreadyHaveAccount = "Already have account? ";
+  static String get registerTitle => 'auth.register'.tr;
+  static String get usernameLabel => 'friends.full_name'.tr;
+  static const String usernameHint = "Melvin Guerrero";
+  static String get passwordHintShort => 'auth.password_hint_short'.tr;
+  static String get confirmPasswordLabel => 'auth.confirm_password'.tr;
+  static String get termsPart1 => 'auth.terms_part1'.tr;
+  static String get termsPart2 => 'auth.terms_part2'.tr;
+  static String get alreadyHaveAccount => 'auth.already_have_account'.tr;
 
   // Forgot Password Page
-  static const String forgotPasswordTitle = "Forgot Password";
-  static const String forgotPasswordMessage =
-      "Enter your email address to receive a password reset link.";
-  static const String sendOtpBtn = "Send OTP";
+  static String get forgotPasswordTitle => 'auth.forgot_password_title'.tr;
+  static String get forgotPasswordMessage => 'auth.forgot_password_msg'.tr;
+  static String get sendOtpBtn => 'auth.send_otp'.tr;
 
   // Reset Password Page
-  static const String resetPasswordTitle = "Reset Password";
-  static const String createNewPassword = "Create new password";
-  static const String createNewPasswordMessage =
-      "Your new password must be different from previous used passwords.";
-  static const String newPasswordLabel = "New Password";
-  static const String confirmPasswordLabelMatches = "Confirm Password";
-  static const String confirmPasswordHintMatches = "Must match new password";
-  static const String resetPasswordBtn = "Reset Password";
+  static String get resetPasswordTitle => 'auth.reset_password'.tr;
+  static String get createNewPassword => 'auth.create_new_password'.tr;
+  static String get createNewPasswordMessage =>
+      'auth.create_new_password_msg'.tr;
+  static String get newPasswordLabel => 'auth.new_password'.tr;
+  static String get confirmPasswordLabelMatches =>
+      'auth.confirm_password_match'.tr;
+  static String get confirmPasswordHintMatches =>
+      'auth.confirm_password_hint_match'.tr;
+  static String get resetPasswordBtn => 'auth.reset_password'.tr;
 
   // Verify Email OTP Page
-  static const String verificationTitle = "Verification";
-  static const String verifyEmailTitle = "Verify Your Email";
-  static const String verifyEmailMessagePart1 =
-      "Please enter the 4 digit code\nsent to ";
-  static const String verifyBtn = "Verify";
+  static String get verificationTitle => 'auth.verification'.tr;
+  static String get verifyEmailTitle => 'auth.verify_email'.tr;
+  static String get verifyEmailMessagePart1 => 'auth.verify_msg_part1'.tr;
+  static String get verifyBtn => 'auth.verify_btn'.tr;
 
   // Onboarding Page
-  static const String appName = "Avipay";
-  static const String onboardingMessage =
-      "Consumer Loan Payment, pay bills\nand many other services";
-  static const String getStartedBtn = "Get Started";
+  static String get appName => 'onboarding.app_name'.tr;
+  static String get onboardingMessage => 'onboarding.message'.tr;
+  static String get getStartedBtn => 'onboarding.get_started'.tr;
 
   // Signup Successful Page
-  static const String signupSuccessfulTitle = "Sign Up Successfully";
-  static const String signupSuccessfulMessage = "Everything will be fine!";
-  static const String doneBtn = "Done";
+  static String get signupSuccessfulTitle => 'auth.signup_success'.tr;
+  static String get signupSuccessfulMessage => 'auth.signup_success_msg'.tr;
+  static String get doneBtn => 'common.done'.tr;
 
   // Home Page
-  static const String balance = "Balance";
-  static const String topUp = "Top up";
-  static const String wallet = "Wallet";
-  static const String qrScan = "QR Scan";
-  static const String myQr = "My QR";
-  static const String sendAgain = "Send Again";
-  static const String paymentList = "Payment List";
-  static const String tradingHistory = "Trading History";
+  static String get balance => 'home.balance'.tr;
+  static String get topUp => 'home.top_up'.tr;
+  static String get wallet => 'home.wallet'.tr;
+  static String get qrScan => 'home.qr_scan'.tr;
+  static String get myQr => 'home.my_qr'.tr;
+  static String get sendAgain => 'home.send_again'.tr;
+  static String get paymentList => 'home.payment_list'.tr;
+  static String get tradingHistory => 'home.trading_history'.tr;
+  static String get sent => 'common.send'.tr;
+  static String get electricBillTitle => 'home.electric_bill'.tr;
+  static String get televisionBillTitle => 'home.television'.tr;
+
   // Payment Items
-  static const String insurance = "Insurance";
-  static const String electricBill = "Electric bill";
-  static const String television = "Television";
-  static const String waterBill = "Waterbill";
-  // Transaction Dummy Data
-  static const String electricBillTitle = "Electric Bill";
-  static const String sent = "Sent";
-  static const String televisionBillTitle = "Television Bill";
+  static String get insurance => 'home.insurance'.tr;
+  static String get electricBill => 'home.electric_bill'.tr;
+  static String get television => 'home.television'.tr;
+  static String get waterBill => 'home.water_bill'.tr;
 
   // Wallets Dashboard
-  static const String myWallet = "My Wallet";
-  static const String deleteCardTitle = "Delete Card?";
-  static const String deleteCardMessage =
-      "Are you sure you want to remove this card?";
-  static const String withdraw = "Withdraw";
-  static const String history = "History";
+  static String get myWallet => 'wallet.my_wallet'.tr;
+  static String get deleteCardTitle => 'wallet.delete_card_title'.tr;
+  static String get deleteCardMessage => 'wallet.delete_card_msg'.tr;
+  static String get withdraw => 'wallet.withdraw'.tr;
+  static String get history => 'wallet.history'.tr;
 
   // Top Up Page
-  static const String topUpTitle = "Top Up";
-  static const String denominations = "Denominations";
-  static const String noCardsAvailable = "No cards available";
+  static String get topUpTitle => 'wallet.top_up'.tr;
+  static String get denominations => 'wallet.denominations'.tr;
+  static String get noCardsAvailable => 'wallet.no_cards'.tr;
 
   // Withdraw Page
-  static const String withdrawTitle = "Withdraw";
-  static const String withdrawToAviBank = "Withdraw To AVI Bank";
-  static const String swipeToWithdraw = "SWIPE TO WITHDRAW";
-  static const String enterAmountHint = "Enter amount";
+  static String get withdrawTitle => 'withdraw.title'.tr;
+  static String get withdrawToAviBank => 'withdraw.to_avi_bank'.tr;
+  static String get swipeToWithdraw => 'withdraw.swipe_to_withdraw'.tr;
+  static String get enterAmountHint => 'withdraw.enter_amount'.tr;
 
   // QR Scanner Page
-  static const String flashlight = "Flashlight";
-  static const String switchToBarcode = "Switch to barcode";
-  static const String switchToQrCode = "Switch to QR Code";
+  static String get flashlight => 'qr.flashlight'.tr;
+  static String get switchToBarcode => 'qr.switch_to_barcode'.tr;
+  static String get switchToQrCode => 'qr.switch_to_qr'.tr;
 
   // My QR Page
-  static const String couponLabel = "Coupon";
+  static String get couponLabel => 'qr.coupon'.tr;
   static const String couponHint = "Your coupon";
-  static const String usePointsLabel = "Use your points";
+  static String get usePointsLabel => 'qr.use_points'.tr;
 
   // Share Bill Page
-  static const String shareBillTitle = "Share Bill";
-  static const String sharedWithTitle = "Shared With";
-  static const String phoneNumberHint = "Phone number";
-  static const String sendBtn = "Send";
-  static const String sentSuccessTitle = "Sent";
-  static const String sentSuccessMessage = "Share message sent successfully";
-  static const String errorTitle = "Error";
-  static const String enterPhoneError = "Please enter a phone number";
-  static const String noContactsFound = "No contacts found";
-  static const String learnSharing = "Learn about sharing";
-  static const String copiedTitle = "Copied";
-  static const String copiedMessage = "Link copied to clipboard";
-  static const String copyLinkBtn = "Copy link";
+  static String get shareBillTitle => 'share_bill.title'.tr;
+  static String get sharedWithTitle => 'share_bill.shared_with'.tr;
+  static String get phoneNumberHint => 'friends.phone_number'.tr;
+  static String get sendBtn => 'common.send'.tr;
+  static String get sentSuccessTitle => 'common.send'.tr;
+  static String get sentSuccessMessage => 'share_bill.sent_success'.tr;
+  static String get errorTitle => 'common.error'.tr;
+  static String get enterPhoneError => 'share_bill.enter_phone_error'.tr;
+  static String get noContactsFound => 'friends.no_contacts'.tr;
+  static String get learnSharing => 'share_bill.learn_sharing'.tr;
+  static String get copiedMessage => 'common.copied'.tr;
 
   // Add Friend Page
-  static const String addNewFriendTitle = "Add New Friend";
-  static const String fullNameLabel = "Full name";
+  static String get addNewFriendTitle => 'friends.add_friend'.tr;
+  static String get fullNameLabel => 'friends.full_name'.tr;
   static const String fullNameHint = "Enter full name";
-  static const String phoneNumberLabel = "Phone number";
+  static String get phoneNumberLabel => 'friends.phone_number'.tr;
   static const String enterPhoneNumberHint = "Enter phone number";
   static const String enterEmailHint = "Enter email address";
-  static const String addNewContactBtn = "Add New Contact";
+  static String get addNewContactBtn => 'friends.add_contact_btn'.tr;
 
   // Profile Page
-  static const String profileTitle = "Profile";
-  static const String cardsBankAccounts = "Cards/Bank Accounts";
-  static const String manageGroupFriends = "Manage group of friend";
-  static const String paymentSecurity = "Payment Security";
-  static const String settingTitle = "Setting";
-  static const String logoutBtn = "Log out";
+  static String get profileTitle => 'profile.title'.tr;
+  static String get cardsBankAccounts => 'profile.cards_bank'.tr;
+  static String get manageGroupFriends => 'profile.manage_friends'.tr;
+  static String get paymentSecurity => 'profile.payment_security'.tr;
+  static String get settingTitle => 'profile.setting'.tr;
+  static String get logoutBtn => 'profile.logout'.tr;
 
   // Edit Profile Page
-  static const String editProfileTitle = "Edit Profile";
-  static const String saveChangeBtn = "Save Change";
+  static String get editProfileTitle => 'profile.edit_profile'.tr;
+  static String get saveChangeBtn => 'profile.save_changes'.tr;
 
   // Setting Page
-  static const String changeFaceId = "Change Face ID";
-  static const String changeLanguage = "Change Language";
-  static const String changePassword = "Change Password";
-  static const String otherLabel = "Other";
-  static const String applicationInformation =
-      "Application infomation"; // Keeping original spelling/text
+  static String get changeFaceId => 'settings.change_face_id'.tr;
+  static String get changeLanguage => 'settings.change_language'.tr;
+  static String get changePassword => 'settings.change_password'.tr;
+  static String get otherLabel => 'settings.other'.tr;
+  static String get applicationInformation => 'settings.app_info'.tr;
 
   // Change Password Page
-  static const String oldPasswordLabel = "Old password";
+  static String get oldPasswordLabel => 'auth.password'.tr;
   static const String oldPasswordHint = "Walletavipay123";
-  static const String newPasswordLabel8Chars = "New password";
-  static const String passwordHint8Chars = "At least 8 characters";
+  static String get newPasswordLabel8Chars => 'auth.new_password'.tr;
+  static String get passwordHint8Chars => 'auth.password_hint'.tr;
   static const String signOutOfAllDevices = "Sign Out Of All Devices";
 
   // Payment Security Page
-  static const String appLockedTitle = "App Locked";
-  static const String sessionExpiredMessage = "Session expired for security";
-  static const String transferLimit = "Transfer Limit";
-  static const String transactionLimit = "Transaction limit";
-  static const String appAutoLocks = "App Automatically Locks";
-  static const String screenLockTime = "Screen lock time";
+  static String get appLockedTitle => 'security.app_locked'.tr;
+  static String get sessionExpiredMessage => 'security.session_expired'.tr;
+  static String get transferLimit => 'security.transfer_limit'.tr;
+  static String get transactionLimit => 'security.transaction_limit'.tr;
+  static String get appAutoLocks => 'security.auto_lock'.tr;
+  static String get screenLockTime => 'security.screen_lock_time'.tr;
   // Time Options
-  static const String time30Sec = "30 sec";
-  static const String time1Min = "1 min";
-  static const String time2Min = "2 min";
-  static const String time3Min = "3 min";
-  static const String time5Min = "5 min";
+  static String get time30Sec => 'security.time_30_sec'.tr;
+  static String get time1Min => 'security.time_1_min'.tr;
+  static String get time2Min => 'security.time_2_min'.tr;
+  static String get time3Min => 'security.time_3_min'.tr;
+  static String get time5Min => 'security.time_5_min'.tr;
 
   // Analytics Page
-  static const String analyticsTitle =
-      "Analysis"; // Corrected from Analys to Analysis if desired, or keep as Analysis
-  static const String incomeLabel = "Income";
-  static const String outcomeLabel = "Outcome";
+  static String get analyticsTitle => 'analytics.title'.tr;
+  static String get incomeLabel => 'analytics.income'.tr;
+  static String get outcomeLabel => 'analytics.outcome'.tr;
 
   // Share Analysis Page
-  static const String shareAnalysisTitle = "Share Analysis";
+  static String get shareAnalysisTitle => 'analytics.share'.tr;
 
   // Face ID Page
-  static const String faceIdTitle = "Face ID";
-  static const String faceRecognition = "Face Recognition";
-  static const String faceRecognitionMessage =
-      "Please look into the camera and look still";
-  static const String scanMyFace = "Scan my face";
-  static const String skip = "Skip";
-  static const String images = "Images";
+  static String get faceIdTitle => 'face_id.title'.tr;
+  static String get faceRecognition => 'face_id.recognition'.tr;
+  static String get faceRecognitionMessage => 'face_id.msg'.tr;
+  static String get scanMyFace => 'face_id.scan_btn'.tr;
+  static String get skipBtn => 'common.skip'.tr;
+  static String get images => 'common.view_all'.tr;
 
   // Application Info Page
-  static const String version = "Version";
-  static const String developer = "Developer";
-  static const String privacyPolicy = "Privacy Policy";
-  static const String termsOfService = "Terms of Service";
-  static const String contact = "Contact";
+  static String get version => 'info.version'.tr;
+  static String get developer => 'info.developer'.tr;
+  static String get privacyPolicy => 'info.privacy'.tr;
+  static String get termsOfService => 'info.terms'.tr;
+  static String get contact => 'info.contact'.tr;
+
+  // Additional New Keys
+  static String get noTransactions => 'common.no_transactions'.tr;
+  static String get cameraPermission => 'face_id.camera_permission'.tr;
+  static String get openSettings => 'face_id.open_settings'.tr;
+
+  // Even More Keys
+  static String get noRecentTransfers => 'transfer.no_recent'.tr;
+  static String get myAccounts => 'wallet.my_accounts'.tr;
+  static String get totalBalance =>
+      'home.balance'.tr; // Reusing balance for now or add home.total_balance
 }

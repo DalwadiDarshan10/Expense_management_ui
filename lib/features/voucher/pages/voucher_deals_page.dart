@@ -1,3 +1,4 @@
+import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/voucher/widgets/deal_card.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class VoucherDealsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = Get.arguments ?? {};
-    final String title = args['title'] ?? 'Deals';
+    final String title = args['title'] ?? AppStrings.dealsTitle;
     final List<Map<String, dynamic>> deals = List<Map<String, dynamic>>.from(
       args['deals'] ?? [],
     );
@@ -38,7 +39,7 @@ class VoucherDealsPage extends StatelessWidget {
       body: deals.isEmpty
           ? Center(
               child: Text(
-                'No deals available',
+                AppStrings.noDealsAvailable,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: context.theme.textTheme.bodyMedium?.color,
                 ),

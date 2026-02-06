@@ -236,7 +236,7 @@ class UtilityBillController extends GetxController {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: const Text('Select Bank'),
+              title: Text(AppStrings.selectBank),
               trailing: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Get.back(),

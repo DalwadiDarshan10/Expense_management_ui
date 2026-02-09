@@ -122,7 +122,9 @@ class ContactTile extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             child: CircleAvatar(
               radius: 24,
-              backgroundColor: Theme.of(context).dividerColor.withOpacity(0.2),
+              backgroundColor: Theme.of(
+                context,
+              ).dividerColor.withValues(alpha: 0.2),
               child: Text(
                 name[0].toUpperCase(),
                 style: TextStyle(

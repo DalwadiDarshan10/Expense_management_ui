@@ -140,7 +140,7 @@ class WithdrawPage extends GetView<WithdrawController> {
                   onTap: () => controller.selectDenomination(amount),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.10),
+                      color: AppColors.primary.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
                         color: isSelected
@@ -174,7 +174,7 @@ class WithdrawPage extends GetView<WithdrawController> {
       controller: controller.customAmountController,
       keyboardType: TextInputType.number,
       hintText: AppStrings.enterAmountHint,
-      prefix: Text("\$ "),
+      prefix: const Text("\$ "),
 
       onChanged: (val) {
         if (int.tryParse(val) != controller.selectedDenomination.value) {

@@ -36,4 +36,5 @@ class AppNamed {
   static const String utilityBills = '/utility-bills';
   static const String billDetails = '/bill-details';
   static const String allTransactions = '/all-transactions';
+  static const String pinSetup = '/pin-setup';
 }

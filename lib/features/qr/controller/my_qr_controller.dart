@@ -53,7 +53,7 @@ class MyQrController extends GetxController {
         "Permission Denied",
         e.type.message,
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
         colorText: Colors.red,
       );
     } catch (e) {
@@ -61,7 +61,7 @@ class MyQrController extends GetxController {
         "Error",
         "Failed to save image: ${e.toString()}",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
         colorText: Colors.red,
       );
     } finally {
@@ -95,7 +95,7 @@ class MyQrController extends GetxController {
         "Error",
         "Please enter coupon code",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
         colorText: Colors.red,
       );
     } else {

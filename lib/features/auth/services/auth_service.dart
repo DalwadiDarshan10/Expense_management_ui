@@ -134,6 +134,38 @@ class AuthService {
     }
   }
 
+  // Change Password with Re-authentication
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      AppLogger.info('Attempting to change password');
+      User? user = _auth.currentUser;
+      if (user == null) throw 'User not logged in';
+
+      // Re-authenticate user
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: oldPassword,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+      AppLogger.info('Password changed successfully');
+    } on FirebaseAuthException catch (e) {
+      AppLogger.error(
+        'Change Password Error: ${e.code} - ${e.message}',
+        e,
+        e.stackTrace,
+      );
+      throw _handleAuthException(e);
+    } catch (e, stack) {
+      AppLogger.error('Unknown Change Password Error', e, stack);
+      throw 'An unknown error occurred';
+    }
+  }
+
   // Helper to parse Firebase Exceptions
   String _handleAuthException(FirebaseAuthException e) {
     AppLogger.warning('Handling Auth Exception: ${e.code}');
@@ -150,6 +182,8 @@ class AuthService {
         return 'The password is too weak.';
       case 'invalid-verification-code':
         return 'The verification code is invalid.';
+      case 'requires-recent-login':
+        return 'This operation is sensitive and requires recent authentication. Please log in again.';
       default:
         return e.message ?? 'An authentication error occurred.';
     }

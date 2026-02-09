@@ -158,6 +158,22 @@ final Map<String, String> guIn = {
   'security.transaction_limit': 'વહેવાર મર્યાદા',
   'security.auto_lock': 'એપ્લિકેશન આપમેળે લૉક થઈ જાય છે',
   'security.screen_lock_time': 'સ્ક્રીન લોક સમય',
+  'security.time_30_sec': '30 સેકન્ડ',
+  'security.time_1_min': '1 મિનિટ',
+  'security.time_2_min': '2 મિનિટ',
+  'security.time_3_min': '3 મિનિટ',
+  'security.time_5_min': '5 મિનિટ',
+  'security.min': 'મિનિટ',
+  'security.end_of_day': 'દિવસના અંત સુધી',
+  'security.set_pin_title': 'સુરક્ષા પિન સેટ કરો',
+  'security.set_pin_msg':
+      'તમારી એપ્લિકેશનને સુરક્ષિત કરવા માટે 4-અંકનો પિન બનાવો',
+  'security.confirm_pin_title': 'સુરક્ષા પિનની પુષ્ટિ કરો',
+  'security.confirm_pin_msg': 'કૃપા કરીને તમારો 4-અંકનો પિન ફરીથી દાખલ કરો',
+  'security.pin_mismatch': 'પિન મેળ ખાતો નથી',
+  'security.enter_pin_title': 'સુરક્ષા પિન દાખલ કરો',
+  'security.enter_pin_msg': 'અનલૉક કરવા માટે તમારો 4-અંકનો પિન દાખલ કરો',
+  'security.incorrect_pin': 'ખોટો પિન',
 
   // Analytics
   'analytics.title': 'વિશ્લેષણ',

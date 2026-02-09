@@ -6,6 +6,18 @@ import 'package:get/get.dart';
 class FriendsController extends GetxController {
   final friends = <FriendModel>[].obs;
   final isDeleteMode = false.obs;
+  final searchQuery = ''.obs;
+
+  List<FriendModel> get filteredFriends {
+    if (searchQuery.value.isEmpty) {
+      return friends;
+    }
+    final query = searchQuery.value.toLowerCase();
+    return friends.where((friend) {
+      return friend.name.toLowerCase().contains(query) ||
+          friend.phone.toLowerCase().contains(query);
+    }).toList();
+  }
 
   @override
   void onInit() {

@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controller/security_controller.dart';
 import 'package:get/get.dart';
 
 class PaymentSecurityPage extends StatefulWidget {
@@ -16,29 +16,17 @@ class PaymentSecurityPage extends StatefulWidget {
 
 class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
   final ProfileController _profileController = Get.find<ProfileController>();
-  bool appLocks = true;
+  final SecurityController _securityController = Get.find<SecurityController>();
 
-  int autoLockSeconds = 120; // default 2 min
-  String selectedTimeLabel = '2 min';
-  Timer? _lockTimer;
+  String get transferLimitTillValue => AppStrings.endOfDay;
 
-  String transferLimitTillValue = 'End of Day';
-
-  void startLockTimer() {
-    if (!appLocks) return;
-
-    _lockTimer?.cancel();
-    _lockTimer = Timer(Duration(seconds: autoLockSeconds), () {
-      lockApp();
-    });
-  }
-
-  void lockApp() {
-    Get.snackbar(
-      AppStrings.appLockedTitle,
-      AppStrings.sessionExpiredMessage,
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  String _getTimeLabel(int seconds) {
+    if (seconds == 30) return AppStrings.time30Sec;
+    if (seconds == 60) return AppStrings.time1Min;
+    if (seconds == 120) return AppStrings.time2Min;
+    if (seconds == 180) return AppStrings.time3Min;
+    if (seconds == 300) return AppStrings.time5Min;
+    return '${seconds ~/ 60} ${AppStrings.minLabel}';
   }
 
   void _showTransactionLimitPicker() {
@@ -103,51 +91,52 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
           ),
         ),
       ),
-      body: Listener(
-        onPointerDown: (_) => startLockTimer(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 8.h),
-              Container(
-                color: Theme.of(context).cardColor,
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-                child: Column(
-                  children: [
-                    Obx(
-                      () => _buildSwitchTile(
-                        title: AppStrings.transferLimit,
-                        value:
-                            _profileController.isTransactionLimitEnabled.value,
-                        onChanged: (val) =>
-                            _profileController.toggleTransactionLimit(val),
-                      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 8.h),
+            Container(
+              color: Theme.of(context).cardColor,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+              child: Column(
+                children: [
+                  Obx(
+                    () => _buildSwitchTile(
+                      title: AppStrings.transferLimit,
+                      value: _profileController.isTransactionLimitEnabled.value,
+                      onChanged: (val) =>
+                          _profileController.toggleTransactionLimit(val),
                     ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 24.h,
+                  ),
+                  Divider(color: Theme.of(context).dividerColor, height: 24.h),
+                  Obx(
+                    () => _buildDropdownTile(
+                      title: AppStrings.transactionLimit,
+                      value:
+                          '\$ ${_profileController.transactionLimit.value.toStringAsFixed(0)}',
+                      onTap: _showTransactionLimitPicker,
                     ),
-                    Obx(
-                      () => _buildDropdownTile(
-                        title: AppStrings.transactionLimit,
-                        value:
-                            '\$ ${_profileController.transactionLimit.value.toStringAsFixed(0)}',
-                        onTap: _showTransactionLimitPicker,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              SizedBox(height: 8.h),
-              Container(
-                color: Theme.of(context).cardColor,
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-                child: Column(
+            ),
+            SizedBox(height: 8.h),
+            Container(
+              color: Theme.of(context).cardColor,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+              child: Obx(
+                () => Column(
                   children: [
                     _buildSwitchTile(
                       title: AppStrings.appAutoLocks,
-                      value: appLocks,
-                      onChanged: (val) => setState(() => appLocks = val),
+                      value: _securityController.isAutoLockEnabled.value,
+                      onChanged: (val) {
+                        if (val && _securityController.pinHash.value.isEmpty) {
+                          Get.toNamed('/pin-setup');
+                        } else {
+                          _securityController.toggleAutoLock(val);
+                        }
+                      },
                     ),
                     Divider(
                       color: Theme.of(context).dividerColor,
@@ -155,14 +144,16 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                     ),
                     _buildDropdownTile(
                       title: AppStrings.screenLockTime,
-                      value: selectedTimeLabel,
+                      value: _getTimeLabel(
+                        _securityController.autoLockTimeout.value,
+                      ),
                       onTap: _showTimePicker,
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -260,12 +251,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         ),
       ),
       onTap: () {
-        setState(() {
-          selectedTimeLabel = label;
-          autoLockSeconds = seconds;
-        });
-
-        startLockTimer();
+        _securityController.updateTimeout(seconds);
         Get.back();
       },
     );

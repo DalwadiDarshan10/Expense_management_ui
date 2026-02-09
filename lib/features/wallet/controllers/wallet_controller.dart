@@ -142,15 +142,6 @@ class WalletController extends GetxController {
               AppLogger.info("Wallet balance updated: ${walletBalance.value}");
             } else {
               AppLogger.warning("Snapshot DOES NOT exist at: $path");
-              // Temporary Debug Snackbar
-              Get.snackbar(
-                "Debug: No Wallet Found",
-                "Please Top Up to create wallet.\nPath: $path",
-                snackPosition: SnackPosition.TOP,
-                duration: const Duration(seconds: 10),
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-              );
             }
           });
     } catch (e, s) {
@@ -211,11 +202,11 @@ class WalletController extends GetxController {
 
   /// COMPUTED: Total Bank Balance
   double get totalBankBalance {
-    return savedBankAccounts.fold(0.0, (sum, bank) {
+    return savedBankAccounts.fold(0.0, (total, bank) {
       final balance = bank['balance'];
-      if (balance is int) return sum + balance;
-      if (balance is double) return sum + balance;
-      return sum;
+      if (balance is int) return total + balance;
+      if (balance is double) return total + balance;
+      return total;
     });
   }
 
@@ -483,11 +474,11 @@ class WalletController extends GetxController {
 
     AppLogger.info("Card saved to Firestore: $cardId");
 
-    /// Create bank account with $5000
+    /// Create bank account with $0 (Initial setup)
     await userDoc.collection('bankAccounts').doc(bankId).set({
       "bankName": bankName,
       "linkedCardId": cardId,
-      "balance": 5000,
+      "balance": 0,
       "createdAt": Timestamp.now(),
     });
 

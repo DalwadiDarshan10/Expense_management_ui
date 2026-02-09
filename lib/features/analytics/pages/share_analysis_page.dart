@@ -3,6 +3,7 @@ import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/analytics/controller/share_analysis_controller.dart';
 import 'package:expense/features/analytics/widgets/shared_contact_item_widget.dart';
+
 import 'package:expense/widgets/app_button.dart';
 import 'package:expense/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,6 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
 
   @override
   Widget build(BuildContext context) {
-    if (!Get.isRegistered<ShareAnalysisController>()) {
-      Get.put(ShareAnalysisController());
-    }
-
     final phoneController = TextEditingController();
 
     return Scaffold(
@@ -120,7 +117,7 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
 
               // Contact List
               Obx(() {
-                if (controller.filteredContacts.isEmpty) {
+                if (controller.filteredFriends.isEmpty) {
                   return Column(
                     children: [
                       Padding(
@@ -146,23 +143,23 @@ class ShareAnalysisPage extends GetView<ShareAnalysisController> {
                 return ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.filteredContacts.length + 1,
+                  itemCount: controller.filteredFriends.length + 1,
                   separatorBuilder: (_, _) =>
                       Divider(color: Theme.of(context).dividerColor),
                   itemBuilder: (context, index) {
-                    if (index == controller.filteredContacts.length) {
+                    if (index == controller.filteredFriends.length) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: _buildFooter(context),
                       );
                     }
 
-                    final contact = controller.filteredContacts[index];
+                    final friend = controller.filteredFriends[index];
 
                     return SharedContactItemWidget(
-                      name: contact.name,
-                      phoneNumber: contact.phoneNumber,
-                      onDelete: () => controller.deleteContact(contact),
+                      name: friend.name,
+                      phoneNumber: friend.phone,
+                      onDelete: () => controller.deleteContact(friend),
                     );
                   },
                 );

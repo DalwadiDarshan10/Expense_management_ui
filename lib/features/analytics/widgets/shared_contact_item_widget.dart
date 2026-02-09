@@ -40,7 +40,7 @@ class SharedContactItemWidget extends StatelessWidget {
                 child: Text(
                   name.isNotEmpty ? name[0].toUpperCase() : '?',
                   style: AppTextStyles.titleMedium.copyWith(
-                    color: AppColors.primaryText,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -58,7 +58,7 @@ class SharedContactItemWidget extends StatelessWidget {
                 name,
                 style: AppTextStyles.bodyLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.primaryText,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               SizedBox(height: 4.h),

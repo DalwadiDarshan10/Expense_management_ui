@@ -2,21 +2,17 @@ import 'package:expense/core/localization/language_controller.dart';
 import 'package:expense/core/localization/translations.dart';
 import 'package:expense/core/theme/app_theme.dart';
 import 'package:expense/core/theme/theme_controller.dart';
-import 'package:expense/firebase_options.dart';
+import 'package:expense/core/services/app_initializer.dart';
+import 'package:expense/core/widgets/app_lock_wrapper.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:expense/routes/app_routes.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await GetStorage.init();
-  Get.put(LanguageController());
-  Get.put(ThemeController());
+  await AppInitializer.init();
   runApp(const MyApp());
 }
 
@@ -28,11 +24,10 @@ class MyApp extends StatelessWidget {
     final box = GetStorage();
     final bool isLoggedIn = box.read('isLoggedIn') ?? false;
     final languageController = Get.find<LanguageController>();
-
     final themeController = Get.find<ThemeController>();
 
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Base design size (iPhone X)
+      designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -48,6 +43,7 @@ class MyApp extends StatelessWidget {
             fallbackLocale: const Locale('en', 'US'),
             initialRoute: isLoggedIn ? AppNamed.menuPage : AppNamed.onboarding,
             getPages: AppRoutes.routes,
+            builder: (context, child) => AppLockWrapper(child: child!),
           ),
         );
       },

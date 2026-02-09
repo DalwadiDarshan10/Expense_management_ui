@@ -73,7 +73,7 @@ class AddNewCardPage extends GetView<WalletController> {
               );
             }),
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 8.h,
             ),
 
@@ -94,7 +94,7 @@ class AddNewCardPage extends GetView<WalletController> {
               );
             }),
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 8.h,
             ),
 
@@ -140,7 +140,8 @@ class AddNewCardPage extends GetView<WalletController> {
                         // Disable decoration appearance if editing
                         enabled: controller.editingCardId.value == null,
                       ),
-                      value: controller.bankNameController.text.isNotEmpty
+                      initialValue:
+                          controller.bankNameController.text.isNotEmpty
                           // Check if value actually exists in dropdown list to avoid error
                           ? (bankNames.contains(
                                   controller.bankNameController.text,
@@ -189,7 +190,7 @@ class AddNewCardPage extends GetView<WalletController> {
             ),
 
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 8.h,
             ),
             Obx(() {
@@ -203,7 +204,7 @@ class AddNewCardPage extends GetView<WalletController> {
               );
             }),
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 8.h,
             ),
             // Result (Live Preview)
@@ -232,13 +233,13 @@ class AddNewCardPage extends GetView<WalletController> {
             ),
 
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 24.h,
             ),
 
             // Add Card Button
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
 
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -253,7 +254,7 @@ class AddNewCardPage extends GetView<WalletController> {
               ),
             ),
             Container(
-              color: Theme.of(context).dividerColor.withOpacity(0.1),
+              color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
               height: 24.h,
             ),
           ],

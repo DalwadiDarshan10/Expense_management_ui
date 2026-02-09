@@ -98,7 +98,7 @@ class TransferPage extends GetView<TransferController> {
                       },
                       separatorBuilder: (BuildContext context, int index) {
                         return Divider(
-                          color: AppColors.dropSection.withOpacity(0.1),
+                          color: AppColors.dropSection.withValues(alpha: 0.1),
                           thickness: 1,
                           indent: 16.w,
                           endIndent: 16.w,

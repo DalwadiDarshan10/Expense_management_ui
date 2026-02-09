@@ -30,6 +30,7 @@ import 'package:expense/features/profile/bingings/edit_profile_binding.dart';
 import 'package:expense/features/profile/pages/edit_profile_page.dart';
 import 'package:expense/features/profile/pages/payment_security_page.dart';
 import 'package:expense/features/profile/pages/setting_page.dart';
+import 'package:expense/features/analytics/bindings/share_analysis_binding.dart';
 import 'package:expense/features/analytics/pages/share_analysis_page.dart';
 import 'package:expense/features/notification/pages/notification_page.dart';
 import 'package:expense/features/transfer/pages/transfer_page.dart';
@@ -44,6 +45,7 @@ import 'package:expense/features/bill/bindings/utility_bill_binding.dart';
 import 'package:expense/features/bill/pages/service_provider_selection_page.dart';
 import 'package:expense/features/bill/pages/bill_details_page.dart';
 import 'package:expense/features/analytics/pages/all_transactions_page.dart';
+import 'package:expense/features/profile/pages/pin_setup_page.dart';
 import 'package:expense/routes/app_named.dart';
 import 'package:get/get.dart';
 
@@ -136,12 +138,9 @@ class AppRoutes {
       page: () => const NotificationPage(),
     ),
     GetPage(
-      name: AppNamed.notificationPage,
-      page: () => const NotificationPage(),
-    ),
-    GetPage(
       name: AppNamed.shareAnalysis,
       page: () => const ShareAnalysisPage(),
+      binding: ShareAnalysisBinding(),
     ),
     GetPage(
       name: AppNamed.shareQr,
@@ -187,5 +186,6 @@ class AppRoutes {
       name: AppNamed.allTransactions,
       page: () => const AllTransactionsPage(),
     ),
+    GetPage(name: AppNamed.pinSetup, page: () => const PinSetupPage()),
   ];
 }

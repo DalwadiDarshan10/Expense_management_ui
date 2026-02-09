@@ -118,7 +118,7 @@ class ShareQrPage extends GetView<ShareQrController> {
 
               // Contact List
               Obx(() {
-                if (controller.filteredContacts.isEmpty) {
+                if (controller.filteredFriends.isEmpty) {
                   return Column(
                     children: [
                       Padding(
@@ -144,23 +144,23 @@ class ShareQrPage extends GetView<ShareQrController> {
                 return ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.filteredContacts.length + 1,
+                  itemCount: controller.filteredFriends.length + 1,
                   separatorBuilder: (_, _) =>
                       Divider(color: Theme.of(context).dividerColor),
                   itemBuilder: (context, index) {
-                    if (index == controller.filteredContacts.length) {
+                    if (index == controller.filteredFriends.length) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: _buildFooter(context),
                       );
                     }
 
-                    final contact = controller.filteredContacts[index];
+                    final friend = controller.filteredFriends[index];
 
                     return SharedContactItemWidget(
-                      name: contact.name,
-                      phoneNumber: contact.phoneNumber,
-                      onDelete: () => controller.deleteContact(contact),
+                      name: friend.name,
+                      phoneNumber: friend.phone,
+                      onDelete: () => controller.deleteContact(friend),
                     );
                   },
                 );

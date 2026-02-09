@@ -251,6 +251,8 @@ class AppStrings {
   static String get time2Min => 'security.time_2_min'.tr;
   static String get time3Min => 'security.time_3_min'.tr;
   static String get time5Min => 'security.time_5_min'.tr;
+  static String get minLabel => 'security.min'.tr;
+  static String get endOfDay => 'security.end_of_day'.tr;
 
   // Analytics Page
   static String get analyticsTitle => 'analytics.title'.tr;
@@ -285,4 +287,14 @@ class AppStrings {
   static String get myAccounts => 'wallet.my_accounts'.tr;
   static String get totalBalance =>
       'home.balance'.tr; // Reusing balance for now or add home.total_balance
+
+  // PIN Flow
+  static String get setPinTitle => 'security.set_pin_title'.tr;
+  static String get setPinMsg => 'security.set_pin_msg'.tr;
+  static String get confirmPinTitle => 'security.confirm_pin_title'.tr;
+  static String get confirmPinMsg => 'security.confirm_pin_msg'.tr;
+  static String get pinMismatch => 'security.pin_mismatch'.tr;
+  static String get enterPinTitle => 'security.enter_pin_title'.tr;
+  static String get enterPinMsg => 'security.enter_pin_msg'.tr;
+  static String get incorrectPin => 'security.incorrect_pin'.tr;
 }

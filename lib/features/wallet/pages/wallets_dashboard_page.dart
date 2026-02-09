@@ -58,8 +58,8 @@ class WalletsDashboardPage extends GetView<WalletController> {
                             extentRatio: 0.30, // width of action
                             children: [
                               CustomSlidableAction(
-                                backgroundColor: AppColors.critical.withOpacity(
-                                  0.1,
+                                backgroundColor: AppColors.critical.withValues(
+                                  alpha: 0.1,
                                 ),
                                 borderRadius: BorderRadius.circular(12.r),
                                 onPressed: (context) {

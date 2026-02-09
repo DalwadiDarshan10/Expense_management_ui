@@ -40,7 +40,12 @@ class AnalyticsController extends GetxController {
 
   // Custom date range
   final Rx<DateTime?> customStartDate = Rx<DateTime?>(null);
+
   final Rx<DateTime?> customEndDate = Rx<DateTime?>(null);
+
+  // Loading and Error states
+  final RxBool isLoading = true.obs;
+  final RxString errorMessage = ''.obs;
 
   // Chart data
   final RxList<ChartData> chartData = <ChartData>[].obs;
@@ -62,6 +67,8 @@ class AnalyticsController extends GetxController {
   }
 
   void _listenToTransactions() {
+    isLoading.value = true;
+    errorMessage.value = '';
     try {
       FirestoreService.userDoc()
           .collection('transactions')
@@ -69,16 +76,21 @@ class AnalyticsController extends GetxController {
           .snapshots()
           .listen(
             (snapshot) {
+              isLoading.value = false;
               _allTransactions.value = snapshot.docs
                   .map((doc) => TransactionModel.fromMap(doc.id, doc.data()))
                   .toList();
               _processData();
             },
             onError: (e) {
+              isLoading.value = false;
+              errorMessage.value = "Error loading transactions: $e";
               AppLogger.error("Error listening to transactions: $e");
             },
           );
     } catch (e) {
+      isLoading.value = false;
+      errorMessage.value = "Error setting up listener: $e";
       AppLogger.error("Error setting up transaction listener: $e");
     }
   }

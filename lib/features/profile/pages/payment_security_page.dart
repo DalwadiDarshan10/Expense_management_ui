@@ -4,6 +4,7 @@ import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 
 class PaymentSecurityPage extends StatefulWidget {
@@ -14,14 +15,13 @@ class PaymentSecurityPage extends StatefulWidget {
 }
 
 class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
-  bool transferLimit = true;
+  final ProfileController _profileController = Get.find<ProfileController>();
   bool appLocks = true;
 
   int autoLockSeconds = 120; // default 2 min
   String selectedTimeLabel = '2 min';
   Timer? _lockTimer;
 
-  String transactionLimitValue = '\$ 200';
   String transferLimitTillValue = 'End of Day';
 
   void startLockTimer() {
@@ -60,24 +60,6 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
     );
   }
 
-  void _showTransferLimitTillPicker() {
-    Get.bottomSheet(
-      Container(
-        color: Theme.of(context).cardColor,
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _limitTillOption('End of Day'),
-            _limitTillOption('1 Week'),
-            _limitTillOption('1 Month'),
-            _limitTillOption('Forever'),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _limitOption(String label) {
     return ListTile(
       title: Text(
@@ -87,26 +69,11 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
         ),
       ),
       onTap: () {
-        setState(() {
-          transactionLimitValue = label;
-        });
-        Get.back();
-      },
-    );
-  }
+        // Parse value from label e.g. "$ 200" -> 200.0
+        final cleanVal = label.replaceAll(RegExp(r'[^\d.]'), '');
+        final double limit = double.tryParse(cleanVal) ?? 200.0;
 
-  Widget _limitTillOption(String label) {
-    return ListTile(
-      title: Text(
-        label,
-        style: AppTextStyles.bodyLarge.copyWith(
-          color: Theme.of(context).textTheme.bodyLarge?.color,
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          transferLimitTillValue = label;
-        });
+        _profileController.updateTransactionLimit(limit);
         Get.back();
       },
     );
@@ -147,28 +114,26 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
                 child: Column(
                   children: [
-                    _buildSwitchTile(
-                      title: AppStrings.transferLimit,
-                      value: transferLimit,
-                      onChanged: (val) => setState(() => transferLimit = val),
+                    Obx(
+                      () => _buildSwitchTile(
+                        title: AppStrings.transferLimit,
+                        value:
+                            _profileController.isTransactionLimitEnabled.value,
+                        onChanged: (val) =>
+                            _profileController.toggleTransactionLimit(val),
+                      ),
                     ),
                     Divider(
                       color: Theme.of(context).dividerColor,
                       height: 24.h,
                     ),
-                    _buildDropdownTile(
-                      title: AppStrings.transactionLimit,
-                      value: transactionLimitValue,
-                      onTap: _showTransactionLimitPicker,
-                    ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 24.h,
-                    ),
-                    _buildDropdownTile(
-                      title: 'Transfer Limit Till',
-                      value: transferLimitTillValue,
-                      onTap: _showTransferLimitTillPicker,
+                    Obx(
+                      () => _buildDropdownTile(
+                        title: AppStrings.transactionLimit,
+                        value:
+                            '\$ ${_profileController.transactionLimit.value.toStringAsFixed(0)}',
+                        onTap: _showTransactionLimitPicker,
+                      ),
                     ),
                   ],
                 ),
@@ -242,6 +207,7 @@ class _PaymentSecurityPageState extends State<PaymentSecurityPage> {
             title,
             style: AppTextStyles.bodyLarge.copyWith(
               color: Theme.of(context).textTheme.bodySmall?.color,
+              fontWeight: FontWeight.w400,
             ),
           ),
           Row(

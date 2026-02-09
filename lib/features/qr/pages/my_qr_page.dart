@@ -91,95 +91,118 @@ class MyQrPage extends StatelessWidget {
   }
 
   Widget _buildTicketCard(BuildContext context, MyQrController controller) {
-    return Stack(
-      children: [
-        CustomPaint(
-          painter: TicketBorderPainter(
-            borderColor: AppColors.primary, // Light border
-            borderRadius: 20.r,
-            cutoutRadius: 15.r,
-            yOffsetPercentage: 0.65, // Position of the cutout
-          ),
-          child: ClipPath(
-            clipper: TicketClipper(
+    return RepaintBoundary(
+      key: controller.ticketKey,
+      child: Stack(
+        children: [
+          CustomPaint(
+            painter: TicketBorderPainter(
+              borderColor: AppColors.primary, // Light border
               borderRadius: 20.r,
               cutoutRadius: 15.r,
-              yOffsetPercentage: 0.65,
+              yOffsetPercentage: 0.65, // Position of the cutout
             ),
-            child: Container(
-              width: double.infinity,
-              height: 450.h,
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Column(
-                children: [
-                  // QR Code Section
-                  Expanded(
-                    flex: 52,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16.r),
+            child: ClipPath(
+              clipper: TicketClipper(
+                borderRadius: 20.r,
+                cutoutRadius: 15.r,
+                yOffsetPercentage: 0.65,
+              ),
+              child: Container(
+                width: double.infinity,
+                height: 450.h,
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  children: [
+                    // QR Code Section
+                    Expanded(
+                      flex: 52,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              child: Container(
+                                color: Colors.white,
+                                child: QrImageView(
+                                  data: controller.currentUserUid,
+                                  size: 180.w,
+                                ),
+                              ),
                             ),
-                            child: QrImageView(
-                              data: controller.currentUserUid,
-                              size: 180.w,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // Dashed Divider
-                  _buildDashedLine(),
-                  // Barcode Section
-                  Expanded(
-                    flex: 28,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 10.h),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            color: Colors.white,
-                            child: BarcodeWidget(
-                              barcode: Barcode.code128(),
-                              data: controller.currentUserUid,
-                              drawText: false,
-                              color: Colors.black,
-                              height: 50.h,
-                              width: double.infinity,
-                            ),
-                          ),
-                          SizedBox(height: 20.h),
-                          // Download Button
-                          CircleAvatar(
-                            backgroundColor: AppColors.primary,
-                            radius: 24.r,
-                            child: AppImageViewer(
-                              imagePath: AppImages.downloadIcon,
-                              height: 20.h,
-                              width: 20.w,
+                    // Dashed Divider
+                    _buildDashedLine(),
+                    // Barcode Section
+                    Expanded(
+                      flex: 28,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 10.h),
+                            Container(
+                              padding: EdgeInsets.all(5),
                               color: Colors.white,
+                              child: Container(
+                                color: Colors.white,
+                                child: BarcodeWidget(
+                                  barcode: Barcode.code128(),
+                                  data: controller.currentUserUid,
+                                  drawText: false,
+                                  color: Colors.black,
+                                  height: 50.h,
+                                  width: double.infinity,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 20.h),
+                            // Download Button
+                            GestureDetector(
+                              onTap: controller.downloadQrAndBarcode,
+                              child: Obx(
+                                () => CircleAvatar(
+                                  backgroundColor: AppColors.primary,
+                                  radius: 24.r,
+                                  child: controller.isDownloading
+                                      ? SizedBox(
+                                          height: 20.h,
+                                          width: 20.w,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : AppImageViewer(
+                                          imagePath: AppImages.downloadIcon,
+                                          height: 20.h,
+                                          width: 20.w,
+                                          color: Colors.white,
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        // Overlay border for exact match if needed, but CustomPaint handles it
-      ],
+          // Overlay border for exact match if needed, but CustomPaint handles it
+        ],
+      ),
     );
   }
 

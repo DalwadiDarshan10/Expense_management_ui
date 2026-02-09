@@ -90,7 +90,7 @@ class EditProfileController extends GetxController {
             _storage.write('userAvatarPath', imagePath);
             profileController.userAvatar.value = imagePath;
             debugPrint('Profile photo path saved to storage');
-
+            Get.back();
             Get.snackbar(
               "Success",
               "Profile photo updated successfully",

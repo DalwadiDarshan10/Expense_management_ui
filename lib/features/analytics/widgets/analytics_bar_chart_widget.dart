@@ -156,7 +156,8 @@ class AnalyticsBarChartWidget extends GetView<AnalyticsController> {
 
   double _getInterval() {
     final maxY = _getMaxY();
-    return (maxY / 4).roundToDouble();
+    final interval = (maxY / 4).roundToDouble();
+    return interval == 0 ? 1.0 : interval;
   }
 
   List<BarChartGroupData> _buildBarGroups() {

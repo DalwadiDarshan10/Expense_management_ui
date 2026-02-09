@@ -1,7 +1,8 @@
 import 'package:expense/core/constants/app_strings.dart';
-import 'package:expense/core/theme/app_colors.dart';
+
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/friends/controller/add_friend_controller.dart';
+import 'package:expense/widgets/app_button.dart';
 import 'package:expense/widgets/labeled_input_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,23 +76,9 @@ class AddFriendPage extends GetView<AddFriendController> {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: AppButton(
+                  text: AppStrings.addNewContactBtn,
                   onPressed: controller.addFriend,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    AppStrings.addNewContactBtn,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
               ),
             ),

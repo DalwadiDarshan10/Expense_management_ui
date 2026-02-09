@@ -2,6 +2,7 @@ import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/constants/app_strings.dart';
 
 import 'package:expense/core/theme/app_text_styles.dart';
+import 'package:expense/core/widgets/empty_state_widget.dart';
 import 'package:expense/features/analytics/controller/analytics_controller.dart';
 import 'package:expense/features/analytics/widgets/analytics_bar_chart_widget.dart';
 import 'package:expense/features/analytics/widgets/summary_card_widget.dart';
@@ -138,9 +139,27 @@ class AnalyticsPage extends GetView<AnalyticsController> {
           ),
           SizedBox(height: 12.h),
           Obx(() {
+            if (controller.isLoading.value) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (controller.errorMessage.isNotEmpty) {
+              return Center(
+                child: Text(
+                  controller.errorMessage.value,
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
             final transactions = controller.transactions;
             if (transactions.isEmpty) {
-              return Center(child: Text(AppStrings.noTransactions));
+              return const EmptyStateWidget(
+                imagePath: AppImages
+                    .onboardingImage1, // Using a placeholder for now, ideally specific empty state image
+                message: "No transactions found",
+                subMessage: "Your transaction history will appear here.",
+              );
             }
 
             // Show top 5

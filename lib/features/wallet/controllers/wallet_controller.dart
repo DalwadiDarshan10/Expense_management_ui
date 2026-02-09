@@ -7,6 +7,8 @@ import 'package:expense/core/utils/app_logger.dart';
 import 'package:expense/features/wallet/models/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'package:expense/features/profile/controller/profile_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class WalletController extends GetxController {
@@ -131,34 +133,26 @@ class WalletController extends GetxController {
           .collection('wallet')
           .doc('main')
           .snapshots()
-          .listen(
-            (snapshot) {
-              if (snapshot.exists) {
-                final data = snapshot.data();
-                AppLogger.info("Snapshot found! Data: $data");
-                walletBalance.value =
-                    (data?['balance'] as num?)?.toDouble() ?? 0.0;
-                AppLogger.info(
-                  "Wallet balance updated: ${walletBalance.value}",
-                );
-              } else {
-                AppLogger.warning("Snapshot DOES NOT exist at: $path");
-                // Temporary Debug Snackbar
-                Get.snackbar(
-                  "Debug: No Wallet Found",
-                  "Please Top Up to create wallet.\nPath: $path",
-                  snackPosition: SnackPosition.TOP,
-                  duration: const Duration(seconds: 10),
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                );
-              }
-            },
-            onError: (e) {
-              AppLogger.error("Error in wallet balance stream", e);
-              Get.snackbar("Error", "Stream Error: $e");
-            },
-          );
+          .listen((snapshot) {
+            if (snapshot.exists) {
+              final data = snapshot.data();
+              AppLogger.info("Snapshot found! Data: $data");
+              walletBalance.value =
+                  (data?['balance'] as num?)?.toDouble() ?? 0.0;
+              AppLogger.info("Wallet balance updated: ${walletBalance.value}");
+            } else {
+              AppLogger.warning("Snapshot DOES NOT exist at: $path");
+              // Temporary Debug Snackbar
+              Get.snackbar(
+                "Debug: No Wallet Found",
+                "Please Top Up to create wallet.\nPath: $path",
+                snackPosition: SnackPosition.TOP,
+                duration: const Duration(seconds: 10),
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            }
+          });
     } catch (e, s) {
       AppLogger.error("Error setting up wallet balance fetch", e, s);
     }
@@ -365,6 +359,16 @@ class WalletController extends GetxController {
       final num currentBalance = bankSnap['balance'] ?? 0;
 
       if (amount <= 0) throw Exception("Invalid amount");
+
+      // CHECK TRANSACTION LIMIT
+      final profileController = Get.find<ProfileController>();
+      if (profileController.isTransactionLimitEnabled.value &&
+          amount > profileController.transactionLimit.value) {
+        throw Exception(
+          "Transfer exceeds your transaction limit of \$${profileController.transactionLimit.value.toStringAsFixed(0)}",
+        );
+      }
+
       if (currentBalance < amount) throw Exception("Insufficient bank funds");
 
       // Deduct from My Bank
@@ -411,6 +415,16 @@ class WalletController extends GetxController {
       final num currentBalance = walletSnap['balance'] ?? 0;
 
       if (amount <= 0) throw Exception("Invalid amount");
+
+      // CHECK TRANSACTION LIMIT
+      final profileController = Get.find<ProfileController>();
+      if (profileController.isTransactionLimitEnabled.value &&
+          amount > profileController.transactionLimit.value) {
+        throw Exception(
+          "Transfer exceeds your transaction limit of \$${profileController.transactionLimit.value.toStringAsFixed(0)}",
+        );
+      }
+
       if (currentBalance < amount) throw Exception("Insufficient wallet funds");
 
       // Deduct from Wallet

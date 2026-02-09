@@ -15,6 +15,8 @@ class ProfileController extends GetxController {
   final RxString userAvatar = ''.obs;
   final RxInt points = 4000.obs;
   final RxDouble walletBalance = 0.0.obs;
+  final RxDouble transactionLimit = 200.0.obs;
+  final RxBool isTransactionLimitEnabled = true.obs;
 
   @override
   void onInit() {
@@ -54,6 +56,9 @@ class ProfileController extends GetxController {
 
       // Load additional data from storage if available
       points.value = _storage.read('userPoints') ?? 4000;
+      transactionLimit.value = _storage.read('transactionLimit') ?? 200.0;
+      isTransactionLimitEnabled.value =
+          _storage.read('isTransactionLimitEnabled') ?? true;
     } else {
       AppLogger.warning('No user logged in');
     }
@@ -70,34 +75,26 @@ class ProfileController extends GetxController {
           .collection('wallet')
           .doc('main')
           .snapshots()
-          .listen(
-            (snapshot) {
-              if (snapshot.exists) {
-                final data = snapshot.data();
-                AppLogger.info("Snapshot found! Data: $data");
-                walletBalance.value =
-                    (data?['balance'] as num?)?.toDouble() ?? 0.0;
-                AppLogger.info(
-                  "Wallet balance updated: ${walletBalance.value}",
-                );
-              } else {
-                AppLogger.warning("Snapshot DOES NOT exist at: $path");
-                // Temporary Debug Snackbar
-                Get.snackbar(
-                  "Debug: No Wallet Found",
-                  "Please Top Up to create wallet.\nPath: $path",
-                  snackPosition: SnackPosition.TOP,
-                  duration: const Duration(seconds: 10),
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                );
-              }
-            },
-            onError: (e) {
-              AppLogger.error("Error in wallet balance stream", e);
-              Get.snackbar("Error", "Stream Error: $e");
-            },
-          );
+          .listen((snapshot) {
+            if (snapshot.exists) {
+              final data = snapshot.data();
+              AppLogger.info("Snapshot found! Data: $data");
+              walletBalance.value =
+                  (data?['balance'] as num?)?.toDouble() ?? 0.0;
+              AppLogger.info("Wallet balance updated: ${walletBalance.value}");
+            } else {
+              AppLogger.warning("Snapshot DOES NOT exist at: $path");
+              // Temporary Debug Snackbar
+              Get.snackbar(
+                "Debug: No Wallet Found",
+                "Please Top Up to create wallet.\nPath: $path",
+                snackPosition: SnackPosition.TOP,
+                duration: const Duration(seconds: 10),
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+              );
+            }
+          }, onError: (e) {});
     } catch (e, s) {
       AppLogger.error("Error setting up wallet balance fetch", e, s);
     }
@@ -105,6 +102,18 @@ class ProfileController extends GetxController {
 
   void refreshProfile() {
     _loadUserProfile();
+  }
+
+  void updateTransactionLimit(double limit) {
+    transactionLimit.value = limit;
+    _storage.write('transactionLimit', limit);
+    AppLogger.info("Transaction limit updated to: $limit");
+  }
+
+  void toggleTransactionLimit(bool isEnabled) {
+    isTransactionLimitEnabled.value = isEnabled;
+    _storage.write('isTransactionLimitEnabled', isEnabled);
+    AppLogger.info("Transaction limit enabled: $isEnabled");
   }
 
   void logout() async {

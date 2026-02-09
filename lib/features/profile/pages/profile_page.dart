@@ -137,14 +137,13 @@ class ProfilePage extends GetView<ProfileController> {
                 ),
               ),
             ),
-
             // Log out button
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40),
               child: AppButton(
                 text: AppStrings.logoutBtn,
                 onPressed: controller.logout,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
+                padding: EdgeInsets.symmetric(vertical: 13.h),
                 borderRadius: 12,
                 backgroundColor: context.theme.primaryColor,
                 textStyle: AppTextStyles.bodyLarge.copyWith(

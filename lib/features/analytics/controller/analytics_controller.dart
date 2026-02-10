@@ -3,36 +3,12 @@ import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/core/utils/app_logger.dart';
 import 'package:expense/features/wallet/models/transaction_model.dart';
+import 'package:expense/features/analytics/models/chart_data.dart';
+import 'package:expense/features/analytics/models/transaction_item.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 enum TimeFilter { last7Days, thirtyDays, custom }
-
-class ChartData {
-  final String date;
-  final double income;
-  final double expense;
-
-  ChartData({required this.date, required this.income, required this.expense});
-}
-
-class TransactionItem {
-  final String icon;
-  final String title;
-  final String status;
-  final double amount;
-  final String date;
-  final bool isExpense;
-
-  TransactionItem({
-    required this.icon,
-    required this.title,
-    required this.status,
-    required this.amount,
-    required this.date,
-    required this.isExpense,
-  });
-}
 
 class AnalyticsController extends GetxController {
   // Selected time filter

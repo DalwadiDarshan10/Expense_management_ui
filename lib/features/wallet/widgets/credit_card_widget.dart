@@ -14,7 +14,7 @@ class CreditCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 190.h,
+      height: 170.h,
       child: Stack(
         children: [
           // Background Image

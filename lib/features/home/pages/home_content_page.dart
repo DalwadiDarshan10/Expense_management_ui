@@ -142,7 +142,7 @@ class HomePage extends StatelessWidget {
                               '\$${walletController.totalBankBalance.toStringAsFixed(2)}',
                               style: AppTextStyles.headingLarge.copyWith(
                                 color: AppColors.primarySup,
-                                fontSize: 24.sp,
+                                fontSize: 28.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -233,7 +233,7 @@ class HomePage extends StatelessWidget {
                 style: AppTextStyles.bodySmall.copyWith(
                   fontWeight: FontWeight.w500,
                   color: Theme.of(context).textTheme.titleMedium?.color,
-                  fontSize: 12.sp,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
@@ -257,6 +257,7 @@ class HomePage extends StatelessWidget {
               AppStrings.sendAgain,
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
                 color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
@@ -415,6 +416,7 @@ class HomePage extends StatelessWidget {
               AppStrings.paymentList,
               style: AppTextStyles.titleMedium.copyWith(
                 fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
                 color: Theme.of(context).textTheme.titleMedium?.color,
               ),
             ),
@@ -488,6 +490,7 @@ class HomePage extends StatelessWidget {
                   AppStrings.tradingHistory,
                   style: AppTextStyles.titleMedium.copyWith(
                     fontWeight: FontWeight.w600,
+                    fontSize: 18.sp,
                     color: Theme.of(context).textTheme.titleMedium?.color,
                   ),
                 ),

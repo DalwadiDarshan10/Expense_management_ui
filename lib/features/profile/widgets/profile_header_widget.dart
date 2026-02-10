@@ -24,16 +24,13 @@ class ProfileHeaderWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor),
         child: Row(
           children: [
             // Avatar
             Container(
-              width: 68.w,
-              height: 68.w,
+              width: 60.w,
+              height: 60.w,
               decoration: const BoxDecoration(
                 color: Color(0xFFE0E0E0),
                 shape: BoxShape.circle,

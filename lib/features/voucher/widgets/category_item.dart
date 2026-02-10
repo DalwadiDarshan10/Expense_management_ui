@@ -48,6 +48,7 @@ class CategoryItem extends StatelessWidget {
           Text(
             title,
             style: AppTextStyles.labelSmall.copyWith(
+              fontSize: 14.sp,
               color: AppColors.secondaryText,
             ),
           ),

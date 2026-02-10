@@ -46,6 +46,7 @@ class VoucherPage extends StatelessWidget {
                     child: Text(
                       AppStrings.categories,
                       style: AppTextStyles.titleMedium.copyWith(
+                        fontSize: 18.sp,
                         color: context.theme.textTheme.titleMedium?.color,
                       ),
                     ),
@@ -116,6 +117,7 @@ class VoucherPage extends StatelessWidget {
                     Text(
                       AppStrings.topTrendingDeals,
                       style: AppTextStyles.titleMedium.copyWith(
+                        fontSize: 18.sp,
                         color: context.theme.textTheme.titleMedium?.color,
                       ),
                     ),
@@ -203,6 +205,7 @@ class VoucherPage extends StatelessWidget {
                           AppStrings.saleOff50,
                           style: AppTextStyles.titleMedium.copyWith(
                             color: context.theme.textTheme.titleMedium?.color,
+                            fontSize: 18.sp,
                           ),
                         ),
                         GestureDetector(

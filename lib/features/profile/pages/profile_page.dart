@@ -91,9 +91,9 @@ class ProfilePage extends GetView<ProfileController> {
 
                     ProfileMenuItemWidget(
                       title: AppStrings.manageGroupFriends,
-                      icon: Icon(
-                        Icons.group_outlined,
-                        size: 24.r,
+                      icon: AppImageViewer(
+                        imagePath: AppImages.twoUserIcon,
+                        height: 22,
                         color: context.theme.iconTheme.color,
                       ),
                       onTap: () {
@@ -107,9 +107,9 @@ class ProfilePage extends GetView<ProfileController> {
 
                     ProfileMenuItemWidget(
                       title: AppStrings.paymentSecurity,
-                      icon: Icon(
-                        Icons.lock_outline,
-                        size: 24.r,
+                      icon: AppImageViewer(
+                        imagePath: AppImages.unlockIcon,
+                        height: 22,
                         color: context.theme.iconTheme.color,
                       ),
                       onTap: () {
@@ -123,9 +123,9 @@ class ProfilePage extends GetView<ProfileController> {
 
                     ProfileMenuItemWidget(
                       title: AppStrings.settingTitle,
-                      icon: Icon(
-                        Icons.settings_outlined,
-                        size: 24.r,
+                      icon: AppImageViewer(
+                        imagePath: AppImages.settingIcon,
+                        height: 22,
                         color: context.theme.iconTheme.color,
                       ),
                       onTap: () {

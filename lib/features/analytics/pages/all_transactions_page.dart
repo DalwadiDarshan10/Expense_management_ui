@@ -2,6 +2,7 @@ import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/analytics/controller/analytics_controller.dart';
 import 'package:expense/features/analytics/widgets/trading_history_item_widget.dart';
+import 'package:expense/features/analytics/models/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -85,6 +86,7 @@ class AllTransactionsPage extends GetView<AnalyticsController> {
         date,
         style: AppTextStyles.titleSmall.copyWith(
           color: context.theme.textTheme.bodySmall?.color,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -132,12 +132,11 @@ class WalletsDashboardPage extends GetView<WalletController> {
             ),
           ),
           width: double.infinity,
-          child: AppImageViewer(
+          child: const AppImageViewer(
             imagePath: AppImages.menuPageBackground,
             fit: BoxFit.fill,
           ),
         ),
-        // Content on top of the background
         SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -254,7 +253,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
                             context,
                             icon: AppImages.historyIcon,
                             label: AppStrings.history,
-                            onTap: () => Get.toNamed(AppNamed.notificationPage),
+                            onTap: () => Get.toNamed(AppNamed.allTransactions),
                           ),
                         ),
                       ],
@@ -291,6 +290,7 @@ class WalletsDashboardPage extends GetView<WalletController> {
             label,
             style: AppTextStyles.labelMedium.copyWith(
               color: Theme.of(context).textTheme.labelMedium?.color,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
           ),

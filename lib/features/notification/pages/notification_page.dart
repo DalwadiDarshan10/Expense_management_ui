@@ -3,6 +3,7 @@ import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/notification/controllers/notification_controller.dart';
+import 'package:expense/features/notification/models/notification_model.dart';
 import 'package:expense/features/notification/widgets/notification_item_widget.dart';
 import 'package:expense/widgets/app_image_viewer.dart';
 

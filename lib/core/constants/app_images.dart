@@ -1,13 +1,3 @@
-/// App Images - Contains all image paths used in the application
-///
-/// Usage with AppImageViewer:
-/// ```dart
-/// AppImageViewer(
-///   imagePath: AppImages.logo,
-///   height: 100,
-///   width: 100,
-/// )
-/// ```
 class AppImages {
   // Private constructor to prevent instantiation
   AppImages._();
@@ -57,6 +47,9 @@ class AppImages {
   // Profile
   static const String profileActive = '$_iconPath/profile_active.svg';
   static const String profileInactive = '$_iconPath/profile_inactive.svg';
+  static const String twoUserIcon = '$_iconPath/two_user_icon.svg';
+  static const String settingIcon = '$_iconPath/setting_icon.svg';
+  static const String unlockIcon = '$_iconPath/unlock.svg';
 
   // Payment Badge Images
   static const String electricityBadge =

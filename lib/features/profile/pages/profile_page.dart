@@ -2,7 +2,7 @@ import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
 
 import 'package:expense/core/theme/app_text_styles.dart';
-import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:expense/features/profile/widgets/profile_header_widget.dart';
 import 'package:expense/features/profile/widgets/profile_menu_item_widget.dart';
 import 'package:expense/features/profile/widgets/profile_stats_widget.dart';

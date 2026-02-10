@@ -186,6 +186,7 @@ class WithdrawPage extends GetView<WithdrawController> {
           Text(
             '(Surplus: ',
             style: AppTextStyles.bodySmall.copyWith(
+              fontSize: 16.sp,
               color: AppColors.secondaryText,
             ),
           ),
@@ -194,6 +195,7 @@ class WithdrawPage extends GetView<WithdrawController> {
               '\$ ${controller.walletBalance.value.toStringAsFixed(2)}',
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.primary,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -202,6 +204,7 @@ class WithdrawPage extends GetView<WithdrawController> {
             ')',
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.secondaryText,
+              fontSize: 16.sp,
             ),
           ),
         ],

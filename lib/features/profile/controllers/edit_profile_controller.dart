@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
-import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:expense/features/profile/services/image_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

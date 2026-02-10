@@ -1,6 +1,6 @@
 import 'package:expense/core/localization/language_controller.dart';
 import 'package:expense/core/theme/theme_controller.dart';
-import 'package:expense/features/profile/controller/security_controller.dart';
+import 'package:expense/features/profile/controllers/security_controller.dart';
 import 'package:expense/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

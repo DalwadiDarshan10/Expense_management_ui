@@ -72,7 +72,7 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
         ),
         child: Text(
           label,
-          style: AppTextStyles.labelMedium.copyWith(
+          style: AppTextStyles.labelLarge.copyWith(
             color: isSelected
                 ? AppColors.primary
                 : Theme.of(context).textTheme.bodySmall?.color,
@@ -112,13 +112,15 @@ class TimeFilterTabsWidget extends GetView<AnalyticsController> {
                         surface: context.theme.cardColor,
                         onSurface: Colors.white,
                       )
-                    : ColorScheme.light(
+                    : const ColorScheme.light(
                         primary: AppColors.primary,
                         onPrimary: Colors.white,
                         surface: Colors.white,
                         onSurface: AppColors.primaryText,
                       ),
-                dialogBackgroundColor: context.theme.scaffoldBackgroundColor,
+                dialogTheme: DialogThemeData(
+                  backgroundColor: context.theme.scaffoldBackgroundColor,
+                ),
               ),
               child: child!,
             );

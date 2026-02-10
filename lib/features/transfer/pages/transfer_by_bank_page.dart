@@ -4,7 +4,6 @@ import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/transfer/controllers/transfer_by_bank_controller.dart';
 import 'package:expense/widgets/app_swipe_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:expense/core/constants/app_strings.dart';
@@ -113,7 +112,7 @@ class TransferByBankPage extends GetView<TransferByBankController> {
                             ),
                           );
                         },
-                        avatar: AppImageViewer(
+                        avatar: const AppImageViewer(
                           imagePath: AppImages.appLogoSquare,
                         ),
                       );

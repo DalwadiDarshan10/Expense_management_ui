@@ -1,4 +1,4 @@
-import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:get/get.dart';
 
 class ProfileBinding extends Bindings {

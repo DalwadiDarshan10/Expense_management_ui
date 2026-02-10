@@ -101,14 +101,8 @@ class AllTransactionsPage extends GetView<AnalyticsController> {
     final yesterday = now.subtract(const Duration(days: 1));
 
     for (var item in items) {
-      // items.date is formatted like "MMM dd - h:mm a"
-      // We need to extract the date part for grouping
       String dateLabel;
       try {
-        // Try to parse back the date or use a more robust grouping if date was stored as DateTime in controller
-        // For now, let's use the date string prefix or logic based on current time
-        // Actually, it's better to group by the actual DateTime if available.
-        // But since TransactionItem already has a formatted date, let's try to group by the "MMM dd" part.
         final datePart = item.date.split(' - ')[0];
 
         // Check if it's today or yesterday

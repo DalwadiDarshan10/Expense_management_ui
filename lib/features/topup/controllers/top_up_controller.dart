@@ -153,7 +153,7 @@ class TopUpController extends GetxController {
                       ),
                     ),
                     subtitle: Text(
-                      '**** ${card.last4}',
+                      '**** **** **** **** ${card.last4}',
                       style: AppTextStyles.bodyMedium.copyWith(
                         fontWeight: FontWeight.w400,
                         color: Theme.of(context).textTheme.bodyLarge?.color,

@@ -50,7 +50,7 @@ class LabeledInputTile extends StatelessWidget {
               Text(
                 title,
                 style: AppTextStyles.labelLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 18.sp,
                   color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
@@ -71,7 +71,7 @@ class LabeledInputTile extends StatelessWidget {
             maxLength: maxLength,
 
             onChanged: onChanged,
-            style: AppTextStyles.bodyMedium.copyWith(
+            style: AppTextStyles.bodyLarge.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
             decoration: InputDecoration(
@@ -88,7 +88,7 @@ class LabeledInputTile extends StatelessWidget {
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Theme.of(context).dividerColor),
               ),
-              focusedBorder: UnderlineInputBorder(
+              focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),

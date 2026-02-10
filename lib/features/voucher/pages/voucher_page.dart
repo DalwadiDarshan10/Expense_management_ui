@@ -153,6 +153,7 @@ class VoucherPage extends StatelessWidget {
                       child: Text(
                         AppStrings.viewAll,
                         style: AppTextStyles.labelSmall.copyWith(
+                          fontSize: 16.sp,
                           color: AppColors.primary,
                         ),
                       ),
@@ -234,6 +235,7 @@ class VoucherPage extends StatelessWidget {
                           child: Text(
                             AppStrings.viewAll,
                             style: AppTextStyles.labelSmall.copyWith(
+                              fontSize: 16.sp,
                               color: AppColors.primary,
                             ),
                           ),

@@ -151,7 +151,7 @@ class MyQrPage extends StatelessWidget {
                           children: [
                             SizedBox(height: 10.h),
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               color: Colors.white,
                               child: Container(
                                 color: Colors.white,
@@ -177,10 +177,11 @@ class MyQrPage extends StatelessWidget {
                                       ? SizedBox(
                                           height: 20.h,
                                           width: 20.w,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
+                                          child:
+                                              const CircularProgressIndicator(
+                                                color: Colors.white,
+                                                strokeWidth: 2,
+                                              ),
                                         )
                                       : AppImageViewer(
                                           imagePath: AppImages.downloadIcon,

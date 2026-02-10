@@ -8,7 +8,7 @@ import 'package:expense/features/wallet/models/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class WalletController extends GetxController {

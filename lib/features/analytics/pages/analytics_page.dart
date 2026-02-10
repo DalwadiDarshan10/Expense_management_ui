@@ -119,7 +119,8 @@ class AnalyticsPage extends GetView<AnalyticsController> {
               Text(
                 AppStrings.tradingHistory,
                 style: AppTextStyles.titleMedium.copyWith(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.sp,
                   color: context.theme.textTheme.bodyLarge?.color,
                 ),
               ),

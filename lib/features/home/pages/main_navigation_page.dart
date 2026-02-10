@@ -2,7 +2,7 @@ import 'package:expense/features/analytics/controller/analytics_controller.dart'
 import 'package:expense/features/analytics/pages/analytics_page.dart';
 import 'package:expense/features/home/pages/home_content_page.dart';
 import 'package:expense/features/home/widgets/bottom_nav_bar_widget.dart';
-import 'package:expense/features/profile/controller/profile_controller.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:expense/features/profile/pages/profile_page.dart';
 import 'package:expense/features/voucher/pages/voucher_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';

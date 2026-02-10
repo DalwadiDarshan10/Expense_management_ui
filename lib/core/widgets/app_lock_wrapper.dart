@@ -1,4 +1,4 @@
-import 'package:expense/features/profile/controller/security_controller.dart';
+import 'package:expense/features/profile/controllers/security_controller.dart';
 import 'package:expense/features/profile/pages/pin_lock_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

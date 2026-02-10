@@ -38,9 +38,10 @@ class WithdrawController extends GetxController {
     final bankName = bankAccount?['bankName'] ?? "Unknown Bank";
     String number = "**** **** **** ****";
     if (card.last4 != null) {
-      number = "**** ${card.last4}";
+      number = "**** **** **** **** ${card.last4}";
     } else if (card.cardNumber.length >= 4) {
-      number = "**** ${card.cardNumber.substring(card.cardNumber.length - 4)}";
+      number =
+          "**** **** **** **** ${card.cardNumber.substring(card.cardNumber.length - 4)}";
     }
 
     return {"name": bankName, "number": number};
@@ -78,7 +79,7 @@ class WithdrawController extends GetxController {
                         ),
                       ),
                       subtitle: Text(
-                        '**** ${card.last4 ?? (card.cardNumber.length >= 4 ? card.cardNumber.substring(card.cardNumber.length - 4) : '')}',
+                        '**** **** **** **** ${card.last4 ?? (card.cardNumber.length >= 4 ? card.cardNumber.substring(card.cardNumber.length - 4) : '')}',
                         style: AppTextStyles.bodyMedium.copyWith(
                           fontWeight: FontWeight.w400,
                           color: Theme.of(context).textTheme.bodyLarge?.color,

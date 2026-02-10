@@ -30,7 +30,7 @@ import 'package:expense/features/profile/bingings/edit_profile_binding.dart';
 import 'package:expense/features/profile/pages/edit_profile_page.dart';
 import 'package:expense/features/profile/pages/payment_security_page.dart';
 import 'package:expense/features/profile/pages/setting_page.dart';
-import 'package:expense/features/analytics/bindings/share_analysis_binding.dart';
+import 'package:expense/features/analytics/bingings/share_analysis_binding.dart';
 import 'package:expense/features/analytics/pages/share_analysis_page.dart';
 import 'package:expense/features/notification/pages/notification_page.dart';
 import 'package:expense/features/transfer/pages/transfer_page.dart';

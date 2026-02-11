@@ -44,12 +44,6 @@ class TopUpController extends GetxController {
   }
 
   Future<void> performTopUp() async {
-    // Parse input as double first to allow flexibility, then cast to int for now
-    // since topUp signature requires int. Or we'll fix WalletController later.
-    // For now, let's assume we want integer top-ups from preset denominations.
-
-    // Actually, user might type 50.50.
-    // Let's parse as double.
     final doubleAmount = customAmountController.text.isNotEmpty
         ? double.tryParse(customAmountController.text.replaceAll(',', '')) ??
               selectedDenomination.value.toDouble()

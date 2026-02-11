@@ -65,7 +65,7 @@ class SignupSuccessfulPage extends StatelessWidget {
                 text: AppStrings.doneBtn,
                 onPressed: () {
                   // Navigate to login or home
-                  Get.toNamed(AppNamed.menuPage);
+                  Get.offAllNamed(AppNamed.menuPage);
                 },
               ),
 

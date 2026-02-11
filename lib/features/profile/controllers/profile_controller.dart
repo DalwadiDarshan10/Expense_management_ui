@@ -85,14 +85,14 @@ class ProfileController extends GetxController {
             } else {
               AppLogger.warning("Snapshot DOES NOT exist at: $path");
               // Temporary Debug Snackbar
-              Get.snackbar(
-                "Debug: No Wallet Found",
-                "Please Top Up to create wallet.\nPath: $path",
-                snackPosition: SnackPosition.TOP,
-                duration: const Duration(seconds: 10),
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-              );
+              // Get.snackbar(
+              //   "Debug: No Wallet Found",
+              //   "Please Top Up to create wallet.\nPath: $path",
+              //   snackPosition: SnackPosition.TOP,
+              //   duration: const Duration(seconds: 10),
+              //   backgroundColor: Colors.red,
+              //   colorText: Colors.white,
+              // );
             }
           }, onError: (e) {});
     } catch (e, s) {

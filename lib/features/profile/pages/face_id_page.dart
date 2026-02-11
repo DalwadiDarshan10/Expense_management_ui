@@ -20,7 +20,7 @@ class FaceIdPage extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
+
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_new,

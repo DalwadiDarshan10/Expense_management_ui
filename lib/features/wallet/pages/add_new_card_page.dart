@@ -84,13 +84,10 @@ class AddNewCardPage extends GetView<WalletController> {
                 label: AppStrings.expiredLabel,
                 hint: AppStrings.expiredHint,
                 controller: controller.expiryDateController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.datetime,
                 errorText: controller.expiryDateError.value,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4),
-                  _ExpiryDateFormatter(),
-                ],
+                readOnly: true,
+                onTap: () => _selectExpiryDate(context),
               );
             }),
             Container(
@@ -244,12 +241,14 @@ class AddNewCardPage extends GetView<WalletController> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Obx(
-                  () => AppButton(
-                    text: controller.editingCardId.value != null
-                        ? 'Update Card'
-                        : AppStrings.btnAddNewCard,
-                    onPressed: controller.addNewCard,
-                  ),
+                  () => controller.isLoading.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : AppButton(
+                          text: controller.editingCardId.value != null
+                              ? 'Update Card'
+                              : AppStrings.btnAddNewCard,
+                          onPressed: controller.addNewCard,
+                        ),
                 ),
               ),
             ),
@@ -263,6 +262,26 @@ class AddNewCardPage extends GetView<WalletController> {
     );
   }
 
+  Future<void> _selectExpiryDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime firstDate = DateTime(now.year, now.month);
+    final DateTime lastDate = DateTime(now.year + 20, 12);
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: firstDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialDatePickerMode: DatePickerMode.year,
+    );
+
+    if (picked != null) {
+      final String formatted =
+          "${picked.month.toString().padLeft(2, '0')}/${picked.year.toString().substring(2)}";
+      controller.expiryDateController.text = formatted;
+    }
+  }
+
   Widget _buildTextField(
     BuildContext context, {
     required String label,
@@ -273,6 +292,7 @@ class AddNewCardPage extends GetView<WalletController> {
     List<TextInputFormatter>? inputFormatters,
     String? errorText,
     bool readOnly = false,
+    VoidCallback? onTap,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
@@ -289,6 +309,7 @@ class AddNewCardPage extends GetView<WalletController> {
           ),
 
           TextField(
+            onTap: onTap,
             controller: controller,
             keyboardType: keyboardType,
             obscureText: obscureText,
@@ -351,35 +372,6 @@ class _CardNumberFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: buffer.toString(),
       selection: TextSelection.collapsed(offset: buffer.toString().length),
-    );
-  }
-}
-
-class _ExpiryDateFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    var text = newValue.text;
-
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
-    var buffer = StringBuffer();
-    for (int i = 0; i < text.length; i++) {
-      buffer.write(text[i]);
-      var nonZeroIndex = i + 1;
-      if (nonZeroIndex % 2 == 0 && nonZeroIndex != text.length) {
-        buffer.write('/');
-      }
-    }
-
-    var string = buffer.toString();
-    return newValue.copyWith(
-      text: string,
-      selection: TextSelection.collapsed(offset: string.length),
     );
   }
 }

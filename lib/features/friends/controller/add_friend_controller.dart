@@ -64,8 +64,11 @@ class AddFriendController extends GetxController {
         emailError.value == null;
   }
 
+  final RxBool isLoading = false.obs;
+
   Future<void> addFriend() async {
     if (validate()) {
+      isLoading.value = true;
       try {
         final friendsCtrl = Get.find<FriendsController>();
         final newFriend = FriendModel(
@@ -93,6 +96,8 @@ class AddFriendController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+      } finally {
+        isLoading.value = false;
       }
     }
   }

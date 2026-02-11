@@ -139,8 +139,7 @@ class RegisterController extends GetxController {
       isEmailValid.value &&
       isPhoneValid.value &&
       isPasswordValid &&
-      doPasswordsMatch &&
-      agreeToTerms.value;
+      doPasswordsMatch;
 
   /// Validates all fields - call this on button tap
   void validateAllFields() {

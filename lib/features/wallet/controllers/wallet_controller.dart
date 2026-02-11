@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/core/utils/app_logger.dart';
+import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:expense/features/wallet/models/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class WalletController extends GetxController {
@@ -18,8 +18,6 @@ class WalletController extends GetxController {
   // Current card being added (for live preview in UI)
   final Rx<CardModel> currentCard = CardModel.empty().obs;
 
-  // List of saved bank accounts (Observed from Firestore)
-  // Maps bankId (or docId) to dynamic data: {balance: int, ...}
   final RxList<Map<String, dynamic>> savedBankAccounts =
       <Map<String, dynamic>>[].obs;
 
@@ -60,9 +58,6 @@ class WalletController extends GetxController {
     fetchBankAccounts();
     ensureWalletExists();
     fetchWalletBalance();
-    // END Firestore Logic
-
-    // Set default image for new card
     assignRandomCardImage();
 
     // Listen to text changes to update the live preview and clear errors
@@ -77,7 +72,6 @@ class WalletController extends GetxController {
     cardNumberController.addListener(() {
       currentCard.update((val) {
         val?.cardNumber = cardNumberController.text;
-        // Also update last4 for preview logic if needed, though mostly visual
       });
       if (cardNumberError.value != null &&
           cardNumberController.text.isNotEmpty) {
@@ -478,7 +472,7 @@ class WalletController extends GetxController {
     await userDoc.collection('bankAccounts').doc(bankId).set({
       "bankName": bankName,
       "linkedCardId": cardId,
-      "balance": 0,
+      "balance": 5000,
       "createdAt": Timestamp.now(),
     });
 
@@ -495,9 +489,13 @@ class WalletController extends GetxController {
   // State for Edit Mode
   final RxnString editingCardId = RxnString(null);
 
+  // Loading State
+  final RxBool isLoading = false.obs;
+
   // Triggered by UI Button
   Future<void> addNewCard() async {
     if (validateForm()) {
+      isLoading.value = true;
       try {
         AppLogger.info("Attempting to save card from UI.");
         // Detect card type (simple logic or default)
@@ -543,6 +541,8 @@ class WalletController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
+      } finally {
+        isLoading.value = false;
       }
     }
   }

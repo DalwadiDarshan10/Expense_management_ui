@@ -76,9 +76,13 @@ class AddFriendPage extends GetView<AddFriendController> {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: SizedBox(
                 width: double.infinity,
-                child: AppButton(
-                  text: AppStrings.addNewContactBtn,
-                  onPressed: controller.addFriend,
+                child: Obx(
+                  () => controller.isLoading.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : AppButton(
+                          text: AppStrings.addNewContactBtn,
+                          onPressed: controller.addFriend,
+                        ),
                 ),
               ),
             ),

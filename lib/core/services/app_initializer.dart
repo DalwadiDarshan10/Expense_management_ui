@@ -1,4 +1,5 @@
 import 'package:expense/core/localization/language_controller.dart';
+import 'package:expense/core/services/notification_service.dart';
 import 'package:expense/core/theme/theme_controller.dart';
 import 'package:expense/features/profile/controllers/security_controller.dart';
 import 'package:expense/firebase_options.dart';
@@ -23,5 +24,8 @@ class AppInitializer {
     Get.put(LanguageController(), permanent: true);
     Get.put(ThemeController(), permanent: true);
     Get.put(SecurityController(), permanent: true);
+
+    // Initialize Notification Service
+    await NotificationService.instance.init();
   }
 }

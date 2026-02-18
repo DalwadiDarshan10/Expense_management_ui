@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense/core/services/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:expense/features/shared/pages/transaction_success_page.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
@@ -189,6 +190,12 @@ class TransferByWalletController extends GetxController {
           recipientName: recipient.name,
           recipientInfo: recipient.phone,
         ),
+      );
+
+      NotificationService.instance.showNotification(
+        title: "Transfer Successful",
+        body:
+            "You have successfully transferred ${amountController.text} to ${recipient.name}",
       );
     } catch (e) {
       Get.snackbar("Transfer Failed", e.toString());

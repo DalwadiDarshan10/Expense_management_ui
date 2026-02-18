@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense/core/constants/app_images.dart';
 import 'package:expense/core/services/firestore_service.dart';
+import 'package:expense/core/services/notification_service.dart';
 import 'package:expense/core/utils/app_logger.dart';
 import 'package:expense/features/profile/controllers/profile_controller.dart';
 import 'package:expense/features/wallet/models/card_model.dart';
@@ -266,6 +267,12 @@ class WalletController extends GetxController {
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
     );
+
+    NotificationService.instance.showNotification(
+      title: "Top Up Successful",
+      body: "You have topped up ₹$amount",
+      payload: {"type": "TOPUP_SUCCESS", "amount": amount},
+    );
   }
 
   /// WITHDRAW: Wallet ➜ Bank
@@ -321,6 +328,12 @@ class WalletController extends GetxController {
       backgroundColor: Colors.green,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
+    );
+
+    NotificationService.instance.showNotification(
+      title: "Withdrawal Successful",
+      body: "You have withdrawn ₹$amount",
+      payload: {"type": "WITHDRAW_SUCCESS", "amount": amount},
     );
   }
 
@@ -379,6 +392,16 @@ class WalletController extends GetxController {
       backgroundColor: Colors.green,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
+    );
+
+    NotificationService.instance.showNotification(
+      title: "Transfer Successful",
+      body: "Sent ₹$amount to $recipientName",
+      payload: {
+        "type": "TRANSFER_SUCCESS",
+        "amount": amount,
+        "recipient": recipientName,
+      },
     );
   }
 

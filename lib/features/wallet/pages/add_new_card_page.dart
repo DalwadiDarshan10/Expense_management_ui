@@ -1,4 +1,5 @@
 import 'package:expense/core/constants/app_strings.dart';
+import 'package:expense/core/services/notification_service.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
@@ -28,7 +29,6 @@ class AddNewCardPage extends GetView<WalletController> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).cardColor,
-
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -36,6 +36,21 @@ class AddNewCardPage extends GetView<WalletController> {
           ),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_active),
+            onPressed: () {
+              NotificationService.instance.showNotification(
+                title: "Transfer Successful",
+                body: "₹500 sent successfully",
+                payload: {
+                  "type": "TRANSFER_SUCCESS",
+                  "transactionId": "TXN_123",
+                },
+              );
+            },
+          ),
+        ],
         title: Obx(
           () => Text(
             controller.editingCardId.value != null

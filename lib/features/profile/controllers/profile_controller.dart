@@ -1,7 +1,6 @@
 import 'package:expense/core/services/firestore_service.dart';
 import 'package:expense/core/utils/app_logger.dart';
 import 'package:expense/features/auth/services/auth_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -84,15 +83,6 @@ class ProfileController extends GetxController {
               AppLogger.info("Wallet balance updated: ${walletBalance.value}");
             } else {
               AppLogger.warning("Snapshot DOES NOT exist at: $path");
-              // Temporary Debug Snackbar
-              // Get.snackbar(
-              //   "Debug: No Wallet Found",
-              //   "Please Top Up to create wallet.\nPath: $path",
-              //   snackPosition: SnackPosition.TOP,
-              //   duration: const Duration(seconds: 10),
-              //   backgroundColor: Colors.red,
-              //   colorText: Colors.white,
-              // );
             }
           }, onError: (e) {});
     } catch (e, s) {

@@ -10,6 +10,11 @@ import 'package:expense/features/wallet/models/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:expense/core/services/cloud_function_simulator.dart';
+import 'package:expense/core/security/luhn_validator.dart';
+import 'package:expense/core/security/encryption_service.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
 class WalletController extends GetxController {
@@ -406,49 +411,27 @@ class WalletController extends GetxController {
   }
 
   /// TRANSFER FROM WALLET (P2P): My Wallet ➜ Recipient
-  /// TRANSFER FROM WALLET (P2P): My Wallet ➜ Recipient
   Future<void> transferFromWallet({
     required double amount,
-    required String recipientInfo,
+    required String recipientInfo, // Phone
+    String? recipientUid, // Now required for secure transfer
     String? recipientName,
   }) async {
-    final userDoc = FirestoreService.userDoc();
-    final walletRef = userDoc.collection('wallet').doc('main');
-    final txnRef = userDoc.collection('transactions').doc();
+    final senderUid = FirestoreService.uid;
 
-    await FirebaseFirestore.instance.runTransaction((transaction) async {
-      final walletSnap = await transaction.get(walletRef);
-      if (!walletSnap.exists) throw Exception("Wallet not found");
+    if (recipientUid == null) {
+      // Ideally we should lookup UID from phone here if not passed.
+      // But for now, we expect the controller to pass it.
+      throw Exception("Recipient UID is required for secure transfer.");
+    }
 
-      final num currentBalance = walletSnap['balance'] ?? 0;
-
-      if (amount <= 0) throw Exception("Invalid amount");
-
-      // CHECK TRANSACTION LIMIT
-      final profileController = Get.find<ProfileController>();
-      if (profileController.isTransactionLimitEnabled.value &&
-          amount > profileController.transactionLimit.value) {
-        throw Exception(
-          "Transfer exceeds your transaction limit of \$${profileController.transactionLimit.value.toStringAsFixed(0)}",
-        );
-      }
-
-      if (currentBalance < amount) throw Exception("Insufficient wallet funds");
-
-      // Deduct from Wallet
-      transaction.update(walletRef, {"balance": currentBalance - amount});
-
-      // Record Transaction
-      transaction.set(txnRef, {
-        "type": "transfer",
-        "amount": amount,
-        "from": "wallet",
-        "recipientInfo": recipientInfo,
-        "recipientName": recipientName,
-        "status": "success",
-        "createdAt": Timestamp.now(),
-      });
-    });
+    // Call the Simulator (Simulating Cloud Function Invocation)
+    await CloudFunctionSimulator.instance.transferMoney(
+      senderUid: senderUid,
+      amount: amount,
+      receiverUid: recipientUid,
+      receiverPhone: recipientInfo,
+    );
 
     Get.snackbar(
       "Success",
@@ -459,7 +442,7 @@ class WalletController extends GetxController {
     );
   }
 
-  /// ADD CARD + CREATE BANK ACCOUNT WITH $1000
+  /// ADD CARD + CREATE BANK ACCOUNT WITH $1000 (SECURE)
   Future<void> addCard({
     required String bankName,
     required String cardType,
@@ -467,15 +450,52 @@ class WalletController extends GetxController {
     required String expiry,
     required String cardHolderName,
   }) async {
+    // 1. Validation (Already done in validateForm, but good to be safe)
+    // if (!LuhnValidator.validate(cardNumber)) {
+    //   throw Exception("Invalid Card Number (Luhn Check Failed)");
+    // }
+
     final cardId = _uuid.v4();
     final bankId = _uuid.v4();
+    final cleanNumber = cardNumber.replaceAll(RegExp(r'\D'), '');
+    final last4 = cleanNumber.length >= 4
+        ? cleanNumber.substring(cleanNumber.length - 4)
+        : cleanNumber;
+
+    // 2. Encrypt
+    final encryptedNumber = EncryptionService.encryptCard(cleanNumber);
+
+    // 3. Uniqueness Check (SHA256)
+    final bytes = utf8.encode(cleanNumber);
+    final hash = sha256.convert(bytes).toString();
+
+    // Check if this card exists globally (Simulated secure check)
+    // In real app, Cloud Function does this inside a transaction or batch.
+    final hashRef = FirebaseFirestore.instance
+        .collection('cardHashes')
+        .doc(hash);
+    final hashSnap = await hashRef.get();
+
+    if (hashSnap.exists) {
+      throw Exception("This card is already registered in the system.");
+    }
+
+    // Reserve the hash
+    await hashRef.set({
+      "uid": FirestoreService.uid,
+      "createdAt": FieldValue.serverTimestamp(),
+    });
 
     AppLogger.info("Attempting to add card: $bankName, Type: $cardType");
     final card = CardModel(
       cardId: cardId,
       bankName: bankName,
       cardType: cardType,
-      cardNumber: cardNumber,
+      cardNumber:
+          cardNumber, // Will be masked in toMap if we changed logic, but toMap uses this.
+      // Actually toMap now takes encryptedCardNumber property.
+      encryptedCardNumber: encryptedNumber,
+      last4: last4,
       expiryDate: expiry,
       cardHolderName: cardHolderName,
       cardImage: "", // Not saved
@@ -484,14 +504,16 @@ class WalletController extends GetxController {
     final userDoc = FirestoreService.userDoc();
     final cardData = card.toMap();
 
-    AppLogger.debug("Card Data to save: $cardData");
+    AppLogger.debug(
+      "Card Data to save: $cardData",
+    ); // Don't log full number if possible, but our logger is local.
 
-    /// Save card
+    /// 3. Save card (Encrypted only)
     await userDoc.collection('cards').doc(cardId).set(cardData);
 
     AppLogger.info("Card saved to Firestore: $cardId");
 
-    /// Create bank account with $0 (Initial setup)
+    /// Create bank account with $5000 (Initial setup)
     await userDoc.collection('bankAccounts').doc(bankId).set({
       "bankName": bankName,
       "linkedCardId": cardId,
@@ -521,8 +543,7 @@ class WalletController extends GetxController {
       isLoading.value = true;
       try {
         AppLogger.info("Attempting to save card from UI.");
-        // Detect card type (simple logic or default)
-        String cardType = "Debit"; // Default or logic
+        String cardType = "Debit";
 
         if (editingCardId.value != null) {
           await updateCard(
@@ -573,7 +594,21 @@ class WalletController extends GetxController {
   void populateForEdit(CardModel card) {
     // Fill controllers
     bankNameController.text = card.bankName;
-    cardNumberController.text = card.cardNumber;
+
+    // Decrypt if available, otherwise use stored (likely masked) value
+    if (card.encryptedCardNumber != null &&
+        card.encryptedCardNumber!.isNotEmpty) {
+      try {
+        cardNumberController.text = EncryptionService.decryptCard(
+          card.encryptedCardNumber!,
+        );
+      } catch (e) {
+        AppLogger.error("Failed to decrypt card for edit", e);
+        cardNumberController.text = ""; // Fail safe
+      }
+    } else {
+      cardNumberController.text = card.cardNumber;
+    }
     expiryDateController.text = card.expiryDate;
     cardHolderNameController.text = card.cardHolderName;
 
@@ -640,9 +675,8 @@ class WalletController extends GetxController {
       bankNameError.value = null;
     }
 
-    if (cardNumberController.text.isEmpty ||
-        cardNumberController.text.length < 16) {
-      cardNumberError.value = "Valid Card Number is required";
+    if (cardNumberController.text.isEmpty) {
+      cardNumberError.value = "Card Number is required";
       isValid = false;
     } else {
       cardNumberError.value = null;

@@ -1,24 +1,57 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if the user is authenticated
+    // Helper function to check if user is authenticated
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Helper function to check if the user is accessing their own data
+    // Helper function to check if user is accessing their own document
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // User data rules
+    // User profile rules
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      // Any authenticated user can read a profile (essential for finding recipients via UID)
+      allow read: if isAuthenticated();
+      
+      // Only the owner can update their basic profile info
+      allow update: if isOwner(userId) 
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                        .hasOnly(['username', 'phone', 'email', 'updatedAt', 'walletBalance']);
+      
+      // Specific rules for the wallet subcollection to support P2P transfers
+      match /wallet/{walletId} {
+        // Any authenticated user can read/write to a wallet document
+        // This is required for P2P transfers (sender deducts, receiver gains)
+        // In a production app, you'd use Cloud Functions to make this more secure.
+        allow read, write: if isAuthenticated();
+      }
 
-      // Subcollections (transactions, wallet, cards, friends, etc.)
-      match /{document=**} {
+      // Subcollections belonging to the user
+      match /{allSubcollections=**} {
+        // Only the owner can read/write their own subcollections (cards, bankAccounts, transactions, friends)
+        // EXCEPT for the wallet subcollection which needs P2P access
         allow read, write: if isOwner(userId);
       }
+    }
+
+    // Transactions collection (root level)
+    match /transactions/{txnId} {
+      // Allow read if the user is the sender or receiver
+      allow read: if isAuthenticated() && 
+                  (request.auth.uid == resource.data.senderUid || 
+                   request.auth.uid == resource.data.receiverUid);
+      
+      // Allow create if the user is the sender (for simulating transfer) or authenticated (for admin/server simulation)
+      allow create: if isAuthenticated();
+    }
+
+    // [New] Global Card Hashes (For Uniqueness Check)
+    // Authenticated users need to read to check existence, and write to reserve.
+    match /cardHashes/{hash} {
+      allow read, write: if isAuthenticated();
     }
   }
 }

@@ -178,6 +178,7 @@ class TransferByWalletController extends GetxController {
         await walletController.transferFromWallet(
           amount: amount,
           recipientInfo: recipient.phone,
+          recipientUid: recipient.id, // Pass UID (From FriendModel)
           recipientName: recipient.name,
         );
       }

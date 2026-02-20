@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:math';
+// import 'dart:math'; // Unused
 import 'package:expense/core/constants/app_images.dart';
 
 class CardModel {
@@ -14,6 +14,7 @@ class CardModel {
   String? cardId;
   String? cardType;
   String? last4;
+  String? encryptedCardNumber; // Store encrypted full number
   DateTime? createdAt;
 
   CardModel({
@@ -25,6 +26,7 @@ class CardModel {
     this.cardId,
     this.cardType,
     this.last4,
+    this.encryptedCardNumber,
     this.createdAt,
   });
 
@@ -55,6 +57,7 @@ class CardModel {
     String? cardId,
     String? cardType,
     String? last4,
+    String? encryptedCardNumber,
     DateTime? createdAt,
   }) {
     return CardModel(
@@ -66,6 +69,7 @@ class CardModel {
       cardId: cardId ?? this.cardId,
       cardType: cardType ?? this.cardType,
       last4: last4 ?? this.last4,
+      encryptedCardNumber: encryptedCardNumber ?? this.encryptedCardNumber,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -76,7 +80,12 @@ class CardModel {
       "cardId": cardId,
       "bankName": bankName,
       "cardType": cardType ?? "Debit", // Default if not set
-      "last4": last4 ?? cleanNumber.substring(max(0, cleanNumber.length - 4)),
+      "last4":
+          last4 ??
+          (cleanNumber.length >= 4
+              ? cleanNumber.substring(cleanNumber.length - 4)
+              : cleanNumber),
+      "encryptedCardNumber": encryptedCardNumber, // Save encrypted
       "expiry": expiryDate,
       "cardHolderName": cardHolderName,
       "createdAt": createdAt ?? DateTime.now(),
@@ -102,6 +111,7 @@ class CardModel {
       cardImage: deterministicImage,
       cardType: map['cardType'],
       last4: last4,
+      encryptedCardNumber: map['encryptedCardNumber'],
       createdAt: (map['createdAt'] as Timestamp?)?.toDate(),
     );
   }

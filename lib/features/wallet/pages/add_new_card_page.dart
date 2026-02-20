@@ -36,21 +36,6 @@ class AddNewCardPage extends GetView<WalletController> {
           ),
           onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_active),
-            onPressed: () {
-              NotificationService.instance.showNotification(
-                title: "Transfer Successful",
-                body: "₹500 sent successfully",
-                payload: {
-                  "type": "TRANSFER_SUCCESS",
-                  "transactionId": "TXN_123",
-                },
-              );
-            },
-          ),
-        ],
         title: Obx(
           () => Text(
             controller.editingCardId.value != null

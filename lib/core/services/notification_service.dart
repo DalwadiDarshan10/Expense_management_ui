@@ -1,6 +1,22 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  if (message.notification != null) {
+    NotificationService.instance.showNotification(
+      title: message.notification!.title ?? "",
+      body: message.notification!.body ?? "",
+      payload: message.data,
+    );
+  }
+}
 
 class NotificationService {
   NotificationService._();
@@ -26,17 +42,42 @@ class NotificationService {
     );
 
     await _createNotificationChannel();
-    await requestPermission();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        showNotification(
+          title: message.notification!.title ?? "",
+          body: message.notification!.body ?? "",
+          payload: message.data,
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleNotificationTap(jsonEncode(message.data));
+    });
   }
 
   Future<void> requestPermission() async {
-    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        _notificationsPlugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >();
-
-    await androidImplementation?.requestNotificationsPermission();
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: false,
+      sound: true,
+    );
+    getDeviceToken();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("✅ User granted permission");
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print("⚠️ Provisional permission granted");
+    } else {
+      print("❌ User denied permission");
+    }
   }
 
   Future<void> _createNotificationChannel() async {
@@ -54,6 +95,42 @@ class NotificationService {
             >();
 
     await androidImplementation?.createNotificationChannel(channel);
+  }
+
+  Future<void> getDeviceToken() async {
+    deviceTokenRefresh();
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("Device Token: $token");
+
+    if (token != null) {
+      await _saveTokenToFirestore(token);
+    }
+  }
+
+  void deviceTokenRefresh() {
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+      print("Device Token Refreshed: $token");
+      await _saveTokenToFirestore(token);
+    });
+  }
+
+  Future<void> _saveTokenToFirestore(String token) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId == null) {
+        print("❌ Cannot save token: User not logged in");
+        return;
+      }
+
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'fcmToken': token,
+      });
+
+      print("✅ FCM Token saved to Firestore");
+    } catch (e) {
+      print("❌ Error saving token: $e");
+    }
   }
 
   Future<void> showNotification({

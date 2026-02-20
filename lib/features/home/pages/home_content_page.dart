@@ -1,5 +1,6 @@
 import 'package:expense/core/constants/app_strings.dart';
 import 'package:expense/core/constants/app_images.dart';
+import 'package:expense/core/services/notification_service.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/routes/app_named.dart';
@@ -13,8 +14,19 @@ import 'package:expense/features/wallet/controllers/wallet_controller.dart';
 import 'package:expense/features/transfer/controllers/transfer_controller.dart';
 import 'package:expense/features/bill/controller/utility_bill_controller.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationService.instance.requestPermission();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +38,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Blue Header Section with Background Image
               _buildHeaderSection(context),
               SizedBox(height: 24.h),
               // Send Again Section

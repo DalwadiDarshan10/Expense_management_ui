@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:expense/core/services/cloud_function_simulator.dart';
-import 'package:expense/core/security/luhn_validator.dart';
+
 import 'package:expense/core/security/encryption_service.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';

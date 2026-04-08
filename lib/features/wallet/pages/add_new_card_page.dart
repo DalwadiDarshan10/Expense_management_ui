@@ -1,5 +1,4 @@
 import 'package:expense/core/constants/app_strings.dart';
-import 'package:expense/core/services/notification_service.dart';
 import 'package:expense/core/theme/app_colors.dart';
 import 'package:expense/core/theme/app_text_styles.dart';
 import 'package:expense/features/wallet/controllers/wallet_controller.dart';
